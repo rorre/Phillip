@@ -39,7 +39,7 @@ def get_discussion_json(uri: str) -> List[dict]:
 def gen_embed(event):
     embed_base = {
         "title": f"**{event.artist} - {event.title}**",
-        "description": f"Beatmap has been **{event.event_type}**!",
+        "description": f"Mapped by {event.beatmap.creator}\nBeatmap has been **{event.event_type}**!",
         "url": f"{event.event_source_url}",
         "color": 29625,
         "footer": {
