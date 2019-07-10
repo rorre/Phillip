@@ -11,7 +11,7 @@ get_events = event_helper.get_events
 
 
 class notAiess:
-    def __init__(self, token, webhook_url, last_date=None):
+    def __init__(self, token: str, webhook_url: str, last_date: datetime = None):
         self.apitoken = token
         helper.apikey = token
         self.hook_url = webhook_url
