@@ -11,11 +11,11 @@ get_events = event_helper.get_events
 
 
 class notAiess:
-    def __init__(self, token, webhook_url):
+    def __init__(self, token, webhook_url, last_date=None):
         self.apitoken = token
         helper.apikey = token
         self.hook_url = webhook_url
-        self.last_date = datetime.utcfromtimestamp(0)
+        self.last_date = last_date or datetime.utcfromtimestamp(0)
 
     def run(self):
         try:
