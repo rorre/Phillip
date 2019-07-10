@@ -38,3 +38,6 @@ class notAiess:
         except KeyboardInterrupt:
             print("Exiting...")
             sys.exit(0)
+        
+        except:
+            self.run() # Forever loop
