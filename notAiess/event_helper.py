@@ -16,7 +16,7 @@ types = [
 
 def get_events(types_val: list) -> str:
     additions = list()
-    for i in range(6):
+    for i in range(5):
         additions.append(types_val[i] and types[i] or str())
     url = base_url + '&types%5B%5D='.join(additions)
     res = requests.get(url, cookies={"locale": "en"})
