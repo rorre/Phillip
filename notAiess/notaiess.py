@@ -44,6 +44,7 @@ class notAiess:
                 for event in events:
                     if event.time > self.last_date:
                         self.last_date = event.time
+                        event._get_map()
                         if event.user_action == "BanchoBot":
                             continue
                         for handler in self.handlers:

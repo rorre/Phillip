@@ -12,7 +12,6 @@ get_discussion_json = helper.get_discussion_json
 class eventBase(ABC):
     def __init__(self, soup: BeautifulSoup):
         self.soup = soup
-        self._get_map()
 
     def _get_map(self):
         map_id = self.soup.a.get("href").split("/")[4]
