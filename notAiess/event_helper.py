@@ -26,7 +26,9 @@ def get_events(types_val: list) -> str:
     event_cases = {
         "Nominated": classes.Nominated,
         "Disqualified": classes.Disqualified,
-        "New": classes.Popped
+        "New": classes.Popped,
+        "Ranked.": classes.Ranked,
+        "Loved": classes.Loved
     }
     for event in events_html:
         action = event.find(
