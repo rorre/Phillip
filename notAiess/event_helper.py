@@ -7,7 +7,6 @@ base_url = "https://osu.ppy.sh/beatmapsets/events?user=&types%5B%5D="
 
 types = [
     "nominate",
-    "qualify",
     "rank",
     "love",
     "nomination_reset",
