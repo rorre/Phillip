@@ -39,7 +39,7 @@ class notAiess:
     def run(self):
         try:
             while True:
-                events = get_events((1, 0, 0, 1, 1))
+                events = get_events((1, 1, 1, 1, 1))
                 events.reverse()
                 for event in events:
                     if event.time > self.last_date:

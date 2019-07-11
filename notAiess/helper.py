@@ -42,14 +42,15 @@ def gen_embed(event):
         "description": f"Mapped by {event.beatmap.creator}, has just been **{event.event_type}**!",
         "url": f"{event.event_source_url}",
         "color": 29625,
-        "footer": {
-            "icon_url": f"https://a.ppy.sh/{event.user_id_action}?1561560622.jpeg",
-            "text": f"{event.user_action}"
-        },
         "thumbnail": {
             "url": f"{event.map_cover}"
         }
     }
+    if event.event_type not in ["Ranked", "Loved"]:
+        embed_base['footer'] = {
+            "icon_url": f"https://a.ppy.sh/{event.user_id_action}?1561560622.jpeg",
+            "text": f"{event.user_action}"
+        }
     if event.event_type in ["Popped", "Disqualified"]:
         embed_base['footer']['text'] += " - {}".format(event.event_source['message'].split("\n")[0])
         embed_base['color'] = 15408128

@@ -123,3 +123,21 @@ class Popped(Disqualified):
     @property
     def user_action(self):
         return get_api("get_user", u=self.user_id_action)[0]['username']
+
+class Ranked(eventBase):
+    @property
+    def user_action(self):
+        pass
+
+    @property
+    def user_id_action(self):
+        pass
+
+    @property
+    def event_type(self):
+        return "Ranked"
+
+class Loved(Ranked):
+    @property
+    def event_type(self):
+        return "Loved"
