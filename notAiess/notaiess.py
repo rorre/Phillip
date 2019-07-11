@@ -1,6 +1,7 @@
 import sys
 import time
 from datetime import datetime
+from typing import List
 
 import requests
 
@@ -10,11 +11,29 @@ from . import event_helper
 get_events = event_helper.get_events
 
 
+class Handler:
+    def __init__(self, webhook_url):
+        self.hook_url = webhook_url
+
+    def parse(self, event):
+        embed = helper.gen_embed(event)
+        requests.post(self.hook_url, json={
+            'content': event.event_source_url,
+            'embeds': [embed]
+        })
+        return
+
+
 class notAiess:
-    def __init__(self, token: str, webhook_url: str, last_date: datetime = None):
+    def __init__(self, token: str, last_date: datetime = None, handlers: List[Handler] = [],
+                 webhook_url: str = ""):
+        self.handlers = handlers
+        if not handlers:
+            if not webhook_url:
+                raise Exception("Requires Handler or webhook_url")
+            self.handlers.append(Handler(webhook_url))
         self.apitoken = token
         helper.apikey = token
-        self.hook_url = webhook_url
         self.last_date = last_date or datetime.utcfromtimestamp(0)
 
     def run(self):
@@ -22,22 +41,22 @@ class notAiess:
             while True:
                 events = get_events((1, 0, 0, 0, 1, 1))
                 events.reverse()
-                embeds = []
                 for event in events:
                     if event.time > self.last_date:
                         self.last_date = event.time
                         if event.user_action == "BanchoBot":
                             continue
-                        embed = helper.gen_embed(event)
-                        embeds.append(embed)
+                        for handler in self.handlers:
+                            handler.parse(event)
 
-                for e in helper.chunk(embeds, 10):
-                    requests.post(self.hook_url, json={'embeds': e})
                 time.sleep(300)
 
         except KeyboardInterrupt:
             print("Exiting...")
             sys.exit(0)
-        
+
         except:
-            self.run() # Forever loop
+            self.run()  # Forever loop
+
+    def add_handler(self, handler):
+        self.handlers.append(handler)
