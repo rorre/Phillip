@@ -37,10 +37,17 @@ def get_discussion_json(uri: str) -> List[dict]:
     return set_json['beatmapset']['discussions']
 
 def gen_embed(event):
+    action_icons = {
+        "Bubbled" : ":thought_balloon:",
+        "Qualified" : ":heart:",
+        "Ranked" : ":sparkling_heart:",
+        "Disqualified" : ":broken_heart:",
+        "Popped" : ":anger_right:"
+    }
     embed_base = {
-        "title": f"**{event.artist} - {event.title}**",
-        "description": f"Mapped by {event.beatmap.creator}, has just been **{event.event_type}**!",
-        "url": f"{event.event_source_url}",
+        "title": f"{action_icons[event.event_type]} {event.event_type}",
+        "description": f"[**{event.artist} - {event.title}**]({event.event_source_url})\r\n\
+Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
         "color": 29625,
         "thumbnail": {
             "url": f"{event.map_cover}"

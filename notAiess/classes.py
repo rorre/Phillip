@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
-
+from typing import List
 from bs4 import BeautifulSoup
 
 from . import helper
@@ -15,7 +15,8 @@ class eventBase(ABC):
 
     def _get_map(self):
         map_id = self.soup.a.get("href").split("/")[4]
-        self.beatmap = get_beatmap_api(s=map_id)[0]
+        self.beatmapset = get_beatmap_api(s=map_id)
+        self.beatmap = self.beatmapset[0]
 
     @property
     def creator(self) -> str:
@@ -55,11 +56,30 @@ class eventBase(ABC):
     def event_source_url(self) -> str:
         return f"https://osu.ppy.sh/s/{self.beatmap.beatmapset_id}"
 
+    @property
+    def gamemodes(self) -> List[str]:
+        mode_num = {
+            "0" : "osu",
+            "1" : "taiko",
+            "2" : "catch",
+            "3" : "mania"
+        }
+        modes = []
+        for diff in self.beatmapset:
+            if mode_num[diff.mode] not in modes:
+                modes.append(mode_num[diff.mode])
+        return modes
+
 
 class Nominated(eventBase):
     @property
     def event_type(self) -> str:
-        return "Nominated"
+        stat = str()
+        if self.beatmap.approved == "3":
+            stat = "Qualified"
+        else:
+            stat = "Bubbled"
+        return stat
 
 
 class Disqualified(eventBase):
