@@ -2,7 +2,7 @@ import sys
 import time
 from datetime import datetime
 from typing import List
-
+import traceback
 import requests
 
 from . import helper
@@ -57,6 +57,8 @@ class notAiess:
             sys.exit(0)
 
         except:
+            print("An error occured, will keep running anyway.")
+            traceback.print_exc()
             self.run()  # Forever loop
 
     def add_handler(self, handler):
