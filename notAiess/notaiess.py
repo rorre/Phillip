@@ -61,16 +61,17 @@ class notAiess:
     def __init__(self, token: str, last_date: datetime = None, handlers: List[Handler] = [],
                  webhook_url: str = ""):
         self.handlers = handlers
-        if not handlers:
-            if not webhook_url:
-                raise Exception("Requires Handler or webhook_url")
-            self.handlers.append(Handler(webhook_url))
+        self.webhook_url = webhook_url
         self.apitoken = token
         helper.apikey = token
         self.last_date = last_date or datetime.utcfromtimestamp(0)
 
     def run(self):
         """Well, run the client, what else?!"""
+        if not self.handlers:
+            if not self.webhook_url:
+                raise Exception("Requires Handler or webhook_url")
+            self.handlers.append(Handler(self.webhook_url))
         try:
             while True:
                 events = get_events((1, 1, 1, 1, 1))
