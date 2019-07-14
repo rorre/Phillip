@@ -12,6 +12,26 @@ base_api_url = "https://osu.ppy.sh/api/"
 apikey = None
 
 def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
+    """Request something based on endpoint.
+    
+    Parameters
+    ----------
+    endpoint: str
+        The API endpoint, reference could be found `here <https://github.com/ppy/osu-api/wiki>`_.
+    **kwargs: dict, optional
+        Keyword arguments that will be passed as a query string.
+    
+    Raises
+    ------
+        Exception
+            If the API key is not assigned.
+
+    Returns
+    -------
+    List[dict]
+        API response.
+    """
+
     global apikey
     if not apikey:
         raise Exception("Requires api key to be set")
@@ -26,17 +46,50 @@ def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
 
 
 def get_beatmap_api(**kwargs: dict) -> List[Beatmap]:
+    """Get beatmapset from osu! API.
+    
+    Returns
+    -------
+    List[Beatmap]
+        Beatmapsets fetched from API.
+    """
     return [Beatmap(map) for map in get_api("get_beatmaps", **kwargs)]
 
 
 def get_discussion_json(uri: str) -> List[dict]:
+    """Receive discussion posts in JSON.
+    
+    Parameters
+    ----------
+    uri: str
+        URL of discussion page.
+    
+    Returns
+    -------
+    List[dict]
+        The discussion posts.
+    """
+    
     set_html = requests.get(uri).text
     soup = BeautifulSoup(set_html, features="html.parser")
     set_json_str = soup.find(id="json-beatmapset-discussion").text
     set_json = json.loads(set_json_str)
     return set_json['beatmapset']['discussions']
 
-def gen_embed(event):
+def gen_embed(event) -> dict:
+    """Generate Discord embed of event.
+    
+    Parameters
+    ----------
+    event: eventBase
+        The beatmap's event.
+    
+    Returns
+    -------
+    dict
+        Discord embed object.
+    """
+
     action_icons = {
         "Bubbled" : ":thought_balloon:",
         "Qualified" : ":heart:",

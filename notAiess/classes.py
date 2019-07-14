@@ -10,10 +10,40 @@ get_beatmap_api = helper.get_beatmap_api
 get_discussion_json = helper.get_discussion_json
 
 class eventBase(ABC):
+    """An Abstract Class (ABC) representing base osu! beatmapset event.
+
+    Attributes
+    ----------
+    creator: str
+        Mapper of beatmap.
+    artist: str
+        Beatmap's artist.
+    title: str
+        Beatmap's title.
+    map_cover: str
+        URL to map's cover image.
+    user_action: str
+        User in charge of the event.
+    user_id_action: int
+        ``user_action``'s user id.
+    time: datetime
+        A ``datetime`` object representing the time where the event happened.
+    event_type: str
+        Event that happened on the beatmap (bubbled, qualified, etc.)
+    event_source_url: str
+        URL to event cause.
+    gamemodes: list of str
+        Game modes inside the beatmapset.
+    beatmap: osuClasses.Beatmap
+        The difficulty of the beatmap, usually the first entry from osu! API. (Needs to run ``_get_map()``)
+    beatmapset: list of osuClasses.Beatmap
+        Array of difficulties inside the beatmap. (Needs to run ``_get_map()``)
+    """
     def __init__(self, soup: BeautifulSoup):
         self.soup = soup
 
     def _get_map(self):
+        """Receive map from osu! API and assign it to ``self.beatmapset`` and ``self.beatmap``"""
         map_id = self.soup.a.get("href").split("/")[4]
         self.beatmapset = get_beatmap_api(s=map_id)
         self.beatmap = self.beatmapset[0]
