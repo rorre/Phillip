@@ -1,4 +1,5 @@
 # notAiess
+[![Documentation Status](https://readthedocs.org/projects/notaiess/badge/?version=latest)](https://notaiess.readthedocs.io/en/latest/?badge=latest)
 A Discord webhook for nomination feeds.
 
 ## Why?
