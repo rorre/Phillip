@@ -75,8 +75,9 @@ class notAiess:
             if not self.webhook_url:
                 raise Exception("Requires Handler or webhook_url")
             self.handlers.append(Handler(self.webhook_url))
-        try:
-            while True:
+
+        while True:
+            try:
                 events = await get_events((1, 1, 1, 1, 1))
                 events.reverse()
                 for event in events:
@@ -90,14 +91,13 @@ class notAiess:
 
                 await asyncio.sleep(300)
 
-        except KeyboardInterrupt:
-            print("Exiting...")
-            sys.exit(0)
+            except KeyboardInterrupt:
+                print("Exiting...")
+                sys.exit(0)
 
-        except:
-            print("An error occured, will keep running anyway.")
-            traceback.print_exc()
-            self.run()  # Forever loop
+            except:
+                print("An error occured, will keep running anyway.", file=sys.stderr)
+                traceback.print_exc()
 
     def add_handler(self, handler):
         """Adds custom handler to handlers.
