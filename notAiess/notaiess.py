@@ -32,7 +32,7 @@ class Handler:
         event: [:class:`eventBase`]
             The beatmapset event
         """
-        embed = helper.gen_embed(event)
+        embed = await helper.gen_embed(event)
         await requests.post(self.hook_url, json={
             'content': event.event_source_url,
             'embeds': [embed]
@@ -69,7 +69,7 @@ class notAiess:
         helper.apikey = token
         self.last_date = last_date or datetime.utcfromtimestamp(0)
 
-    def start(self):
+    async def start(self):
         """Well, run the client, what else?!"""
         if not self.handlers:
             if not self.webhook_url:
@@ -84,16 +84,14 @@ class notAiess:
                     if event.time > self.last_date:
                         self.last_date = event.time
                         await event._get_map()
-                        if event.user_action == "BanchoBot":
-                            continue
+                        if event.event_type != "Loved":
+                            user = await event.source.user
+                            if user['username'] == "BanchoBot":
+                                continue
                         for handler in self.handlers:
                             await handler.parse(event)
 
                 await asyncio.sleep(300)
-
-            except KeyboardInterrupt:
-                print("Exiting...")
-                sys.exit(0)
 
             except:
                 print("An error occured, will keep running anyway.", file=sys.stderr)
@@ -111,5 +109,11 @@ class notAiess:
     
     def run(self):
         loop = asyncio.get_event_loop()
-        asyncio.ensure_future(self.start)
-        loop.run_forever()
+        asyncio.ensure_future(self.start())
+        try:
+            loop.run_forever()
+        except KeyboardInterrupt:
+            print("Exiting...")
+        finally:
+            loop.run_until_complete(loop.shutdown_asyncgens())
+            loop.close()

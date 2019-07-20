@@ -1,3 +1,4 @@
+from async_property import async_property
 from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import List
@@ -8,6 +9,48 @@ from . import helper
 get_api = helper.get_api
 get_beatmap_api = helper.get_beatmap_api
 get_discussion_json = helper.get_discussion_json
+
+
+class Source:
+    def __init__(self, src_url: str, username: str = None, user_id: int = None,
+                 post: dict = None, user: dict = None):
+        self.src_url = src_url
+        self._username = username
+        self._user_id = user_id
+        self._user = user
+        self._post = post
+
+    @async_property
+    async def post(self):
+        if "discussion" not in self.src_url:
+            raise Exception("Nominations doesn't have posts.")
+        if self._post:
+            return self._post
+        post_url = self.src_url
+        post_id = int(post_url.split('/')[-1])
+        discussion_parents = await get_discussion_json(post_url)
+        sourcePost = None
+        for discussion in discussion_parents:
+            if not discussion:
+                continue
+            if discussion['id'] == post_id:
+                sourcePost = discussion['posts'][0]
+                break
+        return sourcePost
+
+    @async_property
+    async def user(self):
+        if self._user:
+            return self._user
+        api_response = list()
+        if self._username:
+            api_response = await get_api("get_user", u=self._username)
+        elif self._user_id:
+            api_response = await get_api("get_user", u=self._user_id)
+        elif self.src_url:
+            post = await self.post
+            api_response = await get_api("get_user", u=post['user_id'])
+        return api_response[0]
 
 
 class eventBase(ABC):
@@ -102,6 +145,10 @@ class eventBase(ABC):
                 modes.append(mode_num[diff.mode])
         return modes
 
+    @property
+    def source(self):
+        return Source(self.event_source_url, self.user_action, self.user_id_action)
+
 
 class Nominated(eventBase):
     @property
@@ -126,20 +173,6 @@ class Disqualified(eventBase):
         post_url = a_html.get('href')
         return post_url
 
-    @property
-    def event_source(self) -> dict:
-        post_url = self.event_source_url
-        post_id = int(post_url.split('/')[-1])
-        discussion_parents = await get_discussion_json(post_url)
-        sourcePost = None
-        for discussion in discussion_parents:
-            if not discussion:
-                continue
-            if discussion['id'] == post_id:
-                sourcePost = discussion['posts'][0]
-                break
-        return sourcePost
-
 
 class Popped(Disqualified):
     @property
@@ -153,8 +186,8 @@ class Popped(Disqualified):
         post_url = a_html.get('href')
         return post_url
 
-    @property
-    def event_source(self) -> dict:
+    @async_property
+    async def event_source(self) -> dict:
         post_url = self.event_source_url
         post_id = int(post_url.split('/')[-1])
         discussion_parents = await get_discussion_json(post_url)
@@ -167,14 +200,20 @@ class Popped(Disqualified):
                 break
         return sourcePost
 
-    @property
-    def user_id_action(self):
-        return self.event_source['user_id']
+    @async_property
+    async def user_id_action(self):
+        source = await self.event_source
+        return source['user_id']
+
+    @async_property
+    async def user_action(self):
+        user_source_id = await self.user_id_action
+        api_response = await get_api("get_user", u=user_source_id)
+        return api_response[0]['username']
 
     @property
-    def user_action(self):
-        return await get_api("get_user", u=self.user_id_action)[0]['username']
-
+    def source(self):
+        return Source(self.event_source_url)
 
 class Ranked(eventBase):
     @property

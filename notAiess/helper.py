@@ -71,14 +71,14 @@ async def get_discussion_json(uri: str) -> List[dict]:
         The discussion posts.
     """
 
-    set_html = await requests.get(uri).text
-    soup = BeautifulSoup(set_html, features="html.parser")
+    set_html = await requests.get(uri)
+    soup = BeautifulSoup(set_html.text, features="html.parser")
     set_json_str = soup.find(id="json-beatmapset-discussion").text
     set_json = json.loads(set_json_str)
     return set_json['beatmapset']['discussions']
 
 
-def gen_embed(event) -> dict:
+async def gen_embed(event) -> dict:
     """Generate Discord embed of event.
 
     Parameters
@@ -110,13 +110,17 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
         }
     }
     if event.event_type not in ["Ranked", "Loved"]:
+        apiuser = await event.source.user
+        user = apiuser['username']
+        user_id = apiuser['user_id']
         embed_base['footer'] = {
-            "icon_url": f"https://a.ppy.sh/{event.user_id_action}?1561560622.jpeg",
-            "text": f"{event.user_action}"
+            "icon_url": f"https://a.ppy.sh/{user_id}?1561560622.jpeg",
+            "text": f"{user}"
         }
     if event.event_type in ["Popped", "Disqualified"]:
+        source = await event.source.post
         embed_base['footer']['text'] += " - {}".format(
-            event.event_source['message'].split("\n")[0])
+            source['message'].split("\n")[0])
         embed_base['color'] = 15408128
     return embed_base
 
