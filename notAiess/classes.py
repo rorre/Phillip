@@ -12,6 +12,15 @@ get_discussion_json = helper.get_discussion_json
 
 
 class Source:
+    """Representation of the beatmapset event source
+    
+    Attributes
+    ----------
+    post: dict
+        The post/thread causing the event. (raises ``Exception`` if its a Nomination/Ranked/Loved post)
+    user: dict
+        osu! API user object of the user that causes the event.
+    """
     def __init__(self, src_url: str, username: str = None, user_id: int = None,
                  post: dict = None, user: dict = None):
         self.src_url = src_url
@@ -82,6 +91,8 @@ class eventBase(ABC):
         The difficulty of the beatmap, usually the first entry from osu! API. (Needs to run ``_get_map()``)
     beatmapset: list of osuClasses.Beatmap
         Array of difficulties inside the beatmap. (Needs to run ``_get_map()``)
+    source: Source
+        Representation of the beatmapset event source.
     """
 
     def __init__(self, soup: BeautifulSoup):
