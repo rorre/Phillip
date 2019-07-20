@@ -95,7 +95,8 @@ def gen_embed(event) -> dict:
         "Qualified" : ":heart:",
         "Ranked" : ":sparkling_heart:",
         "Disqualified" : ":broken_heart:",
-        "Popped" : ":anger_right:"
+        "Popped" : ":anger_right:",
+        "Loved" : ":gift_heart:"
     }
     embed_base = {
         "title": f"{action_icons[event.event_type]} {event.event_type}",
