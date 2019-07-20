@@ -1,9 +1,10 @@
 import sys
 import time
+import asyncio
 from datetime import datetime
 from typing import List
 import traceback
-import requests
+import requests_async as requests
 
 from . import helper
 from . import event_helper
@@ -23,7 +24,7 @@ class Handler:
     def __init__(self, webhook_url):
         self.hook_url = webhook_url
 
-    def parse(self, event):
+    async def parse(self, event):
         """Parse beatmap event and send to discord webhook
 
         Parameters
@@ -32,7 +33,7 @@ class Handler:
             The beatmapset event
         """
         embed = helper.gen_embed(event)
-        requests.post(self.hook_url, json={
+        await requests.post(self.hook_url, json={
             'content': event.event_source_url,
             'embeds': [embed]
         })
@@ -68,7 +69,7 @@ class notAiess:
         helper.apikey = token
         self.last_date = last_date or datetime.utcfromtimestamp(0)
 
-    def run(self):
+    def start(self):
         """Well, run the client, what else?!"""
         if not self.handlers:
             if not self.webhook_url:
@@ -76,18 +77,18 @@ class notAiess:
             self.handlers.append(Handler(self.webhook_url))
         try:
             while True:
-                events = get_events((1, 1, 1, 1, 1))
+                events = await get_events((1, 1, 1, 1, 1))
                 events.reverse()
                 for event in events:
                     if event.time > self.last_date:
                         self.last_date = event.time
-                        event._get_map()
+                        await event._get_map()
                         if event.user_action == "BanchoBot":
                             continue
                         for handler in self.handlers:
-                            handler.parse(event)
+                            await handler.parse(event)
 
-                time.sleep(300)
+                await asyncio.sleep(300)
 
         except KeyboardInterrupt:
             print("Exiting...")
@@ -107,3 +108,8 @@ class notAiess:
             The event handler, class must have `parse` function with `event` as argument.
         """
         self.handlers.append(handler)
+    
+    def run(self):
+        loop = asyncio.get_event_loop()
+        asyncio.ensure_future(self.start)
+        loop.run_forever()

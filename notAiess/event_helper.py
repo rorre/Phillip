@@ -1,4 +1,4 @@
-import requests
+import requests_async as requests
 from bs4 import BeautifulSoup
 
 from . import classes
@@ -14,12 +14,12 @@ types = [
 ]
 
 
-def get_events(types_val: list) -> str:
+async def get_events(types_val: list) -> str:
     additions = list()
     for i in range(5):
         additions.append(types_val[i] and types[i] or str())
     url = base_url + '&types%5B%5D='.join(additions)
-    res = requests.get(url, cookies={"locale": "en"})
+    res = await requests.get(url, cookies={"locale": "en"})
     res_soup = BeautifulSoup(res.text, features="html.parser")
     events_html = res_soup.findAll(class_="beatmapset-event")
     events = []

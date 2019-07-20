@@ -1,7 +1,7 @@
 import json
 from typing import List
 
-import requests
+import requests_async as requests
 from bs4 import BeautifulSoup
 
 from . import osuClasses
@@ -12,7 +12,7 @@ base_api_url = "https://osu.ppy.sh/api/"
 apikey = None
 
 
-def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
+async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
     """Request something based on endpoint.
 
     Parameters
@@ -42,11 +42,11 @@ def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
         api_arguments.append(f"{argument[0]}={str(argument[1])}")
     api_args = '&'.join(api_arguments)
     api_url = base_api_url + endpoint + "?" + api_args
-    api_res = requests.get(api_url)
+    api_res = await requests.get(api_url)
     return api_res.json()
 
 
-def get_beatmap_api(**kwargs: dict) -> List[Beatmap]:
+async def get_beatmap_api(**kwargs: dict) -> List[Beatmap]:
     """Get beatmapset from osu! API.
 
     Returns
@@ -54,10 +54,10 @@ def get_beatmap_api(**kwargs: dict) -> List[Beatmap]:
     List[Beatmap]
         Beatmapsets fetched from API.
     """
-    return [Beatmap(map) for map in get_api("get_beatmaps", **kwargs)]
+    return [Beatmap(map) for map in await get_api("get_beatmaps", **kwargs)]
 
 
-def get_discussion_json(uri: str) -> List[dict]:
+async def get_discussion_json(uri: str) -> List[dict]:
     """Receive discussion posts in JSON.
 
     Parameters
@@ -71,7 +71,7 @@ def get_discussion_json(uri: str) -> List[dict]:
         The discussion posts.
     """
 
-    set_html = requests.get(uri).text
+    set_html = await requests.get(uri).text
     soup = BeautifulSoup(set_html, features="html.parser")
     set_json_str = soup.find(id="json-beatmapset-discussion").text
     set_json = json.loads(set_json_str)

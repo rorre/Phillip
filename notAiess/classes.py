@@ -44,10 +44,10 @@ class eventBase(ABC):
     def __init__(self, soup: BeautifulSoup):
         self.soup = soup
 
-    def _get_map(self):
+    async def _get_map(self):
         """Receive map from osu! API and assign it to ``self.beatmapset`` and ``self.beatmap``"""
         map_id = self.soup.a.get("href").split("/")[4]
-        self.beatmapset = get_beatmap_api(s=map_id)
+        self.beatmapset = await get_beatmap_api(s=map_id)
         self.beatmap = self.beatmapset[0]
 
     @property
@@ -130,7 +130,7 @@ class Disqualified(eventBase):
     def event_source(self) -> dict:
         post_url = self.event_source_url
         post_id = int(post_url.split('/')[-1])
-        discussion_parents = get_discussion_json(post_url)
+        discussion_parents = await get_discussion_json(post_url)
         sourcePost = None
         for discussion in discussion_parents:
             if not discussion:
@@ -157,7 +157,7 @@ class Popped(Disqualified):
     def event_source(self) -> dict:
         post_url = self.event_source_url
         post_id = int(post_url.split('/')[-1])
-        discussion_parents = get_discussion_json(post_url)
+        discussion_parents = await get_discussion_json(post_url)
         sourcePost = None
         for discussion in discussion_parents:
             if not discussion:
@@ -173,7 +173,7 @@ class Popped(Disqualified):
 
     @property
     def user_action(self):
-        return get_api("get_user", u=self.user_id_action)[0]['username']
+        return await get_api("get_user", u=self.user_id_action)[0]['username']
 
 
 class Ranked(eventBase):
