@@ -9,6 +9,7 @@ get_api = helper.get_api
 get_beatmap_api = helper.get_beatmap_api
 get_discussion_json = helper.get_discussion_json
 
+
 class eventBase(ABC):
     """An Abstract Class (ABC) representing base osu! beatmapset event.
 
@@ -39,6 +40,7 @@ class eventBase(ABC):
     beatmapset: list of osuClasses.Beatmap
         Array of difficulties inside the beatmap. (Needs to run ``_get_map()``)
     """
+
     def __init__(self, soup: BeautifulSoup):
         self.soup = soup
 
@@ -89,10 +91,10 @@ class eventBase(ABC):
     @property
     def gamemodes(self) -> List[str]:
         mode_num = {
-            "0" : "osu",
-            "1" : "taiko",
-            "2" : "catch",
-            "3" : "mania"
+            "0": "osu",
+            "1": "taiko",
+            "2": "catch",
+            "3": "mania"
         }
         modes = []
         for diff in self.beatmapset:
@@ -173,6 +175,7 @@ class Popped(Disqualified):
     def user_action(self):
         return get_api("get_user", u=self.user_id_action)[0]['username']
 
+
 class Ranked(eventBase):
     @property
     def user_action(self):
@@ -185,6 +188,7 @@ class Ranked(eventBase):
     @property
     def event_type(self):
         return "Ranked"
+
 
 class Loved(Ranked):
     @property

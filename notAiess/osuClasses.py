@@ -1,18 +1,18 @@
 
 class Beatmap:
     """A class that represents a difficulty object inside a beatmapset
-    
+
     Parameters
     ----------
     js: dict
         osu! API response, gathered from ``get_beatmaps`` endpoint
-    
+
     Attributes
     ----------
     All: str
         Everything that is documented from `osu! API wiki <https://github.com/ppy/osu-api/wiki>`_.
     """
-    
+
     def __init__(self, js):
         self.beatmapset_id = js['beatmapset_id']
         self.beatmap_id = js['beatmap_id']

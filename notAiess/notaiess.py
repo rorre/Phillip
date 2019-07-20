@@ -13,18 +13,19 @@ get_events = event_helper.get_events
 
 class Handler:
     """Handler base for ``notAiess``
-    
+
     Parameters
     ----------
     webhook_url: str
         Discord webhook url to send
     """
+
     def __init__(self, webhook_url):
         self.hook_url = webhook_url
 
     def parse(self, event):
         """Parse beatmap event and send to discord webhook
-        
+
         Parameters
         ----------
         event: [:class:`eventBase`]
@@ -41,7 +42,7 @@ class Handler:
 class notAiess:
     """Representation of Aiess client to interact with osu! web.
     This client will interact with osu! API and web through scraper.
-    
+
     Parameters
     ----------
     token: str
@@ -58,6 +59,7 @@ class notAiess:
     Exception
         if no handlers nor webhook_url assigned.
     """
+
     def __init__(self, token: str, last_date: datetime = None, handlers: List[Handler] = [],
                  webhook_url: str = ""):
         self.handlers = handlers
@@ -98,7 +100,7 @@ class notAiess:
 
     def add_handler(self, handler):
         """Adds custom handler to handlers.
-        
+
         Parameters
         ----------
         handler: object
