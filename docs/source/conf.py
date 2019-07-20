@@ -54,3 +54,10 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 master_doc = 'index'
+
+rst_prolog = """
+.. |coro| replace:: This function is a |coro_link|_.
+.. |coroprop| replace:: This property is a |coroutine_link|_.
+.. |cor_link| replace:: *coroutine*
+.. _coro_link: https://docs.python.org/3/library/asyncio-task.html#coroutine
+"""

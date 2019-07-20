@@ -25,7 +25,7 @@ class Handler:
         self.hook_url = webhook_url
 
     async def parse(self, event):
-        """Parse beatmap event and send to discord webhook
+        """Parse beatmap event and send to discord webhook |coro|
 
         Parameters
         ----------
@@ -70,7 +70,7 @@ class notAiess:
         self.last_date = last_date or datetime.utcfromtimestamp(0)
 
     async def start(self):
-        """Well, run the client, what else?!"""
+        """Well, run the client, what else?! |coro|"""
         if not self.handlers:
             if not self.webhook_url:
                 raise Exception("Requires Handler or webhook_url")

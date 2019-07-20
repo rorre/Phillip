@@ -13,7 +13,7 @@ apikey = None
 
 
 async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
-    """Request something based on endpoint.
+    """Request something based on endpoint. |coro|
 
     Parameters
     ----------
@@ -47,7 +47,7 @@ async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
 
 
 async def get_beatmap_api(**kwargs: dict) -> List[Beatmap]:
-    """Get beatmapset from osu! API.
+    """Get beatmapset from osu! API. |coro|
 
     Returns
     -------
@@ -58,7 +58,7 @@ async def get_beatmap_api(**kwargs: dict) -> List[Beatmap]:
 
 
 async def get_discussion_json(uri: str) -> List[dict]:
-    """Receive discussion posts in JSON.
+    """Receive discussion posts in JSON. |coro|
 
     Parameters
     ----------
@@ -79,7 +79,7 @@ async def get_discussion_json(uri: str) -> List[dict]:
 
 
 async def gen_embed(event) -> dict:
-    """Generate Discord embed of event.
+    """Generate Discord embed of event. |coro|
 
     Parameters
     ----------

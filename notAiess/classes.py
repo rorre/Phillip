@@ -17,8 +17,10 @@ class Source:
     Attributes
     ----------
     post: dict
+        |coroprop|
         The post/thread causing the event. (raises ``Exception`` if its a Nomination/Ranked/Loved post)
     user: dict
+        |coroprop|
         osu! API user object of the user that causes the event.
     """
     def __init__(self, src_url: str, username: str = None, user_id: int = None,
