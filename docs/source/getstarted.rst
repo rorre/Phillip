@@ -26,12 +26,12 @@ Advanced Usage
 This section will give you an example of using custom ``Handler`` to handle beatmap events.::
 
     from notAiess import notAiess, helper
-
+    from requests_async import requests
     class HandleMap:
-        def parse(event):                             # Required function to parse beatmap event
-            embed = helper.gen_embed(event)           # Generate Discord embed
+        async def parse(event):                       # Required function to parse beatmap event
+            embed = await helper.gen_embed(event)           # Generate Discord embed
             hook_url = "https://discordapp.com/api/webhooks/************"
-            requests.post(hook_url, json={
+            await requests.post(hook_url, json={
                 'content': event.event_source_url,
                 'embeds': [embed]
             })                                        # Send webhook to Discord

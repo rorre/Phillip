@@ -23,6 +23,9 @@ Event
 .. autoclass:: notAiess.classes.eventBase
    :members: _get_map
 
+.. autoclass:: notAiess.classes.Source
+   :members:
+
 osu! class
 ----------
 
