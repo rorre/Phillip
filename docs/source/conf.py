@@ -57,7 +57,7 @@ master_doc = 'index'
 
 rst_prolog = """
 .. |coro| replace:: This function is a |coro_link|_.
-.. |coroprop| replace:: This property is a |coroutine_link|_.
+.. |coroprop| replace:: This property is a |coro_link|_.
 .. |coro_link| replace:: *coroutine*
 .. _coro_link: https://docs.python.org/3/library/asyncio-task.html#coroutine
 """
