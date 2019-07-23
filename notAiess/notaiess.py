@@ -78,9 +78,7 @@ class notAiess:
 
         while True:
             try:
-                events = await get_events((1, 1, 1, 1, 1))
-                events.reverse()
-                for event in events:
+                async for event in await get_events((1, 1, 1, 1, 1)):
                     if event.time > self.last_date:
                         self.last_date = event.time
                         await event._get_map()

@@ -22,6 +22,7 @@ async def get_events(types_val: list) -> str:
     res = await requests.get(url, cookies={"locale": "en"})
     res_soup = BeautifulSoup(res.text, features="html.parser")
     events_html = res_soup.findAll(class_="beatmapset-event")
+    events_html.reverse()
     events = []
     event_cases = {
         "Nominated": classes.Nominated,
@@ -33,5 +34,4 @@ async def get_events(types_val: list) -> str:
     for event in events_html:
         action = event.find(
             class_="beatmapset-event__content").text.strip().split()[0]
-        events.append(event_cases[action](event))
-    return events
+        yield event_cases[action](event)
