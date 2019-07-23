@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import List
 import traceback
 import requests_async as requests
+import signal
 
 from . import helper
 from . import event_helper
@@ -62,12 +63,13 @@ class notAiess:
     """
 
     def __init__(self, token: str, last_date: datetime = None, handlers: List[Handler] = [],
-                 webhook_url: str = ""):
+                 webhook_url: str = "", loop = None):
         self.handlers = handlers
         self.webhook_url = webhook_url
         self.apitoken = token
         helper.apikey = token
         self.last_date = last_date or datetime.utcfromtimestamp(0)
+        self.loop = None
 
     async def start(self):
         """Well, run the client, what else?! |coro|"""
@@ -78,11 +80,11 @@ class notAiess:
 
         while True:
             try:
-                async for event in await get_events((1, 1, 1, 1, 1)):
+                async for event in get_events((1, 1, 1, 1, 1)):
                     if event.time > self.last_date:
                         self.last_date = event.time
                         await event._get_map()
-                        if event.event_type != "Loved":
+                        if event.event_type not in ["Ranked", "Loved"]:
                             user = await event.source.user
                             if user['username'] == "BanchoBot":
                                 continue
@@ -106,12 +108,19 @@ class notAiess:
         self.handlers.append(handler)
     
     def run(self):
-        loop = asyncio.get_event_loop()
+        self.loop = asyncio.get_event_loop()
         asyncio.ensure_future(self.start())
+
         try:
-            loop.run_forever()
+            self.loop.add_signal_handler(signal.SIGINT, lambda: self.loop.stop())
+            self.loop.add_signal_handler(signal.SIGTERM, lambda: self.loop.stop())
+        except NotImplementedError:
+            pass
+
+        try:
+            self.loop.run_forever()
         except KeyboardInterrupt:
             print("Exiting...")
         finally:
-            loop.run_until_complete(loop.shutdown_asyncgens())
-            loop.close()
+            self.loop.run_until_complete(self.loop.shutdown_asyncgens())
+            self.loop.close()

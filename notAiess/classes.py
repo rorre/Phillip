@@ -97,8 +97,9 @@ class eventBase(ABC):
         Representation of the beatmapset event source.
     """
 
-    def __init__(self, soup: BeautifulSoup):
+    def __init__(self, soup: BeautifulSoup, nextevent:BeautifulSoup=None):
         self.soup = soup
+        self.next_map = nextevent
 
     async def _get_map(self):
         """Receive map from osu! API and assign it to ``self.beatmapset`` and ``self.beatmap``"""
@@ -166,11 +167,11 @@ class eventBase(ABC):
 class Nominated(eventBase):
     @property
     def event_type(self) -> str:
-        stat = str()
-        if self.beatmap.approved == "3":
-            stat = "Qualified"
-        else:
-            stat = "Bubbled"
+        stat = "Bubbled"
+        if self.next_map:
+            action = self.next_map.find(class_="beatmapset-event__content").text.strip().split()[0]
+            if action == "This":
+                stat = "Qualified"
         return stat
 
 
