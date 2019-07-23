@@ -3,7 +3,6 @@ from typing import List
 
 import requests_async as requests
 from bs4 import BeautifulSoup
-
 from . import osuClasses
 
 Beatmap = osuClasses.Beatmap
@@ -11,6 +10,11 @@ Beatmap = osuClasses.Beatmap
 base_api_url = "https://osu.ppy.sh/api/"
 apikey = None
 
+events = {
+"nominate": "Bubbled",
+"disqualify": "Disqualified",
+"nomination_reset": "Popped",
+}
 
 async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
     """Request something based on endpoint. |coro|
@@ -122,9 +126,38 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
         embed_base['footer']['text'] += " - {}".format(
             source['message'].split("\n")[0])
         embed_base['color'] = 15408128
+    if event.event_type == "Ranked":
+        s = str()
+        history = await nomination_history(event.beatmap.beatmapset_id)
+        for h in history:
+            u = await get_api("get_user", u=h[1])
+            usern = u[0]['username']
+            if usern == "BanchoBot": continue
+            s += f"{action_icons[h[0]]} [{usern}](https://osu.ppy.sh/u/{h[1]}) "
+        embed_base['description'] += "\r\n " + s
     return embed_base
 
 
 def chunk(l, n):
     for i in range(0, len(l), n):
         yield l[i:i + n]
+
+async def nomination_history(mapid: int):
+    discussion_url = f"https://osu.ppy.sh/beatmapsets/{str(mapid)}/discussion"
+    set_html = await requests.get(discussion_url)
+    soup = BeautifulSoup(set_html.text, features="html.parser")
+    set_json_str = soup.find(id="json-beatmapset-discussion").text
+    set_json = json.loads(set_json_str)
+    js = set_json['beatmapset']['events']
+    history = []
+    for i, event in enumerate(js):
+        if i + 1 != len(js):
+            next_event = js[i+1]
+        if event['type'] in events:
+            e = events[event['type']]
+            if next_event['type'] == "qualify":
+                e = "Qualified"
+            history.append((e, event['user_id']))
+    return history
+
+

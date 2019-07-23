@@ -13,7 +13,6 @@ types = [
     "disqualify"
 ]
 
-
 async def get_events(types_val: list) -> str:
     additions = list()
     for i in range(5):
