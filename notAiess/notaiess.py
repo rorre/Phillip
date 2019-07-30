@@ -82,9 +82,16 @@ class notAiess:
         while True:
             try:
                 async for event in get_events((1, 1, 1, 1, 1)):
-                    if event.time >= self.last_date and self.last_event != event:
-                        self.last_date = event.time
+                    if event.time >= self.last_date:
                         await event._get_map()
+                        self.last_event = event
+                        if event.time == self.last_date:
+                            if hasattr(self.last_event, "beatmapset"):
+                                if not self.last_event.beatmapset:
+                                    await self.last_event.beatmapset
+                                if event.beatmapset == self.last_event.beatmapset:
+                                    continue
+                        self.last_date = event.time
                         if event.event_type not in ["Ranked", "Loved"]:
                             user = await event.source.user
                             if user['username'] == "BanchoBot":

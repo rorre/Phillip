@@ -103,18 +103,6 @@ class eventBase(ABC):
         self.beatmapset = None
         self.beatmap = None
 
-    def __eq__(self, other):
-        if not other or not hasattr(other, "beatmapset"):
-            return False
-        if not self.beatmapset:
-            self._get_map()
-        if not other.beatmapset:
-            other._get_map()
-        return self.beatmapset == other.beatmapset
-
-    def __ne__(self, other):
-        return not self == other
-
     async def _get_map(self):
         """Receive map from osu! API and assign it to ``self.beatmapset`` and ``self.beatmap``"""
         map_id = self.soup.a.get("href").split("/")[4]
