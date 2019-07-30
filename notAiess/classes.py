@@ -104,6 +104,8 @@ class eventBase(ABC):
         self.beatmap = None
 
     def __eq__(self, other):
+        if not other or not hasattr(other, "beatmapset"):
+            return False
         if not self.beatmapset:
             self._get_map()
         if not other.beatmapset:
