@@ -100,6 +100,8 @@ class eventBase(ABC):
     def __init__(self, soup: BeautifulSoup, nextevent:BeautifulSoup=None):
         self.soup = soup
         self.next_map = nextevent
+        self.beatmapset = None
+        self.beatmap = None
 
     def __eq__(self, other):
         if not self.beatmapset:
