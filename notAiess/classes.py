@@ -101,6 +101,16 @@ class eventBase(ABC):
         self.soup = soup
         self.next_map = nextevent
 
+    def __eq__(self, other):
+        if not self.beatmapset:
+            self._get_map()
+        if not other.beatmapset:
+            other._get_map()
+        return self.beatmapset == other.beatmapset
+
+    def __ne__(self, other):
+        return self == other
+
     async def _get_map(self):
         """Receive map from osu! API and assign it to ``self.beatmapset`` and ``self.beatmap``"""
         map_id = self.soup.a.get("href").split("/")[4]
