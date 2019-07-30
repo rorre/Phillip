@@ -70,6 +70,7 @@ class notAiess:
         helper.apikey = token
         self.last_date = last_date or datetime.utcfromtimestamp(0)
         self.loop = None
+        self.last_event = None
 
     async def start(self):
         """Well, run the client, what else?! |coro|"""
@@ -81,7 +82,7 @@ class notAiess:
         while True:
             try:
                 async for event in get_events((1, 1, 1, 1, 1)):
-                    if event.time > self.last_date:
+                    if event.time >= self.last_date and self.last_event != event:
                         self.last_date = event.time
                         await event._get_map()
                         if event.event_type not in ["Ranked", "Loved"]:
@@ -90,6 +91,7 @@ class notAiess:
                                 continue
                         for handler in self.handlers:
                             await handler.parse(event)
+                        self.last_event = event
 
                 await asyncio.sleep(300)
 
