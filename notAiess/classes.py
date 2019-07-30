@@ -113,7 +113,7 @@ class eventBase(ABC):
         return self.beatmapset == other.beatmapset
 
     def __ne__(self, other):
-        return self == other
+        return not self == other
 
     async def _get_map(self):
         """Receive map from osu! API and assign it to ``self.beatmapset`` and ``self.beatmap``"""
