@@ -89,6 +89,7 @@ class notAiess:
                                 if not self.last_event.beatmapset:
                                     await self.last_event.beatmapset
                                 if event.beatmapset == self.last_event.beatmapset:
+                                    self.last_event = event
                                     continue
                         self.last_date = event.time
                         if event.event_type not in ["Ranked", "Loved"]:
