@@ -85,20 +85,19 @@ class notAiess:
                     if event.time >= self.last_date:
                         await event._get_map()
                         if event.time == self.last_date:
-                            if hasattr(self.last_event, "beatmapset"):
+                            if self.last_event:
                                 if not self.last_event.beatmapset:
                                     await self.last_event.beatmapset
-                                if event.beatmapset == self.last_event.beatmapset:
-                                    self.last_event = event
+                                if event.beatmapset[0].beatmapset_id == self.last_event.beatmapset[0].beatmapset_id:
                                     continue
                         self.last_date = event.time
+                        self.last_event = event
                         if event.event_type not in ["Ranked", "Loved"]:
                             user = await event.source.user
                             if user['username'] == "BanchoBot":
                                 continue
                         for handler in self.handlers:
                             await handler.parse(event)
-                        self.last_event = event
 
                 await asyncio.sleep(300)
 
