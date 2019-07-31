@@ -84,7 +84,6 @@ class notAiess:
                 async for event in get_events((1, 1, 1, 1, 1)):
                     if event.time >= self.last_date:
                         await event._get_map()
-                        self.last_event = event
                         if event.time == self.last_date:
                             if hasattr(self.last_event, "beatmapset"):
                                 if not self.last_event.beatmapset:
