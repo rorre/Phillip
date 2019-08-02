@@ -1,7 +1,7 @@
 import sys
 import time
 import asyncio
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List
 import traceback
 import requests_async as requests
@@ -81,7 +81,8 @@ class notAiess:
 
         while True:
             try:
-                async for event in get_events((1, 1, 1, 1, 1)):
+                events = [event async for event in get_events((1, 1, 1, 1, 1))]
+                for i, event in enumerate(events):
                     if event.time >= self.last_date:
                         await event._get_map()
                         if event.time == self.last_date:
@@ -90,7 +91,10 @@ class notAiess:
                                     await self.last_event.beatmapset
                                 if event.beatmapset[0].beatmapset_id == self.last_event.beatmapset[0].beatmapset_id:
                                     continue
-                        self.last_date = event.time
+                        if event.time == self.last_date and i + 1 == len(events):
+                            self.last_date = event.time + timedelta(seconds=1)
+                        else:
+                            self.last_date = event.time
                         self.last_event = event
                         if event.event_type not in ["Ranked", "Loved"]:
                             user = await event.source.user
