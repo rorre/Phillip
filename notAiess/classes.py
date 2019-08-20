@@ -44,7 +44,8 @@ class Source:
         for discussion in discussion_parents:
             if not discussion:
                 continue
-            if discussion['id'] == post_id:
+            discussion_id = discussion.get("id")
+            if discussion_id == post_id:
                 sourcePost = discussion['posts'][0]
                 break
         return sourcePost
