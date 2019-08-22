@@ -11,9 +11,9 @@ base_api_url = "https://osu.ppy.sh/api/"
 apikey = None
 
 events = {
-"nominate": "Bubbled",
-"disqualify": "Disqualified",
-"nomination_reset": "Popped",
+    "nominate": "Bubbled",
+    "disqualify": "Disqualified",
+    "nomination_reset": "Popped",
 }
 
 async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
@@ -114,7 +114,7 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
         }
     }
     if event.event_type not in ["Ranked", "Loved"]:
-        apiuser = await event.source.user
+        apiuser = await event.source.user()
         user = apiuser['username']
         user_id = apiuser['user_id']
         embed_base['footer'] = {
@@ -122,7 +122,7 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
             "text": f"{user}"
         }
     if event.event_type in ["Popped", "Disqualified"]:
-        source = await event.source.post
+        source = await event.source.post()
         embed_base['footer']['text'] += " - {}".format(
             source['message'].split("\n")[0])
         embed_base['color'] = 15408128
@@ -159,5 +159,3 @@ async def nomination_history(mapid: int):
                 e = "Qualified"
             history.append((e, event['user_id']))
     return history
-
-

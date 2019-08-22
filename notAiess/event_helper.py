@@ -35,7 +35,7 @@ async def get_events(types_val: list) -> str:
         action = event.find(
             class_="beatmapset-event__content").text.strip().split()[0]
         if action == "This":
-            continue # Skip qualified event news
+            continue  # Skip qualified event news
         next_map = None
         if i + 1 != len(events_html):
             next_map = events_html[i+1]

@@ -1,16 +1,14 @@
-import sys
-import time
 import asyncio
+import signal
+import sys
+import traceback
 from datetime import datetime, timedelta
 from typing import List
-import traceback
+
 import requests_async as requests
-import signal
 
 from . import helper
-from . import event_helper
-
-get_events = event_helper.get_events
+from .event_helper import get_events
 
 
 class Handler:
@@ -62,14 +60,14 @@ class notAiess:
         if no handlers nor webhook_url assigned.
     """
 
-    def __init__(self, token: str, last_date: datetime = None, handlers: List[Handler] = [],
-                 webhook_url: str = "", loop = None):
+    def __init__(self, token: str, last_date: datetime = None, handlers: List[Handler] = list(),
+                 webhook_url: str = "", loop=None):
         self.handlers = handlers
         self.webhook_url = webhook_url
         self.apitoken = token
         helper.apikey = token
         self.last_date = last_date or datetime.utcfromtimestamp(0)
-        self.loop = None
+        self.loop = loop or asyncio.get_event_loop()
         self.last_event = None
 
     async def start(self):
@@ -97,7 +95,7 @@ class notAiess:
                             self.last_date = event.time
                         self.last_event = event
                         if event.event_type not in ["Ranked", "Loved"]:
-                            user = await event.source.user
+                            user = await event.source.user()
                             if user['username'] == "BanchoBot":
                                 continue
                         for handler in self.handlers:
@@ -118,14 +116,13 @@ class notAiess:
             The event handler, class must have `parse` function with `event` as argument.
         """
         self.handlers.append(handler)
-    
+
     def run(self):
-        self.loop = asyncio.get_event_loop()
         asyncio.ensure_future(self.start())
 
         try:
-            self.loop.add_signal_handler(signal.SIGINT, lambda: self.loop.stop())
-            self.loop.add_signal_handler(signal.SIGTERM, lambda: self.loop.stop())
+            self.loop.add_signal_handler(signal.SIGINT, self.loop.stop)
+            self.loop.add_signal_handler(signal.SIGTERM, self.loop.stop)
         except NotImplementedError:
             pass
 

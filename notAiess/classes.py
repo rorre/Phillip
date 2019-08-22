@@ -1,26 +1,21 @@
-from async_property import async_property
 from abc import ABC, abstractmethod
+from async_property import async_property
 from datetime import datetime
 from typing import List
+
 from bs4 import BeautifulSoup
 
-from . import helper
-
-get_api = helper.get_api
-get_beatmap_api = helper.get_beatmap_api
-get_discussion_json = helper.get_discussion_json
+from .helper import get_api, get_beatmap_api, get_discussion_json
 
 
 class Source:
     """Representation of the beatmapset event source
-    
+
     Attributes
     ----------
     post: dict
-        |coroprop|
-        The post/thread causing the event. (raises ``Exception`` if its a Nomination/Ranked/Loved post)
+        The post/thread causing the event. (raises ``Exception`` if its a Nomination post)
     user: dict
-        |coroprop|
         osu! API user object of the user that causes the event.
     """
     def __init__(self, src_url: str, username: str = None, user_id: int = None,
@@ -31,7 +26,6 @@ class Source:
         self._user = user
         self._post = post
 
-    @async_property
     async def post(self):
         if "discussion" not in self.src_url:
             raise Exception("Nominations doesn't have posts.")
@@ -50,7 +44,6 @@ class Source:
                 break
         return sourcePost
 
-    @async_property
     async def user(self):
         if self._user:
             return self._user
@@ -60,7 +53,7 @@ class Source:
         elif self._user_id:
             api_response = await get_api("get_user", u=self._user_id)
         elif self.src_url:
-            post = await self.post
+            post = await self.post()
             api_response = await get_api("get_user", u=post['user_id'])
         return api_response[0]
 
@@ -91,21 +84,21 @@ class eventBase(ABC):
     gamemodes: list of str
         Game modes inside the beatmapset.
     beatmap: osuClasses.Beatmap
-        The difficulty of the beatmap, usually the first entry from osu! API. (Needs to run ``_get_map()``)
+        The difficulty of the beatmap, usually the first entry from osu! API.
     beatmapset: list of osuClasses.Beatmap
-        Array of difficulties inside the beatmap. (Needs to run ``_get_map()``)
+        Array of difficulties inside the beatmap.
     source: Source
         Representation of the beatmapset event source.
     """
 
-    def __init__(self, soup: BeautifulSoup, nextevent:BeautifulSoup=None):
+    def __init__(self, soup: BeautifulSoup, nextevent: BeautifulSoup=None):
         self.soup = soup
         self.next_map = nextevent
         self.beatmapset = None
         self.beatmap = None
 
     async def _get_map(self):
-        """Receive map from osu! API and assign it to ``self.beatmapset`` and ``self.beatmap``"""
+        """Receive map from osu! API"""
         map_id = self.soup.a.get("href").split("/")[4]
         self.beatmapset = await get_beatmap_api(s=map_id)
         self.beatmap = self.beatmapset[0]
@@ -127,12 +120,16 @@ class eventBase(ABC):
         return self.soup.a.img.get("src")
 
     @property
+    def user_html(self):
+        return self.soup.find(class_="beatmapset-event__content").a
+
+    @property
     def user_action(self) -> str:
-        return self.soup.find(class_="beatmapset-event__content").a.text.strip()
+        return self.user_html.text.strip()
 
     @property
     def user_id_action(self) -> int:
-        return int(self.soup.find(class_="beatmapset-event__content").a.get('data-user-id'))
+        return int(self.user_html.get('data-user-id'))
 
     @property
     def time(self) -> datetime:
@@ -164,7 +161,11 @@ class eventBase(ABC):
 
     @property
     def source(self):
-        return Source(self.event_source_url, self.user_action, self.user_id_action)
+        return Source(
+            self.event_source_url,
+            self.user_action,
+            self.user_id_action
+        )
 
 
 class Nominated(eventBase):
@@ -172,7 +173,8 @@ class Nominated(eventBase):
     def event_type(self) -> str:
         stat = "Bubbled"
         if self.next_map:
-            action = self.next_map.find(class_="beatmapset-event__content").text.strip().split()[0]
+            map_content = self.next_map.find(class_="beatmapset-event__content")
+            action = map_content.text.strip().split()[0]
             if action == "This":
                 stat = "Qualified"
         return stat
@@ -231,6 +233,7 @@ class Popped(Disqualified):
     @property
     def source(self):
         return Source(self.event_source_url)
+
 
 class Ranked(eventBase):
     @property
