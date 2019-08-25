@@ -8,6 +8,7 @@ from . import osuClasses
 Beatmap = osuClasses.Beatmap
 
 base_api_url = "https://osu.ppy.sh/api/"
+base_groups_url = "https://osu.ppy.sh/groups/"
 apikey = None
 
 events = {
@@ -159,3 +160,16 @@ async def nomination_history(mapid: int):
                 e = "Qualified"
             history.append((e, event['user_id']))
     return history
+
+async def get_users(group_id: int) -> List[dict]:
+    res = await requests.get(base_groups_url + str(group_id)).text
+    bs = BeautifulSoup(res)
+    users_tag = bs.find(id="json-users").text
+    users_json = json.loads(users_tag)
+    return users_json
+
+def has_user(source, target):
+    for user in target:
+        if source['id'] == target['id']:
+            return True
+    return False

@@ -40,7 +40,58 @@ class Handler:
             'embeds': [embed]
         })
         return
+    
+    @emitter.on('Bubbled')
+    async def on_map_bubbled(self, event):
+        pass
 
+    @emitter.on('Qualified')
+    async def on_map_qualified(self, event):
+        pass
+
+    @emitter.on('Disqualified')
+    async def on_map_disqualified(self, event):
+        pass
+
+    @emitter.on('Popped')
+    async def on_map_popped(self, event):
+        pass
+
+    @emitter.on('Ranked')
+    async def on_map_ranked(self, event):
+        pass
+
+    @emitter.on('Loved')
+    async def on_map_loved(self, event):
+        pass
+
+    @emitter.on('group_added')
+    async def on_group_added(self, user):
+        pass
+
+    @emitter.on('group_removed')
+    async def on_group_removed(self, user):
+        pass
+
+    @emitter.on('bng_limited')
+    async def on_group_probation(self, user):
+        pass
+    
+    @emitter.on('gmt')
+    async def on_group_gmt(self, user):
+        pass
+
+    @emitter.on('bng')
+    async def on_group_bng(self, user):
+        pass
+    
+    @emitter.on('nat')
+    async def on_group_nat(self, user):
+        pass
+
+    @emitter.on('alumni')
+    async def on_group_alumni(self, user):
+        pass
 
 class notAiess:
     """Representation of Aiess client to interact with osu! web.
@@ -73,32 +124,63 @@ class notAiess:
         self.loop = loop or asyncio.get_event_loop()
         self.last_event = None
         self.closed = False
+        self.group_ids = [
+            # https://github.com/ppy/osu-web/blob/master/app/Models/UserGroup.php
+            4,  # GMT
+            7,  # NAT
+            16, # Alumni
+            28, # Full BN
+            32  # Probation BN
+        ]
+        self.last_users = dict()
+        for gid in self.group_ids:
+            self.last_users[gid] = None
 
     async def check_map_events(self):
         events = [event async for event in get_events((1, 1, 1, 1, 1))]
         for i, event in enumerate(events):
             if event.time >= self.last_date:
                 await event._get_map()
+
                 if event.time == self.last_date:
                     if self.last_event:
                         if not self.last_event.beatmapset:
                             await self.last_event.beatmapset
                         if event.beatmapset[0].beatmapset_id == self.last_event.beatmapset[0].beatmapset_id:
                             continue
+
                 if event.time == self.last_date and i + 1 == len(events):
                     self.last_date = event.time + timedelta(seconds=1)
                 else:
                     self.last_date = event.time
+
                 self.last_event = event
                 if event.event_type not in ["Ranked", "Loved"]:
                     user = await event.source.user()
                     if user['username'] == "BanchoBot":
                         continue
+                        
                 for handler in self.handlers:
                     handler.emitter.emit("map_event", handler, event)
+                    handler.emitter.emit(event.event_type, handler, event)
 
     async def check_role_change(self):
-        pass
+        for gid in self.group_ids:
+            users = helper.get_users(gid)
+
+            for user in users:
+                if not helper.has_user(user, self.last_users[gid]):
+                    for handler in self.handlers:
+                        handler.emitter.emit("group_add", user)
+                        handler.emitter.emit(user['default_group'], user)
+            
+            for user in self.last_users:    
+                if not helper.has_user(user, users):
+                    for handler in self.handlers:
+                        handler.emitter.emit("group_removed", user)
+                        handler.emitter.emit(user['default_group'], user)
+
+            self.last_users[gid] = users
 
     async def start(self):
         """Well, run the client, what else?! |coro|"""
@@ -110,6 +192,7 @@ class notAiess:
         while not self.closed:
             try:
                 await self.check_map_events()
+                await self.check_role_change
                 await asyncio.sleep(300)
 
             except:
@@ -125,8 +208,6 @@ class notAiess:
             The event handler, class must have `parse` function with `event` as argument.
         """
         self.handlers.append(handler)
-
-    
 
     def run(self):
         def stop():
