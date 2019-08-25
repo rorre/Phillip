@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from typing import List
 
 import requests_async as requests
+from pyee import AsyncIOEventEmitter
 
 from . import helper
 from .event_helper import get_events
@@ -19,11 +20,13 @@ class Handler:
     webhook_url: str
         Discord webhook url to send
     """
+    emitter = AsyncIOEventEmitter()
 
     def __init__(self, webhook_url):
         self.hook_url = webhook_url
 
-    async def parse(self, event):
+    @emitter.on('map_event')
+    async def on_map_event(self, event):
         """Parse beatmap event and send to discord webhook |coro|
 
         Parameters
@@ -71,6 +74,32 @@ class notAiess:
         self.last_event = None
         self.closed = False
 
+    async def check_map_events(self):
+        events = [event async for event in get_events((1, 1, 1, 1, 1))]
+        for i, event in enumerate(events):
+            if event.time >= self.last_date:
+                await event._get_map()
+                if event.time == self.last_date:
+                    if self.last_event:
+                        if not self.last_event.beatmapset:
+                            await self.last_event.beatmapset
+                        if event.beatmapset[0].beatmapset_id == self.last_event.beatmapset[0].beatmapset_id:
+                            continue
+                if event.time == self.last_date and i + 1 == len(events):
+                    self.last_date = event.time + timedelta(seconds=1)
+                else:
+                    self.last_date = event.time
+                self.last_event = event
+                if event.event_type not in ["Ranked", "Loved"]:
+                    user = await event.source.user()
+                    if user['username'] == "BanchoBot":
+                        continue
+                for handler in self.handlers:
+                    handler.emitter.emit("map_event", handler, event)
+
+    async def check_role_change(self):
+        pass
+
     async def start(self):
         """Well, run the client, what else?! |coro|"""
         if not self.handlers:
@@ -80,28 +109,7 @@ class notAiess:
 
         while not self.closed:
             try:
-                events = [event async for event in get_events((1, 1, 1, 1, 1))]
-                for i, event in enumerate(events):
-                    if event.time >= self.last_date:
-                        await event._get_map()
-                        if event.time == self.last_date:
-                            if self.last_event:
-                                if not self.last_event.beatmapset:
-                                    await self.last_event.beatmapset
-                                if event.beatmapset[0].beatmapset_id == self.last_event.beatmapset[0].beatmapset_id:
-                                    continue
-                        if event.time == self.last_date and i + 1 == len(events):
-                            self.last_date = event.time + timedelta(seconds=1)
-                        else:
-                            self.last_date = event.time
-                        self.last_event = event
-                        if event.event_type not in ["Ranked", "Loved"]:
-                            user = await event.source.user()
-                            if user['username'] == "BanchoBot":
-                                continue
-                        for handler in self.handlers:
-                            await handler.parse(event)
-
+                await self.check_map_events()
                 await asyncio.sleep(300)
 
             except:
@@ -117,6 +125,8 @@ class notAiess:
             The event handler, class must have `parse` function with `event` as argument.
         """
         self.handlers.append(handler)
+
+    
 
     def run(self):
         def stop():
