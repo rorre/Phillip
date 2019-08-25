@@ -162,7 +162,8 @@ async def nomination_history(mapid: int):
     return history
 
 async def get_users(group_id: int) -> List[dict]:
-    res = await requests.get(base_groups_url + str(group_id)).text
+    r = await requests.get(base_groups_url + str(group_id))
+    res = r.text
     bs = BeautifulSoup(res)
     users_tag = bs.find(id="json-users").text
     users_json = json.loads(users_tag)

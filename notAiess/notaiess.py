@@ -11,6 +11,8 @@ from pyee import AsyncIOEventEmitter
 from . import helper
 from .event_helper import get_events
 
+emitter = AsyncIOEventEmitter()
+
 
 class Handler:
     """Handler base for ``notAiess``
@@ -20,7 +22,7 @@ class Handler:
     webhook_url: str
         Discord webhook url to send
     """
-    emitter = AsyncIOEventEmitter()
+    
 
     def __init__(self, webhook_url):
         self.hook_url = webhook_url
@@ -134,7 +136,7 @@ class notAiess:
         ]
         self.last_users = dict()
         for gid in self.group_ids:
-            self.last_users[gid] = None
+            self.last_users[gid] = list()
 
     async def check_map_events(self):
         events = [event async for event in get_events((1, 1, 1, 1, 1))]
@@ -161,24 +163,24 @@ class notAiess:
                         continue
 
                 for handler in self.handlers:
-                    handler.emitter.emit("map_event", handler, event)
-                    handler.emitter.emit(event.event_type, handler, event)
+                    emitter.emit("map_event", handler, event)
+                    emitter.emit(event.event_type, handler, event)
 
     async def check_role_change(self):
         for gid in self.group_ids:
-            users = helper.get_users(gid)
+            users = await helper.get_users(gid)
 
             for user in users:
                 if not helper.has_user(user, self.last_users[gid]):
                     for handler in self.handlers:
-                        handler.emitter.emit("group_add", user)
-                        handler.emitter.emit(user['default_group'], user)
+                        emitter.emit("group_add", handler, user)
+                        emitter.emit(user['default_group'], handler, user)
             
-            for user in self.last_users:    
+            for user in self.last_users[gid]:
                 if not helper.has_user(user, users):
                     for handler in self.handlers:
-                        handler.emitter.emit("group_removed", user)
-                        handler.emitter.emit(user['default_group'], user)
+                        emitter.emit("group_removed", handler, user)
+                        emitter.emit(user['default_group'], handler, user)
 
             self.last_users[gid] = users
 
