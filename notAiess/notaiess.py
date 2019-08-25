@@ -159,7 +159,7 @@ class notAiess:
                     user = await event.source.user()
                     if user['username'] == "BanchoBot":
                         continue
-                        
+
                 for handler in self.handlers:
                     handler.emitter.emit("map_event", handler, event)
                     handler.emitter.emit(event.event_type, handler, event)
@@ -192,7 +192,7 @@ class notAiess:
         while not self.closed:
             try:
                 await self.check_map_events()
-                await self.check_role_change
+                await self.check_role_change()
                 await asyncio.sleep(300)
 
             except:
