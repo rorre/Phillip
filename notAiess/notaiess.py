@@ -69,6 +69,7 @@ class notAiess:
         self.last_date = last_date or datetime.utcfromtimestamp(0)
         self.loop = loop or asyncio.get_event_loop()
         self.last_event = None
+        self.closed = False
 
     async def start(self):
         """Well, run the client, what else?! |coro|"""
@@ -77,7 +78,7 @@ class notAiess:
                 raise Exception("Requires Handler or webhook_url")
             self.handlers.append(Handler(self.webhook_url))
 
-        while True:
+        while not self.closed:
             try:
                 events = [event async for event in get_events((1, 1, 1, 1, 1))]
                 for i, event in enumerate(events):
@@ -118,18 +119,20 @@ class notAiess:
         self.handlers.append(handler)
 
     def run(self):
-        asyncio.ensure_future(self.start())
+        def stop():
+            self.closed = True
+            self.loop.stop()
 
         try:
-            self.loop.add_signal_handler(signal.SIGINT, self.loop.stop)
-            self.loop.add_signal_handler(signal.SIGTERM, self.loop.stop)
+            self.loop.add_signal_handler(signal.SIGINT, stop)
+            self.loop.add_signal_handler(signal.SIGTERM, stop)
         except NotImplementedError:
             pass
 
         try:
-            self.loop.run_forever()
+            self.loop.run_until_complete(self.start())
         except KeyboardInterrupt:
             print("Exiting...")
         finally:
-            self.loop.run_until_complete(self.loop.shutdown_asyncgens())
+            stop()
             self.loop.close()
