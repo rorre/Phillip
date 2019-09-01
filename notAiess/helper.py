@@ -170,7 +170,10 @@ async def get_users(group_id: int) -> List[dict]:
     return users_json
 
 def has_user(source, target):
+    if not target:
+        return False
+
     for user in target:
-        if source['id'] == target['id']:
+        if source['id'] == user['id']:
             return True
     return False
