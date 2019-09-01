@@ -121,7 +121,7 @@ class notAiess:
         self.handlers = handlers
         self.webhook_url = webhook_url
         self.apitoken = token
-        helper.apikey = token
+        helper.APIKEY = token
         self.last_date = last_date or datetime.utcfromtimestamp(0)
         self.loop = loop or asyncio.get_event_loop()
         self.last_event = None
