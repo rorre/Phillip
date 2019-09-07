@@ -4,3 +4,4 @@ click
 numpydoc
 sphinx_rtd_theme
 async-property
+pyee
