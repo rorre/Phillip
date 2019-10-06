@@ -184,7 +184,7 @@ async def get_users(group_id: int) -> List[dict]:
     """
     r = await requests.get(BASE_GROUPS_URL + str(group_id))
     res = r.text
-    bs = BeautifulSoup(res)
+    bs = BeautifulSoup(res, features="html.parser")
     users_tag = bs.find(id="json-users").text
     users_json = json.loads(users_tag)
     return users_json
