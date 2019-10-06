@@ -26,8 +26,22 @@ class Handler:
 
     def __init__(self, webhook_url):
         self.hook_url = webhook_url
+        self._register_events()
 
-    @emitter.on('map_event')
+    def _register_events(self):
+        for func in dir(self):
+            if not func.startswith("on_"): continue
+            if func == "on_map_event":
+                emitter.on("map_event", getattr(self, func))
+            elif func == "on_group_added":
+                emitter.on("group_added", getattr(self, func))
+            elif func == "on_group_removed":
+                emitter.on("group_removed", getattr(self, func))
+            elif func == "on_group_probation":
+                emitter.on("bng_limited", getattr(self, func))
+            else:
+                emitter.on(func.split("_")[-1], getattr(self, func))
+
     async def on_map_event(self, event):
         """Parse beatmap event and send to discord webhook |coro|
 
@@ -43,55 +57,42 @@ class Handler:
         })
         return
     
-    @emitter.on('Bubbled')
     async def on_map_bubbled(self, event):
         pass
 
-    @emitter.on('Qualified')
     async def on_map_qualified(self, event):
         pass
 
-    @emitter.on('Disqualified')
     async def on_map_disqualified(self, event):
         pass
 
-    @emitter.on('Popped')
     async def on_map_popped(self, event):
         pass
 
-    @emitter.on('Ranked')
     async def on_map_ranked(self, event):
         pass
 
-    @emitter.on('Loved')
     async def on_map_loved(self, event):
         pass
 
-    @emitter.on('group_added')
     async def on_group_added(self, user):
         pass
 
-    @emitter.on('group_removed')
     async def on_group_removed(self, user):
         pass
 
-    @emitter.on('bng_limited')
     async def on_group_probation(self, user):
         pass
     
-    @emitter.on('gmt')
     async def on_group_gmt(self, user):
         pass
 
-    @emitter.on('bng')
     async def on_group_bng(self, user):
         pass
     
-    @emitter.on('nat')
     async def on_group_nat(self, user):
         pass
 
-    @emitter.on('alumni')
     async def on_group_alumni(self, user):
         pass
 
@@ -162,9 +163,8 @@ class notAiess:
                     if user['username'] == "BanchoBot":
                         continue
 
-                for handler in self.handlers:
-                    emitter.emit("map_event", handler, event)
-                    emitter.emit(event.event_type, handler, event)
+                emitter.emit("map_event", event)
+                emitter.emit(event.event_type.lower(), event)
 
     async def check_role_change(self):
         for gid in self.group_ids:
@@ -172,15 +172,13 @@ class notAiess:
 
             for user in users:
                 if not helper.has_user(user, self.last_users[gid]):
-                    for handler in self.handlers:
-                        emitter.emit("group_add", handler, user)
-                        emitter.emit(user['default_group'], handler, user)
+                    emitter.emit("group_add", user)
+                    emitter.emit(user['default_group'], user)
             
             for user in self.last_users[gid]:
                 if not helper.has_user(user, users):
-                    for handler in self.handlers:
-                        emitter.emit("group_removed", handler, user)
-                        emitter.emit(user['default_group'], handler, user)
+                    emitter.emit("group_removed", user)
+                    emitter.emit(user['default_group'], user)
 
             self.last_users[gid] = users
 
@@ -196,6 +194,9 @@ class notAiess:
                 await self.check_map_events()
                 await self.check_role_change()
                 await asyncio.sleep(300)
+
+            except KeyboardInterrupt as e:
+                raise e
 
             except:
                 print("An error occured, will keep running anyway.", file=sys.stderr)
