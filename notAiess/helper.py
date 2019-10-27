@@ -1,15 +1,13 @@
 import json
 from typing import List, Tuple
-
-import requests_async as requests
+import aiohttp
 from bs4 import BeautifulSoup
-from . import osuClasses
-
-Beatmap = osuClasses.Beatmap
+from .osuClasses import Beatmap
 
 BASE_API_URL = "https://osu.ppy.sh/api/"
 BASE_GROUPS_URL = "https://osu.ppy.sh/groups/"
 APIKEY = None
+session = aiohttp.ClientSession()
 
 EVENTS = {
     "nominate": "Bubbled",
@@ -47,8 +45,8 @@ async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
         api_arguments.append(f"{argument[0]}={str(argument[1])}")
     api_args = '&'.join(api_arguments)
     api_url = BASE_API_URL + endpoint + "?" + api_args
-    api_res = await requests.get(api_url)
-    return api_res.json()
+    api_res = await session.get(api_url)
+    return await api_res.json()
 
 
 async def get_beatmap_api(**kwargs: dict) -> List[Beatmap]:
@@ -76,8 +74,8 @@ async def get_discussion_json(uri: str) -> List[dict]:
         The discussion posts.
     """
 
-    set_html = await requests.get(uri)
-    soup = BeautifulSoup(set_html.text, features="html.parser")
+    set_html = await session.get(uri)
+    soup = BeautifulSoup(await set_html.text(), features="html.parser")
     set_json_str = soup.find(id="json-beatmapset-discussion").text
     set_json = json.loads(set_json_str)
     return set_json['beatmapset']['discussions']
@@ -153,8 +151,8 @@ async def nomination_history(mapid: int) -> List[Tuple[str, int]]:
         A list containing tuple with a string with event type and user id of user triggering the event.
     """
     discussion_url = f"https://osu.ppy.sh/beatmapsets/{str(mapid)}/discussion"
-    set_html = await requests.get(discussion_url)
-    soup = BeautifulSoup(set_html.text, features="html.parser")
+    set_html = await session.get(discussion_url)
+    soup = BeautifulSoup(await set_html.text(), features="html.parser")
     set_json_str = soup.find(id="json-beatmapset-discussion").text
     set_json = json.loads(set_json_str)
     js = set_json['beatmapset']['events']
@@ -182,8 +180,8 @@ async def get_users(group_id: int) -> List[dict]:
     List[dict]
         A dictionary containing users' data.
     """
-    r = await requests.get(BASE_GROUPS_URL + str(group_id))
-    res = r.text
+    r = await session.get(BASE_GROUPS_URL + str(group_id))
+    res = await r.text()
     bs = BeautifulSoup(res, features="html.parser")
     users_tag = bs.find(id="json-users").text
     users_json = json.loads(users_tag)

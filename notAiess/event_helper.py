@@ -1,9 +1,10 @@
-import requests_async as requests
+import aiohttp
 from bs4 import BeautifulSoup
 
 from . import classes
 
 base_url = "https://osu.ppy.sh/beatmapsets/events?user=&types%5B%5D="
+session = aiohttp.ClientSession()
 
 types = [
     "nominate",
@@ -20,8 +21,8 @@ async def get_events(types_val: list) -> str:
     if types_val[0]:
         additions.append("qualify")
     url = base_url + '&types%5B%5D='.join(additions)
-    res = await requests.get(url, cookies={"locale": "en"})
-    res_soup = BeautifulSoup(res.text, features="html.parser")
+    res = await session.get(url, cookies={"locale": "en"})
+    res_soup = BeautifulSoup(await res.text(), features="html.parser")
     events_html = res_soup.findAll(class_="beatmapset-event")
     events_html.reverse()
     event_cases = {
