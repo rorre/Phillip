@@ -128,8 +128,11 @@ class notAiess:
 
         while not self.closed:
             try:
-                await self.check_map_events()
-                await self.check_role_change()
+                event = asyncio.create_task(self.check_map_events())
+                role = asyncio.create_task(self.check_role_change())
+
+                await event
+                await role
                 await asyncio.sleep(300)
 
             except:
