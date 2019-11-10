@@ -8,7 +8,7 @@ This lists all the interfaces and objects for notAiess.
 notAiess core
 -------------
 
-.. autoclass:: notAiess
+.. autoclass:: notAiess.notAiess
    :members:
 
 Helpers
@@ -17,14 +17,20 @@ Helpers
 .. automodule:: notAiess.helper
    :members:
 
-Event
------
-
-.. autoclass:: notAiess.classes.eventBase
-   :members: _get_map
-
-.. autoclass:: notAiess.classes.Source
+.. automodule:: notAiess.event_helper
    :members:
+
+abc
+---
+
+.. automodule:: notAiess.abc
+   :members: notAiess.abc.EventBase notAiess.abc.Source
+
+Events
+------
+
+.. automodule:: notAiess.classes
+    :members:
 
 osu! class
 ----------

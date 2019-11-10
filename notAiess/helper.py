@@ -9,7 +9,6 @@ from .osuClasses import Beatmap
 BASE_API_URL = "https://osu.ppy.sh/api/"
 BASE_GROUPS_URL = "https://osu.ppy.sh/groups/"
 APIKEY = None
-SESSION = aiohttp.ClientSession()
 
 EVENTS = {
     "nominate": "Bubbled",
@@ -24,7 +23,7 @@ async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
     Parameters
     ----------
     endpoint: str
-        The API endpoint, reference could be found `here <https://github.com/ppy/osu-api/wiki>`_.
+        The API endpoint, reference could be found `in osu!wiki <https://github.com/ppy/osu-api/wiki>`_.
     **kwargs: dict, optional
         Keyword arguments that will be passed as a query string.
 
@@ -40,15 +39,19 @@ async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
     """
 
     global APIKEY
+    session = aiohttp.ClientSession()
+
     if not APIKEY:
         raise Exception("Requires api key to be set")
     kwargs['k'] = APIKEY
+
     api_arguments = list()
     for argument in kwargs.items():
         api_arguments.append(f"{argument[0]}={str(argument[1])}")
     api_args = '&'.join(api_arguments)
     api_url = BASE_API_URL + endpoint + "?" + api_args
-    api_res = await SESSION.get(api_url)
+    api_res = await session.get(api_url)
+
     return await api_res.json()
 
 
@@ -77,7 +80,8 @@ async def get_discussion_json(uri: str) -> List[dict]:
         The discussion posts.
     """
 
-    set_html = await SESSION.get(uri)
+    session = aiohttp.ClientSession()
+    set_html = await session.get(uri)
     soup = BeautifulSoup(await set_html.text(), features="html.parser")
     set_json_str = soup.find(id="json-beatmapset-discussion").text
     set_json = json.loads(set_json_str)
@@ -147,19 +151,24 @@ async def nomination_history(mapid: int) -> List[Tuple[str, int]]:
     Parameters
     ----------
     mapid : int
-        Beatmapset ID that will be gathered.
+        Beatmapset ID to gather.
 
     Returns
     -------
-    List[Tuple[str, int]]
-        A list containing tuple with a string with event type and user id of user triggering the event.
+    parent: List of child
+        A list containing child tuples.
+    child: Tuple of str, int
+        A tuple with a string of event type and user id of user triggering the event.
     """
+    session = aiohttp.ClientSession()
     discussion_url = f"https://osu.ppy.sh/beatmapsets/{str(mapid)}/discussion"
-    set_html = await SESSION.get(discussion_url)
+
+    set_html = await session.get(discussion_url)
     soup = BeautifulSoup(await set_html.text(), features="html.parser")
     set_json_str = soup.find(id="json-beatmapset-discussion").text
     set_json = json.loads(set_json_str)
     js = set_json['beatmapset']['events']
+    
     history = []
     for i, event in enumerate(js):
         if i + 1 != len(js):
@@ -185,8 +194,10 @@ async def get_users(group_id: int) -> List[dict]:
     List[dict]
         A dictionary containing users' data.
     """
-    r = await SESSION.get(BASE_GROUPS_URL + str(group_id))
+    session = aiohttp.ClientSession()
+    r = await session.get(BASE_GROUPS_URL + str(group_id))
     res = await r.text()
+
     bs = BeautifulSoup(res, features="html.parser")
     users_tag = bs.find(id="json-users").text
     users_json = json.loads(users_tag)

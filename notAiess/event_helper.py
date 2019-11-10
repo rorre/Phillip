@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Generator, List
 
 import aiohttp
 from bs4 import BeautifulSoup
@@ -6,7 +6,6 @@ from bs4 import BeautifulSoup
 from . import abc, classes
 
 BASE_URL = "https://osu.ppy.sh/beatmapsets/events?user=&types%5B%5D="
-SESSION = aiohttp.ClientSession()
 
 TYPES = [
     "nominate",
@@ -17,7 +16,7 @@ TYPES = [
 ]
 
 
-async def get_events(types_val: list) -> Generator[abc.EventBase, abc.EventBase]:
+async def get_events(types_val: list) -> Generator[List[abc.EventBase], None, None]:
     """Get events of from osu!website
 
     Parameters
@@ -32,6 +31,7 @@ async def get_events(types_val: list) -> Generator[abc.EventBase, abc.EventBase]
         List of events resulted from fetching osu!web, with next index as next event that will be processed.
     """
     additions = list()
+    session = aiohttp.ClientSession()
 
     for i in range(5):
         additions.append(types_val[i] and TYPES[i] or str())
@@ -40,7 +40,7 @@ async def get_events(types_val: list) -> Generator[abc.EventBase, abc.EventBase]
         additions.append("qualify")
 
     url = BASE_URL + '&types%5B%5D='.join(additions)
-    res = await SESSION.get(url, cookies={"locale": "en"})
+    res = await session.get(url, cookies={"locale": "en"})
     res_soup = BeautifulSoup(await res.text(), features="html.parser")
     events_html = res_soup.findAll(class_="beatmapset-event")
     events_html.reverse()
