@@ -1,19 +1,22 @@
 import json
 from typing import List, Tuple
+
 import aiohttp
 from bs4 import BeautifulSoup
+
 from .osuClasses import Beatmap
 
 BASE_API_URL = "https://osu.ppy.sh/api/"
 BASE_GROUPS_URL = "https://osu.ppy.sh/groups/"
 APIKEY = None
-session = aiohttp.ClientSession()
+SESSION = aiohttp.ClientSession()
 
 EVENTS = {
     "nominate": "Bubbled",
     "disqualify": "Disqualified",
     "nomination_reset": "Popped",
 }
+
 
 async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
     """Request something based on endpoint. |coro|
@@ -45,7 +48,7 @@ async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
         api_arguments.append(f"{argument[0]}={str(argument[1])}")
     api_args = '&'.join(api_arguments)
     api_url = BASE_API_URL + endpoint + "?" + api_args
-    api_res = await session.get(api_url)
+    api_res = await SESSION.get(api_url)
     return await api_res.json()
 
 
@@ -74,7 +77,7 @@ async def get_discussion_json(uri: str) -> List[dict]:
         The discussion posts.
     """
 
-    set_html = await session.get(uri)
+    set_html = await SESSION.get(uri)
     soup = BeautifulSoup(await set_html.text(), features="html.parser")
     set_json_str = soup.find(id="json-beatmapset-discussion").text
     set_json = json.loads(set_json_str)
@@ -131,7 +134,8 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
         for h in history:
             u = await get_api("get_user", u=h[1])
             usern = u[0]['username']
-            if usern == "BanchoBot": continue
+            if usern == "BanchoBot":
+                continue
             s += f"{action_icons[h[0]]} [{usern}](https://osu.ppy.sh/u/{h[1]}) "
         embed_base['description'] += "\r\n " + s
     return embed_base
@@ -139,19 +143,19 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
 
 async def nomination_history(mapid: int) -> List[Tuple[str, int]]:
     """Get nomination history of a beatmap.
-    
+
     Parameters
     ----------
     mapid : int
         Beatmapset ID that will be gathered.
-    
+
     Returns
     -------
     List[Tuple[str, int]]
         A list containing tuple with a string with event type and user id of user triggering the event.
     """
     discussion_url = f"https://osu.ppy.sh/beatmapsets/{str(mapid)}/discussion"
-    set_html = await session.get(discussion_url)
+    set_html = await SESSION.get(discussion_url)
     soup = BeautifulSoup(await set_html.text(), features="html.parser")
     set_json_str = soup.find(id="json-beatmapset-discussion").text
     set_json = json.loads(set_json_str)
@@ -167,36 +171,38 @@ async def nomination_history(mapid: int) -> List[Tuple[str, int]]:
             history.append((e, event['user_id']))
     return history
 
+
 async def get_users(group_id: int) -> List[dict]:
     """Get users inside of a group
-    
+
     Parameters
     ----------
     group_id : int
         The group id.
-    
+
     Returns
     -------
     List[dict]
         A dictionary containing users' data.
     """
-    r = await session.get(BASE_GROUPS_URL + str(group_id))
+    r = await SESSION.get(BASE_GROUPS_URL + str(group_id))
     res = await r.text()
     bs = BeautifulSoup(res, features="html.parser")
     users_tag = bs.find(id="json-users").text
     users_json = json.loads(users_tag)
     return users_json
 
+
 def has_user(source: dict, target: List[dict]) -> bool:
     """Check if user is inside of another list
-    
+
     Parameters
     ----------
     source : dict
         User to be checked.
     target : List[dict]
         List of users that will be compared to.
-    
+
     Returns
     -------
     bool

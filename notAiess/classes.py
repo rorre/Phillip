@@ -7,7 +7,8 @@ class Nominated(EventBase):
     def event_type(self) -> str:
         stat = "Bubbled"
         if self.next_map:
-            map_content = self.next_map.find(class_="beatmapset-event__content")
+            map_content = self.next_map.find(
+                class_="beatmapset-event__content")
             action = map_content.text.strip().split()[0]
             if action == "This":
                 stat = "Qualified"

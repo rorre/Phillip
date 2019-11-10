@@ -4,11 +4,13 @@ import sys
 import traceback
 from datetime import datetime, timedelta
 from typing import List
-from pyee import AsyncIOEventEmitter
+
 import aiohttp
+from pyee import AsyncIOEventEmitter
+
 from . import helper
-from .event_helper import get_events
 from .abc import Handler
+from .event_helper import get_events
 
 
 class SimpleHandler(Handler):
@@ -17,7 +19,7 @@ class SimpleHandler(Handler):
 
         Parameters
         ----------
-        event: [:class:`eventBase`]
+        event: [:class:`EventBase`]
             The beatmapset event
         """
         embed = await helper.gen_embed(event)
@@ -27,6 +29,7 @@ class SimpleHandler(Handler):
                 'embeds': [embed]
             })
         return
+
 
 class notAiess:
     """Representation of Aiess client to interact with osu! web.
@@ -49,9 +52,12 @@ class notAiess:
         if no handlers nor webhook_url assigned.
     """
 
-    def __init__(self, token: str, last_date: datetime = None, handlers: List[Handler] = list(),
+    def __init__(self, token: str, last_date: datetime = None, handlers: List[Handler] = None,
                  webhook_url: str = "", loop=None, emitter: AsyncIOEventEmitter = None):
-        self.handlers = handlers
+        if not handlers:
+            self.handlers = []
+        else:
+            self.handlers = handlers
         self.webhook_url = webhook_url
         self.apitoken = token
         helper.APIKEY = token
@@ -63,20 +69,22 @@ class notAiess:
             # https://github.com/ppy/osu-web/blob/master/app/Models/UserGroup.php
             4,  # GMT
             7,  # NAT
-            16, # Alumni
-            28, # Full BN
+            16,  # Alumni
+            28,  # Full BN
             32  # Probation BN
         ]
         self.last_users = dict()
         for gid in self.group_ids:
             self.last_users[gid] = list()
-        
+
         self.emitter = emitter or AsyncIOEventEmitter()
 
         for handler in handlers:
             handler.register_emitter(self.emitter)
 
     async def check_map_events(self):
+        """Check for map events. |coro|
+        """
         events = [event async for event in get_events((1, 1, 1, 1, 1))]
         for i, event in enumerate(events):
             if event.time >= self.last_date:
@@ -104,6 +112,8 @@ class notAiess:
                 self.emitter.emit(event.event_type.lower(), event)
 
     async def check_role_change(self):
+        """Check for role changes. |coro|
+        """
         for gid in self.group_ids:
             users = await helper.get_users(gid)
 
@@ -111,7 +121,7 @@ class notAiess:
                 if not helper.has_user(user, self.last_users[gid]):
                     self.emitter.emit("group_add", user)
                     self.emitter.emit(user['default_group'], user)
-            
+
             for user in self.last_users[gid]:
                 if not helper.has_user(user, users):
                     self.emitter.emit("group_removed", user)
@@ -150,6 +160,8 @@ class notAiess:
         self.handlers.append(handler)
 
     def run(self):
+        """Run notAiess. This function does not take any parameter.
+        """
         def stop():
             self.closed = True
             self.loop.stop()

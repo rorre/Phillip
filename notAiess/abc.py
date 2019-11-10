@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
-from bs4 import BeautifulSoup
 from datetime import datetime
 from typing import List
 
-from .helper import get_beatmap_api, get_discussion_json, get_api
+from bs4 import BeautifulSoup
+
+from .helper import get_api, get_beatmap_api, get_discussion_json
 
 
 class EventBase(ABC):
@@ -39,7 +40,7 @@ class EventBase(ABC):
         Representation of the beatmapset event source.
     """
 
-    def __init__(self, soup: BeautifulSoup, nextevent: BeautifulSoup=None):
+    def __init__(self, soup: BeautifulSoup, nextevent: BeautifulSoup = None):
         self.soup = soup
         self.next_map = nextevent
         self.beatmapset = None
@@ -112,6 +113,7 @@ class EventBase(ABC):
             self.user_id_action()
         )
 
+
 class Source:
     """Representation of the beatmapset event source
 
@@ -122,6 +124,7 @@ class Source:
     user: dict
         osu! API user object of the user that causes the event.
     """
+
     def __init__(self, src_url: str, username: str = None, user_id: int = None,
                  post: dict = None, user: dict = None):
         self.src_url = src_url
@@ -161,6 +164,7 @@ class Source:
             api_response = await get_api("get_user", u=post['user_id'])
         return api_response[0]
 
+
 class Handler:
     """Handler base for ``notAiess``
 
@@ -169,7 +173,6 @@ class Handler:
     webhook_url: str
         Discord webhook url to send
     """
-    
 
     def __init__(self, webhook_url):
         self.hook_url = webhook_url
@@ -180,7 +183,8 @@ class Handler:
 
     def _register_events(self):
         for func in dir(self):
-            if not func.startswith("on_"): continue
+            if not func.startswith("on_"):
+                continue
             if func == "on_map_event":
                 self.emitter.on("map_event", getattr(self, func))
             elif func == "on_group_added":
@@ -194,7 +198,7 @@ class Handler:
 
     async def on_map_event(self, event):
         pass
-    
+
     async def on_map_bubbled(self, event):
         pass
 
@@ -221,13 +225,13 @@ class Handler:
 
     async def on_group_probation(self, user):
         pass
-    
+
     async def on_group_gmt(self, user):
         pass
 
     async def on_group_bng(self, user):
         pass
-    
+
     async def on_group_nat(self, user):
         pass
 
