@@ -4,7 +4,7 @@ from typing import List, Tuple
 import aiohttp
 from bs4 import BeautifulSoup
 
-from .osuClasses import Beatmap
+from .osuClasses import Beatmap, GroupUser
 
 BASE_API_URL = "https://osu.ppy.sh/api/"
 BASE_GROUPS_URL = "https://osu.ppy.sh/groups/"
@@ -201,7 +201,11 @@ async def get_users(group_id: int) -> List[dict]:
     bs = BeautifulSoup(res, features="html.parser")
     users_tag = bs.find(id="json-users").text
     users_json = json.loads(users_tag)
-    return users_json
+
+    out = []
+    for user in users_json:
+        out.append(GroupUser(user))
+    return out
 
 
 def has_user(source: dict, target: List[dict]) -> bool:
