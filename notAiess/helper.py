@@ -146,7 +146,7 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
 
 
 async def nomination_history(mapid: int) -> List[Tuple[str, int]]:
-    """Get nomination history of a beatmap.
+    """Get nomination history of a beatmap. |coro|
 
     Parameters
     ----------
@@ -182,7 +182,7 @@ async def nomination_history(mapid: int) -> List[Tuple[str, int]]:
 
 
 async def get_users(group_id: int) -> List[dict]:
-    """Get users inside of a group
+    """Get users inside of a group. |coro|
 
     Parameters
     ----------

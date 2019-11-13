@@ -17,7 +17,7 @@ TYPES = [
 
 
 async def get_events(types_val: list) -> Generator[List[abc.EventBase], None, None]:
-    """Get events of from osu!website
+    """Get events of from osu!website. |coro|
 
     Parameters
     ----------
