@@ -5,3 +5,4 @@ numpydoc
 sphinx_rtd_theme
 pyee
 aiohttp
+sphinx-autodoc-typehints

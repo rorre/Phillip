@@ -5,13 +5,13 @@ Getting Started
 
 Installing
 ----------
-To install, clone the repository, and install the packages needed from ``requirements.txt``
+To install, just install it with pip, really.
 
 .. code-block:: sh
 
-    $ git clone https://github.com/rorre/notAiess.github
-    $ cd notAiess
-    $ pip install -r requirements.txt
+    $ pip install git+https://github.com/rorre/notAiess.git
+
+PyPI release will happen someday.
 
 Example
 -------
@@ -26,15 +26,29 @@ Advanced Usage
 This section will give you an example of using custom ``Handler`` to handle beatmap events.::
 
     from notAiess import notAiess, Handler
-    from requests_async import requests
+    import aiohttp
+
+    # Always inherit Handler class!
+    # It has some magic functions to register the event emitter so that listening function could work.
     class HandleMap(Handler):
-        async def on_map_event(self, event):                       # Function to parse beatmap event
+        # Function to handle every beatmap event.
+        # To see other event handler you can add, see https://notaiess.readthedocs.io/en/latest/api.html#event-listener
+        async def on_map_event(self, event):
+            # Generate webhook dict of the event. This will be converted to JSON later.
             embed = await helper.gen_embed(event)
+
+            # Send webhook with aiohttp.
+            # It is better to use aiohttp as it's already embedded when you install notAiess.
             with aiohttp.ClientSession() as session:
                 await session.post(self.hook_url, json={
                     'content': event.event_source_url,
                     'embeds': [embed]
-                })                                                 # Send webhook to Discord
+                })
 
-    nA = notAiess("0c38a********************", handlers=[HandleMap()])
+    nA = notAiess(
+            "0c38a********************",
+            handlers=[
+                HandleMap("https://discordapp.com/api/webhooks/************")
+            ]
+        )
     nA.run()

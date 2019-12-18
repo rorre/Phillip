@@ -5,67 +5,42 @@ from typing import List
 from bs4 import BeautifulSoup
 
 from .helper import get_api, get_beatmap_api, get_discussion_json
-
+from .osuClasses import Beatmap
 
 class EventBase(ABC):
     """An Abstract Class (ABC) representing base osu! beatmapset event.
-
-    Attributes
-    ----------
-    creator: str
-        Mapper of beatmap.
-    artist: str
-        Beatmap's artist.
-    title: str
-        Beatmap's title.
-    map_cover: str
-        URL to map's cover image.
-    user_action: str
-        User in charge of the event.
-    user_id_action: int
-        ``user_action``'s user id.
-    time: datetime
-        A ``datetime`` object representing the time where the event happened.
-    event_type: str
-        Event that happened on the beatmap (bubbled, qualified, etc.)
-    event_source_url: str
-        URL to event cause.
-    gamemodes: list of str
-        Game modes inside the beatmapset.
-    beatmap: osuClasses.Beatmap
-        The difficulty of the beatmap, usually the first entry from osu! API.
-    beatmapset: list of osuClasses.Beatmap
-        Array of difficulties inside the beatmap.
-    source: Source
-        Representation of the beatmapset event source.
     """
 
     def __init__(self, soup: BeautifulSoup, nextevent: BeautifulSoup = None):
         self.soup = soup
         self.next_map = nextevent
-        self.beatmapset = None
-        self.beatmap = None
+        self._beatmapset = None
+        self._beatmap = None
 
     async def _get_map(self):
         """Receive map from osu! API"""
         map_id = self.soup.a.get("href").split("/")[4]
-        self.beatmapset = await get_beatmap_api(s=map_id)
-        self.beatmap = self.beatmapset[0]
+        self._beatmapset = await get_beatmap_api(s=map_id)
+        self._beatmap = self.beatmapset[0]
 
     @property
     def creator(self) -> str:
+        """Mapper of beatmap."""
         return self.beatmap.creator
 
     @property
     def artist(self) -> str:
+        """Beatmap's artist."""
         return self.beatmap.artist
 
     @property
     def title(self) -> str:
+        """Beatmap's title."""
         return self.beatmap.title
 
     @property
     def map_cover(self) -> str:
+        """URL to map's cover image."""
         return self.soup.a.img.get("src")
 
     @property
@@ -73,26 +48,32 @@ class EventBase(ABC):
         return self.soup.find(class_="beatmapset-event__content").a
 
     def user_action(self) -> str:
+        """User in charge of the event."""
         return self.user_html.text.strip()
 
     def user_id_action(self) -> int:
+        """``user_action``'s user id."""
         return int(self.user_html.get('data-user-id'))
 
     @property
     def time(self) -> datetime:
+        """A ``datetime`` object representing the time where the event happened."""
         dt = self.soup.find(class_="timeago").get("datetime")
         return datetime.strptime(dt, '%Y-%m-%dT%H:%M:%S+00:00')
 
     @abstractmethod
     def event_type(self):
+        """Event that happened on the beatmap (bubbled, qualified, etc.)"""
         pass
 
     @property
     def event_source_url(self) -> str:
+        """URL to event cause."""
         return f"https://osu.ppy.sh/s/{self.beatmap.beatmapset_id}"
 
     @property
     def gamemodes(self) -> List[str]:
+        """Game modes inside the beatmapset."""
         mode_num = {
             "0": "osu",
             "1": "taiko",
@@ -107,22 +88,25 @@ class EventBase(ABC):
 
     @property
     def source(self):
+        """Representation of the beatmapset event source."""
         return Source(
             self.event_source_url,
             self.user_action(),
             self.user_id_action()
         )
 
+    @property
+    def beatmap(self) -> Beatmap:
+        """First difficulty of the beatmap, usually the first entry from osu! API."""
+        return self._beatmap
+
+    @property
+    def beatmapset(self) -> List[Beatmap]:
+        """Array of difficulties inside the beatmap."""
+        return self._beatmapset
 
 class Source:
     """Representation of the beatmapset event source
-
-    Attributes
-    ----------
-    post: dict
-        The post/thread causing the event. (raises ``Exception`` if its a Nomination post)
-    user: dict
-        osu! API user object of the user that causes the event.
     """
 
     def __init__(self, src_url: str, username: str = None, user_id: int = None,
@@ -133,7 +117,9 @@ class Source:
         self._user = user
         self._post = post
 
-    async def post(self):
+    async def post(self) -> dict:
+        """The post/thread causing the event. (raises ``Exception`` if its a Nomination post)
+        """
         if "discussion" not in self.src_url:
             raise Exception("Nominations doesn't have posts.")
         if self._post:
@@ -151,7 +137,9 @@ class Source:
                 break
         return sourcePost
 
-    async def user(self):
+    async def user(self) -> dict:
+        """osu! API user object of the user that causes the event.
+        """
         if self._user:
             return self._user
         api_response = list()

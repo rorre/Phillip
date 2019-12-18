@@ -14,6 +14,10 @@ setuptools.setup(
     url="https://github.com/rorre/notAiess",
     packages=setuptools.find_packages(),
     classifiers=[
-        "Programming Language :: Python :: 3"
+        "Programming Language :: Python :: 3",
+        "Development Status :: 4 - Beta",
+        "Environment :: Web Environment",
+        "Framework :: AsyncIO",
+        "Intended Audience :: Developers"
     ],
 )

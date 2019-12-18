@@ -31,17 +31,16 @@ async def get_events(types_val: list) -> Generator[List[abc.EventBase], None, No
         List of events resulted from fetching osu!web, with next index as next event that will be processed.
     """
     additions = list()
-    session = aiohttp.ClientSession()
+    async with aiohttp.ClientSession() as session:
+        for i in range(5):
+            additions.append(types_val[i] and TYPES[i] or str())
+        if types_val[0]:
+            additions.append("qualify")
+        url = BASE_URL + '&types%5B%5D='.join(additions)
 
-    for i in range(5):
-        additions.append(types_val[i] and TYPES[i] or str())
+        async with session.get(url, cookies={"locale": "en"}) as res:
+            res_soup = BeautifulSoup(await res.text(), features="html.parser")
 
-    if types_val[0]:
-        additions.append("qualify")
-
-    url = BASE_URL + '&types%5B%5D='.join(additions)
-    res = await session.get(url, cookies={"locale": "en"})
-    res_soup = BeautifulSoup(await res.text(), features="html.parser")
     events_html = res_soup.findAll(class_="beatmapset-event")
     events_html.reverse()
 

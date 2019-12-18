@@ -54,6 +54,7 @@ Events
 .. automodule:: notAiess.classes
     :members:
     :inherited-members:
+    :show-inheritance:
 
 osu! class
 ----------

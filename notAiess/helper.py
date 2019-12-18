@@ -39,8 +39,6 @@ async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
     """
 
     global APIKEY
-    session = aiohttp.ClientSession()
-
     if not APIKEY:
         raise Exception("Requires api key to be set")
     kwargs['k'] = APIKEY
@@ -50,9 +48,10 @@ async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
         api_arguments.append(f"{argument[0]}={str(argument[1])}")
     api_args = '&'.join(api_arguments)
     api_url = BASE_API_URL + endpoint + "?" + api_args
-    api_res = await session.get(api_url)
 
-    return await api_res.json()
+    async with aiohttp.ClientSession() as session:
+        async with session.get(api_url) as api_res:
+            return await api_res.json()
 
 
 async def get_beatmap_api(**kwargs: dict) -> List[Beatmap]:
@@ -80,9 +79,9 @@ async def get_discussion_json(uri: str) -> List[dict]:
         The discussion posts.
     """
 
-    session = aiohttp.ClientSession()
-    set_html = await session.get(uri)
-    soup = BeautifulSoup(await set_html.text(), features="html.parser")
+    async with aiohttp.ClientSession() as session:
+        async with session.get(uri) as set_html:
+            soup = BeautifulSoup(await set_html.text(), features="html.parser")
     set_json_str = soup.find(id="json-beatmapset-discussion").text
     set_json = json.loads(set_json_str)
     return set_json['beatmapset']['discussions']
@@ -160,11 +159,11 @@ async def nomination_history(mapid: int) -> List[Tuple[str, int]]:
     child: Tuple of str, int
         A tuple with a string of event type and user id of user triggering the event.
     """
-    session = aiohttp.ClientSession()
-    discussion_url = f"https://osu.ppy.sh/beatmapsets/{str(mapid)}/discussion"
-
-    set_html = await session.get(discussion_url)
-    soup = BeautifulSoup(await set_html.text(), features="html.parser")
+    async with aiohttp.ClientSession() as session:
+        discussion_url = f"https://osu.ppy.sh/beatmapsets/{str(mapid)}/discussion"
+        async with session.get(discussion_url) as set_html:
+            soup = BeautifulSoup(await set_html.text(), features="html.parser")
+    
     set_json_str = soup.find(id="json-beatmapset-discussion").text
     set_json = json.loads(set_json_str)
     js = set_json['beatmapset']['events']
@@ -194,9 +193,9 @@ async def get_users(group_id: int) -> List[dict]:
     List[dict]
         A dictionary containing users' data.
     """
-    session = aiohttp.ClientSession()
-    r = await session.get(BASE_GROUPS_URL + str(group_id))
-    res = await r.text()
+    async with aiohttp.ClientSession() as session:
+        async with session.get(BASE_GROUPS_URL + str(group_id)) as r:
+            res = await r.text()
 
     bs = BeautifulSoup(res, features="html.parser")
     users_tag = bs.find(id="json-users").text

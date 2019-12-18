@@ -29,7 +29,8 @@ author = 'Rendy Arya Kemal'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'numpydoc'
+    'numpydoc',
+    'sphinx_autodoc_typehints'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
