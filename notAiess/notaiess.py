@@ -120,12 +120,12 @@ class notAiess:
             for user in users:
                 if not helper.has_user(user, self.last_users[gid]):
                     self.emitter.emit("group_add", user)
-                    self.emitter.emit(user['default_group'], user)
+                    self.emitter.emit(user.default_group, user)
 
             for user in self.last_users[gid]:
                 if not helper.has_user(user, users):
                     self.emitter.emit("group_removed", user)
-                    self.emitter.emit(user['default_group'], user)
+                    self.emitter.emit(user.default_group, user)
 
             self.last_users[gid] = users
 
