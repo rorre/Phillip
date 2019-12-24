@@ -80,9 +80,9 @@ class notAiess:
             self.last_users[gid] = list()
 
         self.emitter = emitter or AsyncIOEventEmitter()
-
-        for handler in handlers:
-            handler.register_emitter(self.emitter)
+        if handlers:
+            for handler in handlers:
+                handler.register_emitter(self.emitter)
 
     async def check_map_events(self):
         """Check for map events. |coro|
@@ -112,6 +112,8 @@ class notAiess:
 
                 self.emitter.emit("map_event", event)
                 self.emitter.emit(event.event_type.lower(), event)
+        
+        await asyncio.sleep(5 * 60)
 
     async def check_role_change(self):
         """Check for role changes. |coro|
@@ -130,6 +132,7 @@ class notAiess:
                     self.emitter.emit(user.default_group, user)
 
             self.last_users[gid] = users
+        await asyncio.sleep(15 * 60)
 
     async def start(self):
         """Well, run the client, what else?! |coro|"""
@@ -149,7 +152,6 @@ class notAiess:
                     await event
                 if not self.disable_user:
                     await role
-                await asyncio.sleep(300)
 
             except:
                 print("An error occured, will keep running anyway.", file=sys.stderr)
