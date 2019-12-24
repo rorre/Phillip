@@ -1,7 +1,7 @@
 import json
 from typing import List, Tuple
-
 import aiohttp
+from asyncio_throttle import Throttler
 from bs4 import BeautifulSoup
 
 from .osuClasses import Beatmap, GroupUser
@@ -16,6 +16,7 @@ EVENTS = {
     "nomination_reset": "Popped",
 }
 
+throttler = Throttler(rate_limit=2, period=60)
 
 async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
     """Request something based on endpoint. |coro|
@@ -54,6 +55,13 @@ async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
             return await api_res.json()
 
 
+async def get_html(uri):
+    async with throttler:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(uri, cookies={"locale": "en"}) as site_html:
+                return BeautifulSoup(await site_html.text(), features="html.parser")
+
+
 async def get_beatmap_api(**kwargs: dict) -> List[Beatmap]:
     """Get beatmapset from osu! API. |coro|
 
@@ -79,9 +87,7 @@ async def get_discussion_json(uri: str) -> List[dict]:
         The discussion posts.
     """
 
-    async with aiohttp.ClientSession() as session:
-        async with session.get(uri) as set_html:
-            soup = BeautifulSoup(await set_html.text(), features="html.parser")
+    soup = await get_html(uri)
     set_json_str = soup.find(id="json-beatmapset-discussion").text
     set_json = json.loads(set_json_str)
     return set_json['beatmapset']['discussions']
@@ -100,7 +106,6 @@ async def gen_embed(event) -> dict:
     dict
         Discord embed object.
     """
-
     action_icons = {
         "Bubbled": ":thought_balloon:",
         "Qualified": ":heart:",
@@ -109,6 +114,7 @@ async def gen_embed(event) -> dict:
         "Popped": ":anger_right:",
         "Loved": ":gift_heart:"
     }
+
     embed_base = {
         "title": f"{action_icons[event.event_type]} {event.event_type}",
         "description": f"[**{event.artist} - {event.title}**]({event.event_source_url})\r\n\
@@ -118,6 +124,7 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
             "url": f"{event.map_cover}"
         }
     }
+
     if event.event_type not in ["Ranked", "Loved"]:
         apiuser = await event.source.user()
         user = apiuser['username']
@@ -126,11 +133,13 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
             "icon_url": f"https://a.ppy.sh/{user_id}?1561560622.jpeg",
             "text": f"{user}"
         }
+    
     if event.event_type in ["Popped", "Disqualified"]:
         source = await event.source.post()
         embed_base['footer']['text'] += " - {}".format(
             source['message'].split("\n")[0])
         embed_base['color'] = 15408128
+    
     if event.event_type == "Ranked":
         s = str()
         history = await nomination_history(event.beatmap.beatmapset_id)
@@ -141,6 +150,7 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
                 continue
             s += f"{action_icons[h[0]]} [{usern}](https://osu.ppy.sh/u/{h[1]}) "
         embed_base['description'] += "\r\n " + s
+    
     return embed_base
 
 
@@ -159,11 +169,8 @@ async def nomination_history(mapid: int) -> List[Tuple[str, int]]:
     child: Tuple of str, int
         A tuple with a string of event type and user id of user triggering the event.
     """
-    async with aiohttp.ClientSession() as session:
-        discussion_url = f"https://osu.ppy.sh/beatmapsets/{str(mapid)}/discussion"
-        async with session.get(discussion_url) as set_html:
-            soup = BeautifulSoup(await set_html.text(), features="html.parser")
-    
+    uri = f"https://osu.ppy.sh/beatmapsets/{str(mapid)}/discussion"
+    soup = await get_html(uri)
     set_json_str = soup.find(id="json-beatmapset-discussion").text
     set_json = json.loads(set_json_str)
     js = set_json['beatmapset']['events']
@@ -193,11 +200,8 @@ async def get_users(group_id: int) -> List[dict]:
     List[dict]
         A dictionary containing users' data.
     """
-    async with aiohttp.ClientSession() as session:
-        async with session.get(BASE_GROUPS_URL + str(group_id)) as r:
-            res = await r.text()
-
-    bs = BeautifulSoup(res, features="html.parser")
+    uri = BASE_GROUPS_URL + str(group_id)
+    bs = await get_html(uri)
     users_tag = bs.find(id="json-users").text
     users_json = json.loads(users_tag)
 

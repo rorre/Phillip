@@ -65,6 +65,8 @@ class notAiess:
         self.loop = loop or asyncio.get_event_loop()
         self.last_event = None
         self.closed = False
+        self.disable_user = False
+        self.disable_map = False
         self.group_ids = [
             # https://github.com/ppy/osu-web/blob/master/app/Models/UserGroup.php
             4,  # GMT
@@ -131,6 +133,8 @@ class notAiess:
 
     async def start(self):
         """Well, run the client, what else?! |coro|"""
+        if self.disable_map and self.disable_user:
+            raise Exception("Cannot disable both map and role check.")
         if not self.handlers:
             if not self.webhook_url:
                 raise Exception("Requires Handler or webhook_url")
@@ -138,11 +142,13 @@ class notAiess:
 
         while not self.closed:
             try:
-                event = asyncio.create_task(self.check_map_events())
-                role = asyncio.create_task(self.check_role_change())
+                event = asyncio.create_task(self.check_map_events()) if not self.disable_map else None
+                role = asyncio.create_task(self.check_role_change()) if not self.disable_user else None
 
-                await event
-                await role
+                if not self.disable_map:
+                    await event
+                if not self.disable_user:
+                    await role
                 await asyncio.sleep(300)
 
             except:

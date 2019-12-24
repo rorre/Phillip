@@ -6,3 +6,4 @@ sphinx_rtd_theme
 pyee
 aiohttp
 sphinx-autodoc-typehints
+asyncio-throttle
