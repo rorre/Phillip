@@ -53,20 +53,24 @@ class notAiess:
     """
 
     def __init__(self, token: str, last_date: datetime = None, handlers: List[Handler] = None,
-                 webhook_url: str = "", loop=None, emitter: AsyncIOEventEmitter = None):
+                 webhook_url: str = None, loop=None, emitter: AsyncIOEventEmitter = None,
+                 disable_groupfeed: bool = False, disable_mapfeed: bool = False):
         if not handlers:
             self.handlers = []
         else:
             self.handlers = handlers
         self.webhook_url = webhook_url
+
         self.apitoken = token
         helper.APIKEY = token
+
         self.last_date = last_date or datetime.utcfromtimestamp(0)
         self.loop = loop or asyncio.get_event_loop()
         self.last_event = None
         self.closed = False
-        self.disable_user = False
-        self.disable_map = False
+        self.disable_user = disable_groupfeed
+        self.disable_map = disable_mapfeed
+
         self.group_ids = [
             # https://github.com/ppy/osu-web/blob/master/app/Models/UserGroup.php
             4,  # GMT
@@ -76,6 +80,7 @@ class notAiess:
             32  # Probation BN
         ]
         self.last_users = dict()
+
         for gid in self.group_ids:
             self.last_users[gid] = list()
 
@@ -90,13 +95,11 @@ class notAiess:
         events = [event async for event in get_events((1, 1, 1, 1, 1))]
         for i, event in enumerate(events):
             if event.time >= self.last_date:
-                await event._get_map()
+                beatmap = await event.get_map()
 
                 if event.time == self.last_date:
                     if self.last_event:
-                        if not self.last_event.beatmapset:
-                            await self.last_event.beatmapset
-                        if event.beatmapset[0].beatmapset_id == self.last_event.beatmapset[0].beatmapset_id:
+                        if beatmap.beatmapset_id == self.last_event.beatmap.beatmapset_id:
                             continue
 
                 if event.time == self.last_date and i + 1 == len(events):
@@ -141,7 +144,7 @@ class notAiess:
         if not self.handlers:
             if not self.webhook_url:
                 raise Exception("Requires Handler or webhook_url")
-            self.handlers.append(Handler(self.webhook_url))
+            self.handlers.append(SimpleHandler(self.webhook_url))
 
         while not self.closed:
             try:

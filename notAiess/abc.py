@@ -17,11 +17,13 @@ class EventBase(ABC):
         self._beatmapset = None
         self._beatmap = None
 
-    async def _get_map(self):
+    async def get_beatmap(self):
         """Receive map from osu! API"""
-        map_id = self.soup.a.get("href").split("/")[4]
-        self._beatmapset = await get_beatmap_api(s=map_id)
-        self._beatmap = self.beatmapset[0]
+        if not self._beatmap:
+            map_id = self.soup.a.get("href").split("/")[4]
+            self._beatmapset = await get_beatmap_api(s=map_id)
+            self._beatmap = self.beatmapset[0]
+        return self._beatmap
 
     @property
     def creator(self) -> str:
