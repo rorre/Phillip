@@ -1,37 +1,40 @@
-.. module:: notAiess
+.. module:: phillip
 
 API
 ===
 
-This lists all the interfaces and objects for notAiess.
+This lists all the interfaces and objects for Phillip.
 
-notAiess core
+Phillip core
 -------------
 
-.. autoclass:: notAiess.notAiess
+.. autoclass:: phillip.application.phillip
+   :members:
+
+.. automodule:: phillip.handlers
    :members:
 
 Helpers
 -------
 
-.. automodule:: notAiess.helper
+.. automodule:: phillip.helper
    :members:
 
-.. automodule:: notAiess.event_helper
+.. automodule:: phillip.event_helper
    :members:
 
 abc
 ---
 
-.. autoclass:: notAiess.abc.EventBase
+.. autoclass:: phillip.abc.EventBase
    :members:  
 
-.. autoclass:: notAiess.abc.Source
+.. autoclass:: phillip.abc.Source
    :members:  
 
 Event Listener
 --------------
-Every event listener is always given a parameter `event` (:class:`notAiess.abc.EventBase`) or `user` (:class:`notAiess.osuClasses.GroupUser`)
+Every event listener is always given a parameter `event` (:class:`phillip.abc.EventBase`) or `user` (:class:`phillip.osuClasses.GroupUser`)
 
 .. function:: on_group_added(user)
 .. function:: on_group_alumni(user)
@@ -51,7 +54,7 @@ Every event listener is always given a parameter `event` (:class:`notAiess.abc.E
 Events
 ------
 
-.. automodule:: notAiess.classes
+.. automodule:: phillip.classes
     :members:
     :inherited-members:
     :show-inheritance:
@@ -59,5 +62,5 @@ Events
 osu! class
 ----------
 
-.. automodule:: notAiess.osuClasses
+.. automodule:: phillip.osu
    :members:

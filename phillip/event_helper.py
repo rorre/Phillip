@@ -3,8 +3,8 @@ from typing import Generator, List
 import aiohttp
 from bs4 import BeautifulSoup
 
-from . import abc, classes
-from .helper import throttler
+from phillip import abc, classes
+from phillip.helper import throttler
 
 BASE_URL = "https://osu.ppy.sh/beatmapsets/events?user=&types%5B%5D="
 
@@ -23,13 +23,14 @@ async def get_events(types_val: list) -> Generator[List[abc.EventBase], None, No
     Parameters
     ----------
     types_val : list
-        A list consisting of 5 integer, with value of either 0 or 1 for the value of [nominate, rank, love, nomination_reset, disqualify]
-]
+        A list consisting of 5 integer, with value of either 0 or 1 for the value of \
+            [nominate, rank, love, nomination_reset, disqualify]
 
     Yields
     -------
     list of abc.EventBase
-        List of events resulted from fetching osu!web, with next index as next event that will be processed.
+        List of events resulted from fetching osu!web, \
+            with next index as next event that will be processed.
     """
     additions = list()
     async with throttler:

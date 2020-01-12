@@ -5,33 +5,13 @@ import traceback
 from datetime import datetime, timedelta
 from typing import List
 
-import aiohttp
 from pyee import AsyncIOEventEmitter
 
-from . import helper
-from .abc import Handler
-from .event_helper import get_events
+from phillip import helper
+from phillip.event_helper import get_events
+from phillip.handlers import Handler, SimpleHandler
 
-
-class SimpleHandler(Handler):
-    async def on_map_event(self, event):
-        """Parse beatmap event and send to discord webhook |coro|
-
-        Parameters
-        ----------
-        event: [:class:`EventBase`]
-            The beatmapset event
-        """
-        embed = await helper.gen_embed(event)
-        with aiohttp.ClientSession() as session:
-            await session.post(self.hook_url, json={
-                'content': event.event_source_url,
-                'embeds': [embed]
-            })
-        return
-
-
-class notAiess:
+class Phillip:
     """Representation of Aiess client to interact with osu! web.
     This client will interact with osu! API and web through scraper.
 
@@ -95,7 +75,7 @@ class notAiess:
         events = [event async for event in get_events((1, 1, 1, 1, 1))]
         for i, event in enumerate(events):
             if event.time >= self.last_date:
-                beatmap = await event.get_map()
+                beatmap = await event.get_beatmap()
 
                 if event.time == self.last_date:
                     if self.last_event:

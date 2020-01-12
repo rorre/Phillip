@@ -1,5 +1,5 @@
-from .abc import EventBase, Source
-from .helper import get_api, get_discussion_json
+from phillip.abc import EventBase, Source
+from phillip.helper import get_api, get_discussion_json
 
 
 class Nominated(EventBase):
@@ -44,14 +44,14 @@ class Popped(Disqualified):
         post_url = self.event_source_url
         post_id = int(post_url.split('/')[-1])
         discussion_parents = await get_discussion_json(post_url)
-        sourcePost = None
+        source_post = None
         for discussion in discussion_parents:
             if not discussion:
                 continue
             if discussion['id'] == post_id:
-                sourcePost = discussion['posts'][0]
+                source_post = discussion['posts'][0]
                 break
-        return sourcePost
+        return source_post
 
     async def user_id_action(self):
         source = await self.event_source()

@@ -1,4 +1,4 @@
-.. currentmodule:: notAiess
+.. currentmodule:: phillip
 
 Getting Started
 ===============
@@ -9,7 +9,7 @@ To install, just install it with pip, really.
 
 .. code-block:: sh
 
-    $ pip install git+https://github.com/rorre/notAiess.git
+    $ pip install git+https://github.com/rorre/phillip.git
 
 PyPI release will happen someday.
 
@@ -17,15 +17,16 @@ Example
 -------
 This is a very basic example of using ``notAiess`` to forward events to a discord hook.::
 
-    from notAiess import notAiess
-    nA = notAiess("0c38a********************", webhook_url="https://discordapp.com/api/webhooks/************")
-    nA.run()
+    from phillip.application import Phillip
+    p = notAiess("0c38a********************", webhook_url="https://discordapp.com/api/webhooks/************")
+    p.run()
 
 Advanced Usage
 ~~~~~~~~~~~~~~
 This section will give you an example of using custom ``Handler`` to handle beatmap events.::
 
-    from notAiess import notAiess, Handler
+    from phillip.application import notaiess
+    from phillip.handlers import Handler
     import aiohttp
 
     # Always inherit Handler class!
@@ -45,10 +46,10 @@ This section will give you an example of using custom ``Handler`` to handle beat
                     'embeds': [embed]
                 })
 
-    nA = notAiess(
+    p = Phillip(
             "0c38a********************",
             handlers=[
                 HandleMap("https://discordapp.com/api/webhooks/************")
             ]
         )
-    nA.run()
+    p.run()
