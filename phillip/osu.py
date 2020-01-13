@@ -64,7 +64,7 @@ class GroupUser:
     ----------
     id: int
         osu! user ID.
-    usernam : str
+    username : str
         osu! username.
     profile_colou : str
         Hex of user's role color.

@@ -120,7 +120,7 @@ class Source:
         self._post = post
 
     async def post(self) -> dict:
-        """The post/thread causing the event. (raises ``Exception`` if its a Nomination post)
+        """The post/thread causing the event. (raises `Exception` if its a Nomination post)
         """
         if "discussion" not in self.src_url:
             raise Exception("Nominations doesn't have posts.")

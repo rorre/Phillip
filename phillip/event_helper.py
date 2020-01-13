@@ -20,16 +20,14 @@ TYPES = [
 async def get_events(types_val: list) -> Generator[List[abc.EventBase], None, None]:
     """Get events of from osu!website. |coro|
 
-    Parameters
-    ----------
-    types_val : list
-        A list consisting of 5 integer, with value of either 0 or 1 for the value of \
+    **Parameters:**
+
+    types_val - `list` -- A list consisting of 5 integer, with value of either 0 or 1 for the value of \
             [nominate, rank, love, nomination_reset, disqualify]
 
-    Yields
-    -------
-    list of abc.EventBase
-        List of events resulted from fetching osu!web, \
+    **Yields:**
+
+    list `abc.EventBase` -- List of events resulted from fetching osu!web, \
             with next index as next event that will be processed.
     """
     additions = list()

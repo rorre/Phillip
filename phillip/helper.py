@@ -21,22 +21,18 @@ throttler = Throttler(rate_limit=2, period=60)
 async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
     """Request something based on endpoint. |coro|
 
-    Parameters
-    ----------
-    endpoint: str
-        The API endpoint, reference could be found `in osu!wiki <https://github.com/ppy/osu-api/wiki>`_.
-    **kwargs: dict, optional
-        Keyword arguments that will be passed as a query string.
+    **Parameters:**
 
-    Raises
-    ------
-        Exception
-            If the API key is not assigned.
+    endpoint - `str` -- The API endpoint, reference could be found in [osu!wiki](https://github.com/ppy/osu-api/wiki).
+    **kwargs - `dict` | optional -- Keyword arguments that will be passed as a query string.
 
-    Returns
-    -------
-    List[dict]
-        API response.
+    **Raises:**
+
+    `Exception` -- If API key is not assigned.
+
+    **Returns:**
+
+    `List[dict]` -- API response.
     """
 
     global APIKEY
@@ -65,10 +61,9 @@ async def get_html(uri):
 async def get_beatmap_api(**kwargs: dict) -> List[Beatmap]:
     """Get beatmapset from osu! API. |coro|
 
-    Returns
-    -------
-    List[Beatmap]
-        Beatmapsets fetched from API.
+    **Returns:**
+
+    `List[Beatmap]` -- Beatmapsets fetched from API.
     """
     return [Beatmap(map) for map in await get_api("get_beatmaps", **kwargs)]
 
@@ -76,15 +71,13 @@ async def get_beatmap_api(**kwargs: dict) -> List[Beatmap]:
 async def get_discussion_json(uri: str) -> List[dict]:
     """Receive discussion posts in JSON. |coro|
 
-    Parameters
-    ----------
-    uri: str
-        URL of discussion page.
+    **Parameters:**
 
-    Returns
-    -------
-    List[dict]
-        The discussion posts.
+    uri - `str` -- URL of discussion page.
+
+    **Returns:**
+
+    `List[dict]` -- The discussion posts.
     """
 
     soup = await get_html(uri)
@@ -96,15 +89,13 @@ async def get_discussion_json(uri: str) -> List[dict]:
 async def gen_embed(event) -> dict:
     """Generate Discord embed of event. |coro|
 
-    Parameters
-    ----------
-    event: eventBase
-        The beatmap's event.
+    **Parameters:**
 
-    Returns
-    -------
-    dict
-        Discord embed object.
+    event - `abc.EventBase` -- The beatmap's event.
+
+    **Returns**
+
+    `dict` -- Discord embed object.
     """
     action_icons = {
         "Bubbled": ":thought_balloon:",
@@ -133,13 +124,13 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
             "icon_url": f"https://a.ppy.sh/{user_id}?1561560622.jpeg",
             "text": f"{user}"
         }
-    
+
     if event.event_type in ["Popped", "Disqualified"]:
         source = await event.source.post()
         embed_base['footer']['text'] += " - {}".format(
             source['message'].split("\n")[0])
         embed_base['color'] = 15408128
-    
+
     if event.event_type == "Ranked":
         users_str = str()
         history = await nomination_history(event.beatmap.beatmapset_id)
@@ -152,33 +143,30 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
 
             users_str += f"{action_icons[history_event[0]]} \
                 [{u_name}](https://osu.ppy.sh/u/{history_event[1]}) "
-        
+
         embed_base['description'] += "\r\n " + users_str
-    
+
     return embed_base
 
 
 async def nomination_history(mapid: int) -> List[Tuple[str, int]]:
     """Get nomination history of a beatmap. |coro|
 
-    Parameters
-    ----------
-    mapid : int
-        Beatmapset ID to gather.
+    **Parameters:**
 
-    Returns
-    -------
-    parent: List of child
-        A list containing child tuples.
-    child: Tuple of str, int
-        A tuple with a string of event type and user id of user triggering the event.
+    mapid - `int` -- Beatmapset ID to gather.
+
+    **Returns**
+
+    parent - `List[child]` -- A list containing child tuples.
+        `child` - `Tuple[str, int]` -- A tuple with a string of event type and user id of user triggering the event.
     """
     uri = f"https://osu.ppy.sh/beatmapsets/{str(mapid)}/discussion"
     soup = await get_html(uri)
     set_json_str = soup.find(id="json-beatmapset-discussion").text
     set_json = json.loads(set_json_str)
     js = set_json['beatmapset']['events']
-    
+
     history = []
     for i, event in enumerate(js):
         if i + 1 != len(js):
@@ -194,15 +182,13 @@ async def nomination_history(mapid: int) -> List[Tuple[str, int]]:
 async def get_users(group_id: int) -> List[dict]:
     """Get users inside of a group. |coro|
 
-    Parameters
-    ----------
-    group_id : int
-        The group id.
+    **Parameters:**
 
-    Returns
-    -------
-    List[dict]
-        A dictionary containing users' data.
+    group_id - `int` -- The group id.
+
+    **Returns**
+
+    `List[dict]` -- A dictionary containing users' data.
     """
     uri = BASE_GROUPS_URL + str(group_id)
     bs = await get_html(uri)
@@ -218,17 +204,14 @@ async def get_users(group_id: int) -> List[dict]:
 def has_user(source: dict, target: List[dict]) -> bool:
     """Check if user is inside of another list
 
-    Parameters
-    ----------
-    source : dict
-        User to be checked.
-    target : List[dict]
-        List of users that will be compared to.
+    **Parameters:**
 
-    Returns
-    -------
-    bool
-        Boolean value if user is inside another list or not.
+    source - `dict` -- User to be checked.
+    target - `List[dict]` -- List of users that will be compared to.
+
+    **Returns**
+
+    `bool` -- Boolean value if user is inside another list or not.
     """
     if not target:
         return False

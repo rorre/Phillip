@@ -1,12 +1,12 @@
 from phillip import helper
 import aiohttp
-class Handler:
-    """Handler base for ``notAiess``
 
-    Parameters
-    ----------
-    webhook_url: str
-        Discord webhook url to send
+class Handler:
+    """Handler base for ``Phillip``
+
+    **Parameters:**
+
+    webhook_url - `str` -- Discord webhook url to send
     """
 
     def __init__(self, webhook_url):
@@ -14,11 +14,10 @@ class Handler:
 
     def register_emitter(self, emitter):
         """Registers an emitter to the handler
-        
-        Parameters
-        ----------
-        emitter : pyee.AsyncIOEventEmitter
-            Emitter to register.
+
+        **Parameters:**
+
+        emitter - `pyee.AsyncIOEventEmitter` -- Emitter to register.
         """
         self.emitter = emitter
         self._register_events()
@@ -111,10 +110,9 @@ class SimpleHandler(Handler):
     async def on_map_event(self, event):
         """Parse beatmap event and send to discord webhook |coro|
 
-        Parameters
-        ----------
-        event: [:class:`EventBase`]
-            The beatmapset event
+        **Parameters:**
+
+        * event - `EventBase` -- The beatmapset event
         """
         embed = await helper.gen_embed(event)
         with aiohttp.ClientSession() as session:

@@ -11,7 +11,7 @@ setuptools.setup(
     description="An event-driven for osu! feeds.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/rorre/notAiess",
+    url="https://github.com/rorre/Phillip",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
