@@ -2,3 +2,7 @@ bs4
 pyee
 aiohttp
 asyncio-throttle
+mkdocs
+mkdocs-material
+mkautodoc
+pymdown-extensions
