@@ -6,7 +6,7 @@ class Handler:
 
     **Parameters:**
 
-    webhook_url - `str` -- Discord webhook url to send
+    * webhook_url - `str` -- Discord webhook url to send
     """
 
     def __init__(self, webhook_url):
@@ -17,7 +17,7 @@ class Handler:
 
         **Parameters:**
 
-        emitter - `pyee.AsyncIOEventEmitter` -- Emitter to register.
+        * emitter - `pyee.AsyncIOEventEmitter` -- Emitter to register.
         """
         self.emitter = emitter
         self._register_events()
@@ -108,7 +108,7 @@ class Handler:
 
 class SimpleHandler(Handler):
     async def on_map_event(self, event):
-        """Parse beatmap event and send to discord webhook |coro|
+        """Parse beatmap event and send to discord webhook.
 
         **Parameters:**
 

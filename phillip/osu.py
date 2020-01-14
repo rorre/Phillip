@@ -2,15 +2,13 @@
 class Beatmap:
     """A class that represents a difficulty object inside a beatmapset
 
-    Parameters
-    ----------
-    js: dict
-        osu! API response, gathered from ``get_beatmaps`` endpoint
+    **Parameters:**
+    
+    js - `dict` -- osu! API response, gathered from ``get_beatmaps`` endpoint
 
-    Attributes
-    ----------
-    All: str
-        Everything that is documented from `osu! API wiki <https://github.com/ppy/osu-api/wiki>`_.
+    **Attributes:**
+    
+    All - `str` -- Everything that is documented from [osu! API wiki](https://github.com/ppy/osu-api/wiki).
     """
 
     def __init__(self, js):
@@ -55,43 +53,27 @@ class Beatmap:
 class GroupUser:
     """A class representing a user inside a grup.
 
-    Parameters
-    ----------
-    obj: dict
-        osu! json object, gathered from groups page.
+    **Parameters:**
+    
+    * obj - `dict` -- osu! json object, gathered from groups page.
 
-    Attributes
-    ----------
-    id: int
-        osu! user ID.
-    username : str
-        osu! username.
-    profile_colou : str
-        Hex of user's role color.
-    avatar_url: str
-        User's avatar URL.
-    country_code: str
-        Country code of user.
-    default_group: str
-        Highest group of the user.
-    is_active: bool
-        Representation if user is still active on osu! or not.
-    is_bot: bool
-        Is user a bot?
-    is_online: bool
-        Is the user is only at the moment or not.
-    is_supporter: bool
-        Does the user have supporter tag?
-    last_visit: str
-        User's last login to osu!
-    pm_friends_only: bool
-        Represents if user only enables forum pm to friends only or not.
-    country: dict
-        A dictionary with key of code and name, representing the country code and full country name respectively.
-    cover: dict
-        A dictionary with custom_url, id, and url as key, representing cover url, id, and cover url respectively.
-    support_level: int
-        Supporter tag level of user.
+    **Attributes:**
+    
+    * id - `int` -- osu! user ID.
+    * username - `str` -- osu! username.
+    * profile_colour - `str` -- Hex of user's role color.
+    * avatar_url - `str` -- User's avatar URL.
+    * country_code - `str` -- Country code of user.
+    * default_group - `str` -- Highest group of the user.
+    * is_active - `bool` -- Representation if user is still active on osu! or not.
+    * is_bot - `bool` -- Is user a bot?
+    * is_online - `bool` -- Is the user is only at the moment or not.
+    * is_supporter - `bool` -- Does the user have supporter tag?
+    * last_visit - `str` -- User's last login to osu!
+    * pm_friends_only - `bool` -- Represents if user only enables forum pm to friends only or not.
+    * country - `dict` -- A dictionary with key of code and name, representing the country code and full country name respectively.
+    * cover - `dict` -- A dictionary with custom_url, id, and url as key, representing cover url, id, and cover url respectively.
+    * support_level - `int` -- Supporter tag level of user.
     """
     def __init__(self, obj):
         self.id = obj['id']

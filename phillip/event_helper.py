@@ -18,7 +18,7 @@ TYPES = [
 
 
 async def get_events(types_val: list) -> Generator[List[abc.EventBase], None, None]:
-    """Get events of from osu!website. |coro|
+    """Get events of from osu!website. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
     **Parameters:**
 

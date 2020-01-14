@@ -1,0 +1,20 @@
+site_name: Phillip
+site_description: An event-driven library for osu! mapping feeds.
+
+theme:
+    name: 'material'
+
+repo_name: rorre/phillip
+repo_url: https://github.com/rorre/phillip
+edit_uri: ""
+
+nav:
+    - Introduction: 'index.md'
+    - The Phillip Instance: 'app.md'
+    - Handling Events: 'handler.md'
+
+markdown_extensions:
+  - admonition
+  - markdown.extensions.codehilite:
+      guess_lang: false
+  - mkautodoc

@@ -54,12 +54,12 @@ class EventBase(ABC):
         return self.user_html.text.strip()
 
     def user_id_action(self) -> int:
-        """``user_action``'s user id."""
+        """`user_action`'s user id."""
         return int(self.user_html.get('data-user-id'))
 
     @property
     def time(self) -> datetime:
-        """A ``datetime`` object representing the time where the event happened."""
+        """A `datetime` object representing the time where the event happened."""
         dt = self.soup.find(class_="timeago").get("datetime")
         return datetime.strptime(dt, '%Y-%m-%dT%H:%M:%S+00:00')
 

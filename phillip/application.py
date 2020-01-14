@@ -17,14 +17,18 @@ class Phillip:
 
     **Parameters:**
 
-    token - `str` -- osu! API token, could be gathered `here <https://osu.ppy.sh/p/api>`_
-    last_date - `datetime` | optional -- Custom checkpoint to check every event after last_date, defaults to None
-    handlers - `List[Handler]` | optional -- Event handlers assigned to be called, defaults to [Handler]
-    webhook_url - `str` | optional -- **Discord** webhook url if there is no handlers assigned, defaults to empty string
+    * token - `str` -- osu! API token, could be gathered `here <https://osu.ppy.sh/p/api>`_
+    * last_date - `datetime` | optional -- Custom checkpoint to check every event after last_date, defaults to None
+    * handlers - `List[Handler]` | optional -- Event handlers assigned to be called, defaults to [Handler]
+    * webhook_url - `str` | optional -- **Discord** webhook url if there is no handlers assigned, defaults to empty string
+    * loop -- Custom event loop to run on
+    * emitter - `AsyncIOEventEmitter` - Custom event emitter to fire events.
+    * disable_groupfeed - `bool` -- Whether to disable group feed or not.
+    * disable_mapfeed - `bool` -- Whether to disable map feed or not.
 
     **Raises:**
 
-    `Exception` -- if no handlers nor webhook_url assigned.
+    * `Exception` -- if no handlers nor webhook_url assigned.
     """
 
     def __init__(self, token: str, last_date: datetime = None, handlers: List[Handler] = None,
@@ -65,7 +69,7 @@ class Phillip:
                 handler.register_emitter(self.emitter)
 
     async def check_map_events(self):
-        """Check for map events. |coro|
+        """Check for map events. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
         """
         events = [event async for event in get_events((1, 1, 1, 1, 1))]
         for i, event in enumerate(events):
@@ -94,7 +98,7 @@ class Phillip:
         await asyncio.sleep(5 * 60)
 
     async def check_role_change(self):
-        """Check for role changes. |coro|
+        """Check for role changes. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
         """
         for gid in self.group_ids:
             users = await helper.get_users(gid)
@@ -113,7 +117,7 @@ class Phillip:
         await asyncio.sleep(15 * 60)
 
     async def start(self):
-        """Well, run the client, what else?! |coro|"""
+        """Well, run the client, what else?! *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*"""
         if self.disable_map and self.disable_user:
             raise Exception("Cannot disable both map and role check.")
         if not self.handlers:
@@ -140,7 +144,7 @@ class Phillip:
 
         **Parameters:**
 
-        handler - `handlers.Handler` -- The event handler, must inherits `handlers.Handler`.
+        * handler - `handlers.Handler` -- The event handler, must inherits `handlers.Handler`.
         """
         self.handlers.append(handler)
 

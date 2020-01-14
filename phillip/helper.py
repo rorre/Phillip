@@ -19,20 +19,20 @@ EVENTS = {
 throttler = Throttler(rate_limit=2, period=60)
 
 async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
-    """Request something based on endpoint. |coro|
+    """Request something based on endpoint. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
     **Parameters:**
 
-    endpoint - `str` -- The API endpoint, reference could be found in [osu!wiki](https://github.com/ppy/osu-api/wiki).
-    **kwargs - `dict` | optional -- Keyword arguments that will be passed as a query string.
+    * endpoint - `str` -- The API endpoint, reference could be found in [osu!wiki](https://github.com/ppy/osu-api/wiki).
+    * \*\*kwargs - `dict` | optional -- Keyword arguments that will be passed as a query string.
 
     **Raises:**
 
-    `Exception` -- If API key is not assigned.
+    * `Exception` -- If API key is not assigned.
 
-    **Returns:**
+    **Returns**
 
-    `List[dict]` -- API response.
+    * `List[dict]` -- API response.
     """
 
     global APIKEY
@@ -59,25 +59,25 @@ async def get_html(uri):
 
 
 async def get_beatmap_api(**kwargs: dict) -> List[Beatmap]:
-    """Get beatmapset from osu! API. |coro|
+    """Get beatmapset from osu! API. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
-    **Returns:**
+    **Returns**
 
-    `List[Beatmap]` -- Beatmapsets fetched from API.
+    * `List[Beatmap]` -- Beatmapsets fetched from API.
     """
     return [Beatmap(map) for map in await get_api("get_beatmaps", **kwargs)]
 
 
 async def get_discussion_json(uri: str) -> List[dict]:
-    """Receive discussion posts in JSON. |coro|
+    """Receive discussion posts in JSON. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
     **Parameters:**
 
-    uri - `str` -- URL of discussion page.
+    * uri - `str` -- URL of discussion page.
 
-    **Returns:**
+    **Returns**
 
-    `List[dict]` -- The discussion posts.
+    * `List[dict]` -- The discussion posts.
     """
 
     soup = await get_html(uri)
@@ -87,15 +87,15 @@ async def get_discussion_json(uri: str) -> List[dict]:
 
 
 async def gen_embed(event) -> dict:
-    """Generate Discord embed of event. |coro|
+    """Generate Discord embed of event. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
     **Parameters:**
 
-    event - `abc.EventBase` -- The beatmap's event.
+    * event - `abc.EventBase` -- The beatmap's event.
 
     **Returns**
 
-    `dict` -- Discord embed object.
+    z `dict` -- Discord embed object.
     """
     action_icons = {
         "Bubbled": ":thought_balloon:",
@@ -150,16 +150,16 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
 
 
 async def nomination_history(mapid: int) -> List[Tuple[str, int]]:
-    """Get nomination history of a beatmap. |coro|
+    """Get nomination history of a beatmap. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
     **Parameters:**
 
-    mapid - `int` -- Beatmapset ID to gather.
+    * mapid - `int` -- Beatmapset ID to gather.
 
     **Returns**
 
-    parent - `List[child]` -- A list containing child tuples.
-        `child` - `Tuple[str, int]` -- A tuple with a string of event type and user id of user triggering the event.
+    * parent - `List[child]` -- A list containing child tuples.
+        * `child` - `Tuple[str, int]` -- A tuple with a string of event type and user id of user triggering the event.
     """
     uri = f"https://osu.ppy.sh/beatmapsets/{str(mapid)}/discussion"
     soup = await get_html(uri)
@@ -180,15 +180,15 @@ async def nomination_history(mapid: int) -> List[Tuple[str, int]]:
 
 
 async def get_users(group_id: int) -> List[dict]:
-    """Get users inside of a group. |coro|
+    """Get users inside of a group. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
     **Parameters:**
 
-    group_id - `int` -- The group id.
+    * group_id - `int` -- The group id.
 
     **Returns**
 
-    `List[dict]` -- A dictionary containing users' data.
+    * `List[dict]` -- A dictionary containing users' data.
     """
     uri = BASE_GROUPS_URL + str(group_id)
     bs = await get_html(uri)
@@ -206,12 +206,12 @@ def has_user(source: dict, target: List[dict]) -> bool:
 
     **Parameters:**
 
-    source - `dict` -- User to be checked.
-    target - `List[dict]` -- List of users that will be compared to.
+    * source - `dict` -- User to be checked.
+    * target - `List[dict]` -- List of users that will be compared to.
 
     **Returns**
 
-    `bool` -- Boolean value if user is inside another list or not.
+    * `bool` -- Boolean value if user is inside another list or not.
     """
     if not target:
         return False
