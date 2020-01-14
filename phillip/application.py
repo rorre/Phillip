@@ -149,7 +149,7 @@ class Phillip:
         self.handlers.append(handler)
 
     def run(self):
-        """Run notAiess. This function does not take any parameter.
+        """Run Phillip. This function does not take any parameter.
         """
         def stop():
             self.closed = True

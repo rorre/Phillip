@@ -22,12 +22,12 @@ async def get_events(types_val: list) -> Generator[List[abc.EventBase], None, No
 
     **Parameters:**
 
-    types_val - `list` -- A list consisting of 5 integer, with value of either 0 or 1 for the value of \
+    * types_val - `list` -- A list consisting of 5 integer, with value of either 0 or 1 for the value of \
             [nominate, rank, love, nomination_reset, disqualify]
 
     **Yields:**
 
-    list `abc.EventBase` -- List of events resulted from fetching osu!web, \
+    * list `abc.EventBase` -- List of events resulted from fetching osu!web, \
             with next index as next event that will be processed.
     """
     additions = list()

@@ -95,7 +95,7 @@ async def gen_embed(event) -> dict:
 
     **Returns**
 
-    z `dict` -- Discord embed object.
+    * `dict` -- Discord embed object.
     """
     action_icons = {
         "Bubbled": ":thought_balloon:",

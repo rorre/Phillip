@@ -12,9 +12,14 @@ nav:
     - Introduction: 'index.md'
     - The Phillip Instance: 'app.md'
     - Handling Events: 'handler.md'
+    - Event Object: 'events.md'
+    - Helpers: 'helpers.md'
 
 markdown_extensions:
   - admonition
   - markdown.extensions.codehilite:
       guess_lang: false
   - mkautodoc
+  - pymdownx.superfences
+  - toc:
+      permalink: true

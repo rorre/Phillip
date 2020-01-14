@@ -4,11 +4,11 @@ class Beatmap:
 
     **Parameters:**
     
-    js - `dict` -- osu! API response, gathered from ``get_beatmaps`` endpoint
+    * js - `dict` -- osu! API response, gathered from ``get_beatmaps`` endpoint
 
     **Attributes:**
     
-    All - `str` -- Everything that is documented from [osu! API wiki](https://github.com/ppy/osu-api/wiki).
+    * All - `str` -- Everything that is documented from [osu! API wiki](https://github.com/ppy/osu-api/wiki).
     """
 
     def __init__(self, js):
