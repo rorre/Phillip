@@ -1,6 +1,4 @@
 from phillip.abc import EventBase, Source
-from phillip.helper import get_api, get_discussion_json
-
 
 class Nominated(EventBase):
     @property
@@ -43,7 +41,7 @@ class Popped(Disqualified):
     async def event_source(self) -> dict:
         post_url = self.event_source_url
         post_id = int(post_url.split('/')[-1])
-        discussion_parents = await get_discussion_json(post_url)
+        discussion_parents = await self.app.web.get_discussion_json(post_url)
         source_post = None
         for discussion in discussion_parents:
             if not discussion:
@@ -59,12 +57,12 @@ class Popped(Disqualified):
 
     async def user_action(self):
         user_source_id = await self.user_id_action()
-        api_response = await get_api("get_user", u=user_source_id)
+        api_response = await self.app.api.get_api("get_user", u=user_source_id)
         return api_response[0]['username']
 
     @property
     def source(self):
-        return Source(self.event_source_url)
+        return Source(self.event_source_url, app=self.app)
 
 
 class Ranked(EventBase):

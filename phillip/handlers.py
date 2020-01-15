@@ -9,8 +9,8 @@ class Handler:
     * webhook_url - `str` -- Discord webhook url to send
     """
 
-    def __init__(self, webhook_url):
-        self.hook_url = webhook_url
+    def __init__(self):
+        self.app = None
 
     def register_emitter(self, emitter):
         """Registers an emitter to the handler
@@ -107,6 +107,10 @@ class Handler:
         pass
 
 class SimpleHandler(Handler):
+    def __init__(self, hook_url):
+        self.hook_url = hook_url
+        self.app = None
+
     async def on_map_event(self, event):
         """Parse beatmap event and send to discord webhook.
 
@@ -114,7 +118,7 @@ class SimpleHandler(Handler):
 
         * event - `EventBase` -- The beatmapset event
         """
-        embed = await helper.gen_embed(event)
+        embed = await helper.gen_embed(event, self.app)
         with aiohttp.ClientSession() as session:
             await session.post(self.hook_url, json={
                 'content': event.event_source_url,

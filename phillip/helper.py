@@ -4,89 +4,9 @@ import aiohttp
 from asyncio_throttle import Throttler
 from bs4 import BeautifulSoup
 
-from phillip.osu import Beatmap, GroupUser
+from phillip.osu.classes import Beatmap, GroupUser
 
-BASE_API_URL = "https://osu.ppy.sh/api/"
-BASE_GROUPS_URL = "https://osu.ppy.sh/groups/"
-APIKEY = None
-
-EVENTS = {
-    "nominate": "Bubbled",
-    "disqualify": "Disqualified",
-    "nomination_reset": "Popped",
-}
-
-throttler = Throttler(rate_limit=2, period=60)
-
-async def get_api(endpoint: str, **kwargs: dict) -> List[dict]:
-    """Request something based on endpoint. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
-
-    **Parameters:**
-
-    * endpoint - `str` -- The API endpoint, reference could be found in [osu!wiki](https://github.com/ppy/osu-api/wiki).
-    * \*\*kwargs - `dict` | optional -- Keyword arguments that will be passed as a query string.
-
-    **Raises:**
-
-    * `Exception` -- If API key is not assigned.
-
-    **Returns**
-
-    * `List[dict]` -- API response.
-    """
-
-    global APIKEY
-    if not APIKEY:
-        raise Exception("Requires api key to be set")
-    kwargs['k'] = APIKEY
-
-    api_arguments = list()
-    for argument in kwargs.items():
-        api_arguments.append(f"{argument[0]}={str(argument[1])}")
-    api_args = '&'.join(api_arguments)
-    api_url = BASE_API_URL + endpoint + "?" + api_args
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(api_url) as api_res:
-            return await api_res.json()
-
-
-async def get_html(uri):
-    async with throttler:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(uri, cookies={"locale": "en"}) as site_html:
-                return BeautifulSoup(await site_html.text(), features="html.parser")
-
-
-async def get_beatmap_api(**kwargs: dict) -> List[Beatmap]:
-    """Get beatmapset from osu! API. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
-
-    **Returns**
-
-    * `List[Beatmap]` -- Beatmapsets fetched from API.
-    """
-    return [Beatmap(map) for map in await get_api("get_beatmaps", **kwargs)]
-
-
-async def get_discussion_json(uri: str) -> List[dict]:
-    """Receive discussion posts in JSON. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
-
-    **Parameters:**
-
-    * uri - `str` -- URL of discussion page.
-
-    **Returns**
-
-    * `List[dict]` -- The discussion posts.
-    """
-
-    soup = await get_html(uri)
-    set_json_str = soup.find(id="json-beatmapset-discussion").text
-    set_json = json.loads(set_json_str)
-    return set_json['beatmapset']['discussions']
-
-
-async def gen_embed(event) -> dict:
+async def gen_embed(event, app) -> dict:
     """Generate Discord embed of event. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
     **Parameters:**
@@ -133,9 +53,9 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
 
     if event.event_type == "Ranked":
         users_str = str()
-        history = await nomination_history(event.beatmap.beatmapset_id)
+        history = await app.web.nomination_history(event.beatmap.beatmapset_id)
         for history_event in history:
-            user = await get_api("get_user", u=history_event[1])
+            user = await app.api.get_api("get_user", u=history_event[1])
             u_name = user[0]['username']
 
             if u_name == "BanchoBot":
@@ -147,58 +67,6 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
         embed_base['description'] += "\r\n " + users_str
 
     return embed_base
-
-
-async def nomination_history(mapid: int) -> List[Tuple[str, int]]:
-    """Get nomination history of a beatmap. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
-
-    **Parameters:**
-
-    * mapid - `int` -- Beatmapset ID to gather.
-
-    **Returns**
-
-    * parent - `List[child]` -- A list containing child tuples.
-        * `child` - `Tuple[str, int]` -- A tuple with a string of event type and user id of user triggering the event.
-    """
-    uri = f"https://osu.ppy.sh/beatmapsets/{str(mapid)}/discussion"
-    soup = await get_html(uri)
-    set_json_str = soup.find(id="json-beatmapset-discussion").text
-    set_json = json.loads(set_json_str)
-    js = set_json['beatmapset']['events']
-
-    history = []
-    for i, event in enumerate(js):
-        if i + 1 != len(js):
-            next_event = js[i+1]
-        if event['type'] in EVENTS:
-            event_name = EVENTS[event['type']]
-            if next_event['type'] == "qualify":
-                event_name = "Qualified"
-            history.append((event_name, event['user_id']))
-    return history
-
-
-async def get_users(group_id: int) -> List[dict]:
-    """Get users inside of a group. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
-
-    **Parameters:**
-
-    * group_id - `int` -- The group id.
-
-    **Returns**
-
-    * `List[dict]` -- A dictionary containing users' data.
-    """
-    uri = BASE_GROUPS_URL + str(group_id)
-    bs = await get_html(uri)
-    users_tag = bs.find(id="json-users").text
-    users_json = json.loads(users_tag)
-
-    out = []
-    for user in users_json:
-        out.append(GroupUser(user))
-    return out
 
 
 def has_user(source: dict, target: List[dict]) -> bool:

@@ -4,14 +4,14 @@ from typing import List
 
 from bs4 import BeautifulSoup
 
-from phillip.helper import get_api, get_beatmap_api, get_discussion_json
-from phillip.osu import Beatmap
+from phillip.osu.classes import Beatmap
 
 class EventBase(ABC):
     """An Abstract Class (ABC) representing base osu! beatmapset event.
     """
 
-    def __init__(self, soup: BeautifulSoup, nextevent: BeautifulSoup = None):
+    def __init__(self, soup: BeautifulSoup, nextevent: BeautifulSoup = None, app=None):
+        self.app = app
         self.soup = soup
         self.next_map = nextevent
         self._beatmapset = None
@@ -21,7 +21,7 @@ class EventBase(ABC):
         """Receive map from osu! API"""
         if not self._beatmap:
             map_id = self.soup.a.get("href").split("/")[4]
-            self._beatmapset = await get_beatmap_api(s=map_id)
+            self._beatmapset = await self.app.api.get_beatmaps(s=map_id)
             self._beatmap = self.beatmapset[0]
         return self._beatmap
 
@@ -94,7 +94,8 @@ class EventBase(ABC):
         return Source(
             self.event_source_url,
             self.user_action(),
-            self.user_id_action()
+            self.user_id_action(),
+            app=self.app
         )
 
     @property
@@ -112,12 +113,13 @@ class Source:
     """
 
     def __init__(self, src_url: str, username: str = None, user_id: int = None,
-                 post: dict = None, user: dict = None):
+                 post: dict = None, user: dict = None, app=None):
         self.src_url = src_url
         self._username = username
         self._user_id = user_id
         self._user = user
         self._post = post
+        self.app = app
 
     async def post(self) -> dict:
         """The post/thread causing the event. (raises `Exception` if its a Nomination post)
@@ -128,7 +130,7 @@ class Source:
             return self._post
         post_url = self.src_url
         post_id = int(post_url.split('/')[-1])
-        discussion_parents = await get_discussion_json(post_url)
+        discussion_parents = await self.app.web.get_discussion_json(post_url)
         sourcePost = None
         for discussion in discussion_parents:
             if not discussion:
@@ -146,10 +148,10 @@ class Source:
             return self._user
         api_response = list()
         if self._username:
-            api_response = await get_api("get_user", u=self._username)
+            api_response = await self.app.api.get_api("get_user", u=self._username)
         elif self._user_id:
-            api_response = await get_api("get_user", u=self._user_id)
+            api_response = await self.app.api.get_api("get_user", u=self._user_id)
         elif self.src_url:
             post = await self.post()
-            api_response = await get_api("get_user", u=post['user_id'])
+            api_response = await self.app.api.get_api("get_user", u=post['user_id'])
         return api_response[0]

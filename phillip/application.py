@@ -7,9 +7,11 @@ from typing import List
 
 from pyee import AsyncIOEventEmitter
 
+import aiohttp
+
 from phillip import helper
-from phillip.event_helper import get_events
 from phillip.handlers import Handler, SimpleHandler
+from phillip.osu import APIClient, WebClient
 
 class Phillip:
     """Representation of feed client to interact with osu! web.
@@ -25,6 +27,7 @@ class Phillip:
     * emitter - `AsyncIOEventEmitter` - Custom event emitter to fire events.
     * disable_groupfeed - `bool` -- Whether to disable group feed or not.
     * disable_mapfeed - `bool` -- Whether to disable map feed or not.
+    * session - `aiohttp.ClientSession` -- aiohttp client session to use for http requests.
 
     **Raises:**
 
@@ -33,7 +36,7 @@ class Phillip:
 
     def __init__(self, token: str, last_date: datetime = None, handlers: List[Handler] = None,
                  webhook_url: str = None, loop=None, emitter: AsyncIOEventEmitter = None,
-                 disable_groupfeed: bool = False, disable_mapfeed: bool = False):
+                 disable_groupfeed: bool = False, disable_mapfeed: bool = False, session=None):
         if not handlers:
             self.handlers = []
         else:
@@ -41,7 +44,6 @@ class Phillip:
         self.webhook_url = webhook_url
 
         self.apitoken = token
-        helper.APIKEY = token
 
         self.last_date = last_date or datetime.utcfromtimestamp(0)
         self.loop = loop or asyncio.get_event_loop()
@@ -49,6 +51,10 @@ class Phillip:
         self.closed = False
         self.disable_user = disable_groupfeed
         self.disable_map = disable_mapfeed
+
+        self.session = session or aiohttp.ClientSession()
+        self.api = APIClient(self.session, self.apitoken)
+        self.web = WebClient(self.session, app=self)
 
         self.group_ids = [
             # https://github.com/ppy/osu-web/blob/master/app/Models/UserGroup.php
@@ -67,11 +73,22 @@ class Phillip:
         if handlers:
             for handler in handlers:
                 handler.register_emitter(self.emitter)
+                handler.app = self
+
+    async def on_error(self, error):
+        """Function to be called if an exception occurs.
+
+        **Parameters:**
+
+        * error - `Exception` -- The exception raised.
+        """
+        print("An error occured, will keep running anyway.", file=sys.stderr)
+        traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
     async def check_map_events(self):
         """Check for map events. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
         """
-        events = [event async for event in get_events((1, 1, 1, 1, 1))]
+        events = [event async for event in self.web.get_events((1, 1, 1, 1, 1))]
         for i, event in enumerate(events):
             if event.time >= self.last_date:
                 beatmap = await event.get_beatmap()
@@ -101,7 +118,7 @@ class Phillip:
         """Check for role changes. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
         """
         for gid in self.group_ids:
-            users = await helper.get_users(gid)
+            users = await self.web.get_users(gid)
 
             for user in users:
                 if not helper.has_user(user, self.last_users[gid]):
@@ -135,9 +152,8 @@ class Phillip:
                 if not self.disable_user:
                     await role
 
-            except:
-                print("An error occured, will keep running anyway.", file=sys.stderr)
-                traceback.print_exc()
+            except Exception as e:
+                await self.on_error(e)
 
     def add_handler(self, handler):
         """Adds custom handler to handlers.
