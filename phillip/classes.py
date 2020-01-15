@@ -1,5 +1,6 @@
 from phillip.abc import EventBase, Source
 
+
 class Nominated(EventBase):
     @property
     def event_type(self) -> str:

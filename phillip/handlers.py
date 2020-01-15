@@ -1,6 +1,7 @@
 from phillip import helper
 import aiohttp
 
+
 class Handler:
     """Handler base for ``Phillip``
 
@@ -105,6 +106,7 @@ class Handler:
         """Function to be called when someone gets added/removed to/from Alumni.
         """
         pass
+
 
 class SimpleHandler(Handler):
     def __init__(self, hook_url):

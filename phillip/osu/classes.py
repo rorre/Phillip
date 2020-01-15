@@ -3,11 +3,11 @@ class Beatmap:
     """A class that represents a difficulty object inside a beatmapset
 
     **Parameters:**
-    
+
     * js - `dict` -- osu! API response, gathered from ``get_beatmaps`` endpoint
 
     **Attributes:**
-    
+
     * All - `str` -- Everything that is documented from [osu! API wiki](https://github.com/ppy/osu-api/wiki).
     """
 
@@ -50,15 +50,16 @@ class Beatmap:
         self.diff_speed = js['diff_speed']
         self.difficultyrating = js['difficultyrating']
 
+
 class GroupUser:
     """A class representing a user inside a grup.
 
     **Parameters:**
-    
+
     * obj - `dict` -- osu! json object, gathered from groups page.
 
     **Attributes:**
-    
+
     * id - `int` -- osu! user ID.
     * username - `str` -- osu! username.
     * profile_colour - `str` -- Hex of user's role color.
@@ -75,6 +76,7 @@ class GroupUser:
     * cover - `dict` -- A dictionary with custom_url, id, and url as key, representing cover url, id, and cover url respectively.
     * support_level - `int` -- Supporter tag level of user.
     """
+
     def __init__(self, obj):
         self.id = obj['id']
         self.username = obj['username']

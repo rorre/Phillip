@@ -5,6 +5,7 @@ import json
 from phillip.osu.classes import GroupUser
 from phillip import abc, classes
 
+
 class WebClient:
     BASE_GROUPS_URL = "https://osu.ppy.sh/groups/"
     EVENTS = {
@@ -69,14 +70,13 @@ class WebClient:
         history = []
         for i, event in enumerate(js):
             if i + 1 != len(js):
-                next_event = js[i+1]
+                next_event = js[i + 1]
             if event['type'] in self.EVENTS:
                 event_name = self.EVENTS[event['type']]
                 if next_event['type'] == "qualify":
                     event_name = "Qualified"
                 history.append((event_name, event['user_id']))
         return history
-
 
     async def get_users(self, group_id: int) -> List[dict]:
         """Get users inside of a group. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
@@ -113,13 +113,12 @@ class WebClient:
              with next index as next event that will be processed.
         """
         additions = list()
-        
+
         for i in range(5):
             additions.append(types_val[i] and self.TYPES[i] or str())
         if types_val[0]:
             additions.append("qualify")
         url = self.BASE_EVENTS_URL + '&types%5B%5D='.join(additions)
-
 
         async with self._throttler:
             async with self._session.get(url, cookies={"locale": "en"}) as res:
@@ -145,6 +144,6 @@ class WebClient:
 
             next_map = None
             if i + 1 != len(events_html):
-                next_map = events_html[i+1]
+                next_map = events_html[i + 1]
 
             yield event_cases[action](event, next_map, app=self._app)

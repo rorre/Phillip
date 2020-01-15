@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 from phillip.osu.classes import Beatmap, GroupUser
 
+
 async def gen_embed(event, app) -> dict:
     """Generate Discord embed of event. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
@@ -32,9 +33,7 @@ async def gen_embed(event, app) -> dict:
 Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
         "color": 29625,
         "thumbnail": {
-            "url": f"{event.map_cover}"
-        }
-    }
+            "url": f"{event.map_cover}"}}
 
     if event.event_type not in ["Ranked", "Loved"]:
         apiuser = await event.source.user()

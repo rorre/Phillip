@@ -2,6 +2,7 @@ from urllib.parse import urlencode
 from typing import List
 from phillip.osu.classes import Beatmap
 
+
 class APIClient:
     BASE_URL = "https://osu.ppy.sh/api/"
 

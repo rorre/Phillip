@@ -6,11 +6,16 @@ from bs4 import BeautifulSoup
 
 from phillip.osu.classes import Beatmap
 
+
 class EventBase(ABC):
     """An Abstract Class (ABC) representing base osu! beatmapset event.
     """
 
-    def __init__(self, soup: BeautifulSoup, nextevent: BeautifulSoup = None, app=None):
+    def __init__(
+            self,
+            soup: BeautifulSoup,
+            nextevent: BeautifulSoup = None,
+            app=None):
         self.app = app
         self.soup = soup
         self.next_map = nextevent
@@ -107,6 +112,7 @@ class EventBase(ABC):
     def beatmapset(self) -> List[Beatmap]:
         """Array of difficulties inside the beatmap."""
         return self._beatmapset
+
 
 class Source:
     """Representation of the beatmapset event source

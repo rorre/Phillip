@@ -13,6 +13,7 @@ from phillip import helper
 from phillip.handlers import Handler, SimpleHandler
 from phillip.osu import APIClient, WebClient
 
+
 class Phillip:
     """Representation of feed client to interact with osu! web.
     This client will interact with osu! API and web through scraper.
@@ -34,9 +35,17 @@ class Phillip:
     * `Exception` -- if no handlers nor webhook_url assigned.
     """
 
-    def __init__(self, token: str, last_date: datetime = None, handlers: List[Handler] = None,
-                 webhook_url: str = None, loop=None, emitter: AsyncIOEventEmitter = None,
-                 disable_groupfeed: bool = False, disable_mapfeed: bool = False, session=None):
+    def __init__(
+            self,
+            token: str,
+            last_date: datetime = None,
+            handlers: List[Handler] = None,
+            webhook_url: str = None,
+            loop=None,
+            emitter: AsyncIOEventEmitter = None,
+            disable_groupfeed: bool = False,
+            disable_mapfeed: bool = False,
+            session=None):
         if not handlers:
             self.handlers = []
         else:
@@ -83,7 +92,11 @@ class Phillip:
         * error - `Exception` -- The exception raised.
         """
         print("An error occured, will keep running anyway.", file=sys.stderr)
-        traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+        traceback.print_exception(
+            type(error),
+            error,
+            error.__traceback__,
+            file=sys.stderr)
 
     async def check_map_events(self):
         """Check for map events. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
@@ -144,8 +157,10 @@ class Phillip:
 
         while not self.closed:
             try:
-                event = asyncio.create_task(self.check_map_events()) if not self.disable_map else None
-                role = asyncio.create_task(self.check_role_change()) if not self.disable_user else None
+                event = asyncio.create_task(
+                    self.check_map_events()) if not self.disable_map else None
+                role = asyncio.create_task(
+                    self.check_role_change()) if not self.disable_user else None
 
                 if not self.disable_map:
                     await event
