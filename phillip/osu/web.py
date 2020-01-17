@@ -99,13 +99,22 @@ class WebClient:
             out.append(GroupUser(user))
         return out
 
-    async def get_events(self, types_val: list) -> Generator[List[abc.EventBase], None, None]:
+    async def get_events(self,
+                         nominate : bool = True,
+                         rank : bool = True,
+                         love : bool = True,
+                         nomination_reset : bool = True,
+                         disqualify : bool = True,
+                         **kwargs) -> Generator[List[abc.EventBase], None, None]:
         """Get events of from osu!website. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
         **Parameters:**
 
-        * types_val - `list` -- A list consisting of 5 integer, with value of either 0 or 1 for the value of \
-             [nominate, rank, love, nomination_reset, disqualify]
+        * nominate - `bool` -- Whether to get nomination events or not. **This implies `qualify` event.**
+        * rank - `bool` -- Whether to get ranked events or not.
+        * love - `bool` -- Whetger to get loved events or not.
+        * nomination_reset - `bool` -- Whether to get nomination reset events or not.
+        * disqualify -- `bool` -- Whether to get disqualification events or not.
 
         **Yields:**
 
@@ -113,17 +122,16 @@ class WebClient:
              with next index as next event that will be processed.
         """
         additions = list()
+        types_val = [nominate, rank, love, nomination_reset, disqualify]
 
         for i in range(5):
             additions.append(types_val[i] and self.TYPES[i] or str())
         if types_val[0]:
             additions.append("qualify")
-        url = self.BASE_EVENTS_URL + '&types%5B%5D='.join(additions)
+        extras = urlencode(kwargs)
+        url = self.BASE_EVENTS_URL + '&types%5B%5D='.join(additions) + "&" + extras
 
-        async with self._throttler:
-            async with self._session.get(url, cookies={"locale": "en"}) as res:
-                res_soup = BeautifulSoup(await res.text(), features="html.parser")
-
+        res_soup = await self.get_html(url)
         events_html = res_soup.findAll(class_="beatmapset-event")
         events_html.reverse()
 

@@ -101,7 +101,7 @@ class Phillip:
     async def check_map_events(self):
         """Check for map events. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
         """
-        events = [event async for event in self.web.get_events((1, 1, 1, 1, 1))]
+        events = [event async for event in self.web.get_events(True, True, True, True, True)]
         for i, event in enumerate(events):
             if event.time >= self.last_date:
                 beatmap = await event.get_beatmap()
