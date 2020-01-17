@@ -27,7 +27,18 @@ class WebClient:
         self._session = session
         self._throttler = throttler or Throttler(rate_limit=2, period=60)
 
-    async def get_html(self, uri):
+    async def get_html(self, uri : str) -> BeautifulSoup:
+        """Receive html from uri. 
+        *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
+
+        **Parameters:**
+
+        * uri - `str` -- URL of discussion page.
+
+        **Returns**
+
+        * BeautifulSoup -- Soup'd html response.
+        """
         async with self._throttler:
             async with self._session.get(uri, cookies={"locale": "en"}) as site_html:
                 return BeautifulSoup(await site_html.text(), features="html.parser")
