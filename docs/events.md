@@ -17,7 +17,7 @@ The only diffrrence is that they're using different mechanism to gather info and
 
 `GroupUser` rrepresents a user inside a group that is defined from scraping the site.
 
-::: phillip.osu.GroupUser
+::: phillip.osu.classes.GroupUser
     :docstring:
 
 !!! warning
