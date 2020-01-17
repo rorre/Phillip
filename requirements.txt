@@ -4,5 +4,5 @@ aiohttp
 asyncio-throttle
 mkdocs
 mkdocs-material
-mkautodoc
+git+git://github.com/rorre/mkautodoc.git@attr-value#egg=mkautodoc
 pymdown-extensions
