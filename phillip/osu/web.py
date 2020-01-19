@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import json
 from phillip.osu.classes import GroupUser
 from phillip import abc, classes
+from urllib.parse import urlencode
 
 
 class WebClient:
@@ -27,7 +28,7 @@ class WebClient:
         self._session = session
         self._throttler = throttler or Throttler(rate_limit=2, period=60)
 
-    async def get_html(self, uri : str) -> BeautifulSoup:
+    async def get_html(self, uri: str) -> BeautifulSoup:
         """Receive html from uri. 
         *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
@@ -111,11 +112,11 @@ class WebClient:
         return out
 
     async def get_events(self,
-                         nominate : bool = True,
-                         rank : bool = True,
-                         love : bool = True,
-                         nomination_reset : bool = True,
-                         disqualify : bool = True,
+                         nominate: bool = True,
+                         rank: bool = True,
+                         love: bool = True,
+                         nomination_reset: bool = True,
+                         disqualify: bool = True,
                          **kwargs) -> Generator[List[abc.EventBase], None, None]:
         """Get events of from osu!website. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
@@ -140,7 +141,8 @@ class WebClient:
         if types_val[0]:
             additions.append("qualify")
         extras = urlencode(kwargs)
-        url = self.BASE_EVENTS_URL + '&types%5B%5D='.join(additions) + "&" + extras
+        url = self.BASE_EVENTS_URL + \
+            '&types%5B%5D='.join(additions) + "&" + extras
 
         res_soup = await self.get_html(url)
         events_html = res_soup.findAll(class_="beatmapset-event")

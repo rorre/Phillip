@@ -50,16 +50,16 @@ class Phillip:
             self.handlers = []
         else:
             self.handlers = handlers
-        self.webhook_url = webhook_url
 
+        self.webhook_url = webhook_url
         self.apitoken = token
 
         self.last_date = last_date or datetime.utcfromtimestamp(0)
         self.loop = loop or asyncio.get_event_loop()
         self.last_event = None
-        self.closed = False
         self.disable_user = disable_groupfeed
         self.disable_map = disable_mapfeed
+        self.tasks = []
 
         self.session = session or aiohttp.ClientSession()
         self.api = APIClient(self.session, self.apitoken)
@@ -101,29 +101,32 @@ class Phillip:
     async def check_map_events(self):
         """Check for map events. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
         """
-        events = [event async for event in self.web.get_events(True, True, True, True, True)]
-        for i, event in enumerate(events):
-            if event.time >= self.last_date:
-                beatmap = await event.get_beatmap()
+        try:
+            events = [event async for event in self.web.get_events(True, True, True, True, True)]
+            for i, event in enumerate(events):
+                if event.time >= self.last_date:
+                    beatmap = await event.get_beatmap()
 
-                if event.time == self.last_date:
-                    if self.last_event:
-                        if beatmap.beatmapset_id == self.last_event.beatmap.beatmapset_id:
+                    if event.time == self.last_date:
+                        if self.last_event:
+                            if beatmap.beatmapset_id == self.last_event.beatmap.beatmapset_id:
+                                continue
+
+                    if event.time == self.last_date and i + 1 == len(events):
+                        self.last_date = event.time + timedelta(seconds=1)
+                    else:
+                        self.last_date = event.time
+
+                    self.last_event = event
+                    if event.event_type not in ["Ranked", "Loved"]:
+                        user = await event.source.user()
+                        if user['username'] == "BanchoBot":
                             continue
 
-                if event.time == self.last_date and i + 1 == len(events):
-                    self.last_date = event.time + timedelta(seconds=1)
-                else:
-                    self.last_date = event.time
-
-                self.last_event = event
-                if event.event_type not in ["Ranked", "Loved"]:
-                    user = await event.source.user()
-                    if user['username'] == "BanchoBot":
-                        continue
-
-                self.emitter.emit("map_event", event)
-                self.emitter.emit(event.event_type.lower(), event)
+                    self.emitter.emit("map_event", event)
+                    self.emitter.emit(event.event_type.lower(), event)
+        except Exception as e:
+            await self.on_error(e)
 
         await asyncio.sleep(5 * 60)
 
@@ -131,23 +134,26 @@ class Phillip:
         """Check for role changes. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
         """
         for gid in self.group_ids:
-            users = await self.web.get_users(gid)
+            try:
+                users = await self.web.get_users(gid)
 
-            for user in users:
-                if not helper.has_user(user, self.last_users[gid]):
-                    self.emitter.emit("group_add", user)
-                    self.emitter.emit(user.default_group, user)
+                for user in users:
+                    if not helper.has_user(user, self.last_users[gid]):
+                        self.emitter.emit("group_add", user)
+                        self.emitter.emit(user.default_group, user)
 
-            for user in self.last_users[gid]:
-                if not helper.has_user(user, users):
-                    self.emitter.emit("group_removed", user)
-                    self.emitter.emit(user.default_group, user)
+                for user in self.last_users[gid]:
+                    if not helper.has_user(user, users):
+                        self.emitter.emit("group_removed", user)
+                        self.emitter.emit(user.default_group, user)
 
-            self.last_users[gid] = users
+                self.last_users[gid] = users
+            except Exception as e:
+                await self.on_error(e)
         await asyncio.sleep(15 * 60)
 
-    async def start(self):
-        """Well, run the client, what else?! *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*"""
+    def start(self):
+        """Well, run the client, what else?!"""
         if self.disable_map and self.disable_user:
             raise Exception("Cannot disable both map and role check.")
         if not self.handlers:
@@ -155,20 +161,10 @@ class Phillip:
                 raise Exception("Requires Handler or webhook_url")
             self.handlers.append(SimpleHandler(self.webhook_url))
 
-        while not self.closed:
-            try:
-                event = asyncio.create_task(
-                    self.check_map_events()) if not self.disable_map else None
-                role = asyncio.create_task(
-                    self.check_role_change()) if not self.disable_user else None
-
-                if not self.disable_map:
-                    await event
-                if not self.disable_user:
-                    await role
-
-            except Exception as e:
-                await self.on_error(e)
+        if not self.disable_map:
+            self.tasks.append(asyncio.ensure_future(self.check_map_events()))
+        if not self.disable_user:
+            self.tasks.append(asyncio.ensure_future(self.check_role_change()))
 
     def add_handler(self, handler):
         """Adds custom handler to handlers.
@@ -183,7 +179,9 @@ class Phillip:
         """Run Phillip. This function does not take any parameter.
         """
         def stop():
-            self.closed = True
+            asyncio.run_coroutine_threadsafe(self.session.close(), self.loop)
+            for t in self.tasks:
+                if not None: t.cancel()
             self.loop.stop()
 
         try:
@@ -193,7 +191,8 @@ class Phillip:
             pass
 
         try:
-            self.loop.run_until_complete(self.start())
+            self.start()
+            self.loop.run_forever()
         except KeyboardInterrupt:
             print("Exiting...")
         finally:
