@@ -11,11 +11,7 @@ class EventBase(ABC):
     """An Abstract Class (ABC) representing base osu! beatmapset event.
     """
 
-    def __init__(
-            self,
-            soup: BeautifulSoup,
-            nextevent: BeautifulSoup = None,
-            app=None):
+    def __init__(self, soup: BeautifulSoup, nextevent: BeautifulSoup = None, app=None):
         self.app = app
         self.soup = soup
         self.next_map = nextevent
@@ -60,13 +56,13 @@ class EventBase(ABC):
 
     def user_id_action(self) -> int:
         """`user_action`'s user id."""
-        return int(self.user_html.get('data-user-id'))
+        return int(self.user_html.get("data-user-id"))
 
     @property
     def time(self) -> datetime:
         """A `datetime` object representing the time where the event happened."""
         dt = self.soup.find(class_="timeago").get("datetime")
-        return datetime.strptime(dt, '%Y-%m-%dT%H:%M:%S+00:00')
+        return datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S+00:00")
 
     @abstractmethod
     def event_type(self):
@@ -81,12 +77,7 @@ class EventBase(ABC):
     @property
     def gamemodes(self) -> List[str]:
         """Game modes inside the beatmapset."""
-        mode_num = {
-            "0": "osu",
-            "1": "taiko",
-            "2": "catch",
-            "3": "mania"
-        }
+        mode_num = {"0": "osu", "1": "taiko", "2": "catch", "3": "mania"}
         modes = []
         for diff in self.beatmapset:
             if mode_num[diff.mode] not in modes:
@@ -100,7 +91,7 @@ class EventBase(ABC):
             self.event_source_url,
             self.user_action(),
             self.user_id_action(),
-            app=self.app
+            app=self.app,
         )
 
     @property
@@ -118,8 +109,15 @@ class Source:
     """Representation of the beatmapset event source
     """
 
-    def __init__(self, src_url: str, username: str = None, user_id: int = None,
-                 post: dict = None, user: dict = None, app=None):
+    def __init__(
+        self,
+        src_url: str,
+        username: str = None,
+        user_id: int = None,
+        post: dict = None,
+        user: dict = None,
+        app=None,
+    ):
         self.src_url = src_url
         self._username = username
         self._user_id = user_id
@@ -135,7 +133,7 @@ class Source:
         if self._post:
             return self._post
         post_url = self.src_url
-        post_id = int(post_url.split('/')[-1])
+        post_id = int(post_url.split("/")[-1])
         discussion_parents = await self.app.web.get_discussion_json(post_url)
         sourcePost = None
         for discussion in discussion_parents:
@@ -143,7 +141,7 @@ class Source:
                 continue
             discussion_id = discussion.get("id")
             if discussion_id == post_id:
-                sourcePost = discussion['posts'][0]
+                sourcePost = discussion["posts"][0]
                 break
         return sourcePost
 
@@ -159,5 +157,5 @@ class Source:
             api_response = await self.app.api.get_api("get_user", u=self._user_id)
         elif self.src_url:
             post = await self.post()
-            api_response = await self.app.api.get_api("get_user", u=post['user_id'])
+            api_response = await self.app.api.get_api("get_user", u=post["user_id"])
         return api_response[0]

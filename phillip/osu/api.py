@@ -26,7 +26,7 @@ class APIClient:
 
         * `List[dict]` -- API response.
         """
-        kwargs['k'] = self._key
+        kwargs["k"] = self._key
 
         api_args = urlencode(kwargs)
         api_url = self.BASE_URL + endpoint + "?" + api_args

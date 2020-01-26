@@ -122,8 +122,8 @@ class SimpleHandler(Handler):
         """
         embed = await helper.gen_embed(event, self.app)
         with aiohttp.ClientSession() as session:
-            await session.post(self.hook_url, json={
-                'content': event.event_source_url,
-                'embeds': [embed]
-            })
+            await session.post(
+                self.hook_url,
+                json={"content": event.event_source_url, "embeds": [embed]},
+            )
         return

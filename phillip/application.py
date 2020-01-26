@@ -36,16 +36,17 @@ class Phillip:
     """
 
     def __init__(
-            self,
-            token: str,
-            last_date: datetime = None,
-            handlers: List[Handler] = None,
-            webhook_url: str = None,
-            loop=None,
-            emitter: AsyncIOEventEmitter = None,
-            disable_groupfeed: bool = False,
-            disable_mapfeed: bool = False,
-            session=None):
+        self,
+        token: str,
+        last_date: datetime = None,
+        handlers: List[Handler] = None,
+        webhook_url: str = None,
+        loop=None,
+        emitter: AsyncIOEventEmitter = None,
+        disable_groupfeed: bool = False,
+        disable_mapfeed: bool = False,
+        session=None,
+    ):
         if not handlers:
             self.handlers = []
         else:
@@ -71,7 +72,7 @@ class Phillip:
             7,  # NAT
             16,  # Alumni
             28,  # Full BN
-            32  # Probation BN
+            32,  # Probation BN
         ]
         self.last_users = dict()
 
@@ -93,23 +94,27 @@ class Phillip:
         """
         print("An error occured, will keep running anyway.", file=sys.stderr)
         traceback.print_exception(
-            type(error),
-            error,
-            error.__traceback__,
-            file=sys.stderr)
+            type(error), error, error.__traceback__, file=sys.stderr
+        )
 
     async def check_map_events(self):
         """Check for map events. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
         """
         try:
-            events = [event async for event in self.web.get_events(True, True, True, True, True)]
+            events = [
+                event
+                async for event in self.web.get_events(True, True, True, True, True)
+            ]
             for i, event in enumerate(events):
                 if event.time >= self.last_date:
                     beatmap = await event.get_beatmap()
 
                     if event.time == self.last_date:
                         if self.last_event:
-                            if beatmap.beatmapset_id == self.last_event.beatmap.beatmapset_id:
+                            if (
+                                beatmap.beatmapset_id
+                                == self.last_event.beatmap.beatmapset_id
+                            ):
                                 continue
 
                     if event.time == self.last_date and i + 1 == len(events):
@@ -120,7 +125,7 @@ class Phillip:
                     self.last_event = event
                     if event.event_type not in ["Ranked", "Loved"]:
                         user = await event.source.user()
-                        if user['username'] == "BanchoBot":
+                        if user["username"] == "BanchoBot":
                             continue
 
                     self.emitter.emit("map_event", event)
@@ -178,10 +183,12 @@ class Phillip:
     def run(self):
         """Run Phillip. This function does not take any parameter.
         """
+
         def stop():
             asyncio.run_coroutine_threadsafe(self.session.close(), self.loop)
             for t in self.tasks:
-                if not None: t.cancel()
+                if not None:
+                    t.cancel()
             self.loop.stop()
 
         try:

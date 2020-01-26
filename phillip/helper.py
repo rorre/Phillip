@@ -24,7 +24,7 @@ async def gen_embed(event, app) -> dict:
         "Ranked": ":sparkling_heart:",
         "Disqualified": ":broken_heart:",
         "Popped": ":anger_right:",
-        "Loved": ":gift_heart:"
+        "Loved": ":gift_heart:",
     }
 
     embed_base = {
@@ -32,30 +32,29 @@ async def gen_embed(event, app) -> dict:
         "description": f"[**{event.artist} - {event.title}**]({event.event_source_url})\r\n\
 Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
         "color": 29625,
-        "thumbnail": {
-            "url": f"{event.map_cover}"}}
+        "thumbnail": {"url": f"{event.map_cover}"},
+    }
 
     if event.event_type not in ["Ranked", "Loved"]:
         apiuser = await event.source.user()
-        user = apiuser['username']
-        user_id = apiuser['user_id']
-        embed_base['footer'] = {
+        user = apiuser["username"]
+        user_id = apiuser["user_id"]
+        embed_base["footer"] = {
             "icon_url": f"https://a.ppy.sh/{user_id}?1561560622.jpeg",
-            "text": f"{user}"
+            "text": f"{user}",
         }
 
     if event.event_type in ["Popped", "Disqualified"]:
         source = await event.source.post()
-        embed_base['footer']['text'] += " - {}".format(
-            source['message'].split("\n")[0])
-        embed_base['color'] = 15408128
+        embed_base["footer"]["text"] += " - {}".format(source["message"].split("\n")[0])
+        embed_base["color"] = 15408128
 
     if event.event_type == "Ranked":
         users_str = str()
         history = await app.web.nomination_history(event.beatmap.beatmapset_id)
         for history_event in history:
             user = await app.api.get_api("get_user", u=history_event[1])
-            u_name = user[0]['username']
+            u_name = user[0]["username"]
 
             if u_name == "BanchoBot":
                 continue
@@ -63,7 +62,7 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
             users_str += f"{action_icons[history_event[0]]} \
                 [{u_name}](https://osu.ppy.sh/u/{history_event[1]}) "
 
-        embed_base['description'] += "\r\n " + users_str
+        embed_base["description"] += "\r\n " + users_str
 
     return embed_base
 
@@ -84,6 +83,6 @@ def has_user(source: dict, target: List[dict]) -> bool:
         return False
 
     for user in target:
-        if source['id'] == user['id']:
+        if source["id"] == user["id"]:
             return True
     return False

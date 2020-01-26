@@ -15,13 +15,7 @@ class WebClient:
         "nomination_reset": "Popped",
     }
     BASE_EVENTS_URL = "https://osu.ppy.sh/beatmapsets/events?user=&types%5B%5D="
-    TYPES = [
-        "nominate",
-        "rank",
-        "love",
-        "nomination_reset",
-        "disqualify"
-    ]
+    TYPES = ["nominate", "rank", "love", "nomination_reset", "disqualify"]
 
     def __init__(self, session, throttler=None, app=None):
         self._app = app
@@ -59,7 +53,7 @@ class WebClient:
         soup = await self.get_html(uri)
         set_json_str = soup.find(id="json-beatmapset-discussion").text
         set_json = json.loads(set_json_str)
-        return set_json['beatmapset']['discussions']
+        return set_json["beatmapset"]["discussions"]
 
     async def nomination_history(self, mapid: int) -> List[Tuple[str, int]]:
         """Get nomination history of a beatmap. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
@@ -77,17 +71,17 @@ class WebClient:
         soup = await self.get_html(uri)
         set_json_str = soup.find(id="json-beatmapset-discussion").text
         set_json = json.loads(set_json_str)
-        js = set_json['beatmapset']['events']
+        js = set_json["beatmapset"]["events"]
 
         history = []
         for i, event in enumerate(js):
             if i + 1 != len(js):
                 next_event = js[i + 1]
-            if event['type'] in self.EVENTS:
-                event_name = self.EVENTS[event['type']]
-                if next_event['type'] == "qualify":
+            if event["type"] in self.EVENTS:
+                event_name = self.EVENTS[event["type"]]
+                if next_event["type"] == "qualify":
                     event_name = "Qualified"
-                history.append((event_name, event['user_id']))
+                history.append((event_name, event["user_id"]))
         return history
 
     async def get_users(self, group_id: int) -> List[dict]:
@@ -111,13 +105,15 @@ class WebClient:
             out.append(GroupUser(user))
         return out
 
-    async def get_events(self,
-                         nominate: bool = True,
-                         rank: bool = True,
-                         love: bool = True,
-                         nomination_reset: bool = True,
-                         disqualify: bool = True,
-                         **kwargs) -> Generator[List[abc.EventBase], None, None]:
+    async def get_events(
+        self,
+        nominate: bool = True,
+        rank: bool = True,
+        love: bool = True,
+        nomination_reset: bool = True,
+        disqualify: bool = True,
+        **kwargs,
+    ) -> Generator[List[abc.EventBase], None, None]:
         """Get events of from osu!website. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
         **Parameters:**
@@ -141,8 +137,7 @@ class WebClient:
         if types_val[0]:
             additions.append("qualify")
         extras = urlencode(kwargs)
-        url = self.BASE_EVENTS_URL + \
-            '&types%5B%5D='.join(additions) + "&" + extras
+        url = self.BASE_EVENTS_URL + "&types%5B%5D=".join(additions) + "&" + extras
 
         res_soup = await self.get_html(url)
         events_html = res_soup.findAll(class_="beatmapset-event")
@@ -153,12 +148,13 @@ class WebClient:
             "Disqualified": classes.Disqualified,
             "New": classes.Popped,
             "Ranked.": classes.Ranked,
-            "Loved": classes.Loved
+            "Loved": classes.Loved,
         }
 
         for i, event in enumerate(events_html):
-            action = event.find(
-                class_="beatmapset-event__content").text.strip().split()[0]
+            action = (
+                event.find(class_="beatmapset-event__content").text.strip().split()[0]
+            )
 
             if action == "This":
                 continue  # Skip qualified event news
