@@ -1,14 +1,21 @@
-import json
-from typing import List, Tuple
-import aiohttp
-from asyncio_throttle import Throttler
-from bs4 import BeautifulSoup
+from typing import List
 
-from phillip.osu.classes import Beatmap, GroupUser
+from phillip.application import Phillip
+from phillip.abc import EventBase
 
 
-async def gen_embed(event, app) -> dict:
-    """Generate Discord embed of event. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
+def format_message(msg: str) -> str:
+    message = msg.split("\n")[0]
+    if len(message) < 20:
+        message = msg[:80]
+    if len(message) > 80:
+        message = msg[:80] + "..."
+    return message
+
+
+async def gen_embed(event: EventBase, app: Phillip) -> dict:
+    """Generate Aiess-styled Discord embed of event. 
+    *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
     **Parameters:**
 
@@ -46,7 +53,9 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
 
     if event.event_type in ["Popped", "Disqualified"]:
         source = await event.source.post()
-        embed_base["footer"]["text"] += " - {}".format(source["message"].split("\n")[0])
+        embed_base["footer"]["text"] += " - {}".format(
+            format_message(source["message"])
+        )
         embed_base["color"] = 15408128
 
     if event.event_type == "Ranked":
