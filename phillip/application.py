@@ -101,7 +101,7 @@ class Phillip:
     async def check_map_events(self):
         """Check for map events. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
         """
-        while not self._closed;
+        while not self._closed:
             try:
                 events = [
                     event
@@ -140,7 +140,7 @@ class Phillip:
     async def check_role_change(self):
         """Check for role changes. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
         """
-        while not self._closed;
+        while not self._closed:
             for gid in self.group_ids:
                 try:
                     users = await self.web.get_users(gid)
