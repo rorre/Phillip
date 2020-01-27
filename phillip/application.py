@@ -167,9 +167,9 @@ class Phillip:
             self.handlers.append(SimpleHandler(self.webhook_url))
 
         if not self.disable_map:
-            self.tasks.append(asyncio.ensure_future(self.check_map_events()))
+            self.tasks.append(self.loop.create_task(self.check_map_events()))
         if not self.disable_user:
-            self.tasks.append(asyncio.ensure_future(self.check_role_change()))
+            self.tasks.append(self.loop.create_task(self.check_role_change()))
 
     def add_handler(self, handler):
         """Adds custom handler to handlers.
