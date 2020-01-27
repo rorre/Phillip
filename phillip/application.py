@@ -47,6 +47,7 @@ class Phillip:
         disable_mapfeed: bool = False,
         session=None,
     ):
+        self._closed = False
         if not handlers:
             self.handlers = []
         else:
@@ -100,62 +101,64 @@ class Phillip:
     async def check_map_events(self):
         """Check for map events. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
         """
-        try:
-            events = [
-                event
-                async for event in self.web.get_events(True, True, True, True, True)
-            ]
-            for i, event in enumerate(events):
-                if event.time >= self.last_date:
-                    beatmap = await event.get_beatmap()
+        while not self._closed;
+            try:
+                events = [
+                    event
+                    async for event in self.web.get_events(True, True, True, True, True)
+                ]
+                for i, event in enumerate(events):
+                    if event.time >= self.last_date:
+                        beatmap = await event.get_beatmap()
 
-                    if event.time == self.last_date:
-                        if self.last_event:
-                            if (
-                                beatmap.beatmapset_id
-                                == self.last_event.beatmap.beatmapset_id
-                            ):
+                        if event.time == self.last_date:
+                            if self.last_event:
+                                if (
+                                    beatmap.beatmapset_id
+                                    == self.last_event.beatmap.beatmapset_id
+                                ):
+                                    continue
+
+                        if event.time == self.last_date and i + 1 == len(events):
+                            self.last_date = event.time + timedelta(seconds=1)
+                        else:
+                            self.last_date = event.time
+
+                        self.last_event = event
+                        if event.event_type not in ["Ranked", "Loved"]:
+                            user = await event.source.user()
+                            if user["username"] == "BanchoBot":
                                 continue
 
-                    if event.time == self.last_date and i + 1 == len(events):
-                        self.last_date = event.time + timedelta(seconds=1)
-                    else:
-                        self.last_date = event.time
+                        self.emitter.emit("map_event", event)
+                        self.emitter.emit(event.event_type.lower(), event)
+            except Exception as e:
+                await self.on_error(e)
 
-                    self.last_event = event
-                    if event.event_type not in ["Ranked", "Loved"]:
-                        user = await event.source.user()
-                        if user["username"] == "BanchoBot":
-                            continue
-
-                    self.emitter.emit("map_event", event)
-                    self.emitter.emit(event.event_type.lower(), event)
-        except Exception as e:
-            await self.on_error(e)
-
-        await asyncio.sleep(5 * 60)
+            await asyncio.sleep(5 * 60)
 
     async def check_role_change(self):
         """Check for role changes. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
         """
-        for gid in self.group_ids:
-            try:
-                users = await self.web.get_users(gid)
+        while not self._closed;
+            for gid in self.group_ids:
+                try:
+                    users = await self.web.get_users(gid)
 
-                for user in users:
-                    if not helper.has_user(user, self.last_users[gid]):
-                        self.emitter.emit("group_add", user)
-                        self.emitter.emit(user.default_group, user)
+                    for user in users:
+                        if not helper.has_user(user, self.last_users[gid]):
+                            self.emitter.emit("group_add", user)
+                            self.emitter.emit(user.default_group, user)
 
-                for user in self.last_users[gid]:
-                    if not helper.has_user(user, users):
-                        self.emitter.emit("group_removed", user)
-                        self.emitter.emit(user.default_group, user)
+                    for user in self.last_users[gid]:
+                        if not helper.has_user(user, users):
+                            self.emitter.emit("group_removed", user)
+                            self.emitter.emit(user.default_group, user)
 
-                self.last_users[gid] = users
-            except Exception as e:
-                await self.on_error(e)
-        await asyncio.sleep(15 * 60)
+                    self.last_users[gid] = users
+                except Exception as e:
+                    await self.on_error(e)
+            await asyncio.sleep(15 * 60)
 
     def start(self):
         """Well, run the client, what else?!"""
@@ -185,6 +188,7 @@ class Phillip:
         """
 
         def stop():
+            self._closed = True
             asyncio.run_coroutine_threadsafe(self.session.close(), self.loop)
             for t in self.tasks:
                 if not None:
