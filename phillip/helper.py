@@ -65,8 +65,7 @@ Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
             if u_name == "BanchoBot":
                 continue
 
-            users_str += f"{action_icons[history_event[0]]} \
-                [{u_name}](https://osu.ppy.sh/u/{history_event[1]}) "
+            users_str += f"{action_icons[history_event[0]]} [{u_name}](https://osu.ppy.sh/u/{history_event[1]}) "
 
         embed_base["description"] += "\r\n " + users_str
 
