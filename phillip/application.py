@@ -187,13 +187,17 @@ class Phillip:
         """Run Phillip. This function does not take any parameter.
         """
 
-        def stop():
+        async def astop():
             self._closed = True
-            asyncio.run_coroutine_threadsafe(self.session.close(), self.loop)
+            await self.session.close()
             for t in self.tasks:
-                if not None:
-                    t.cancel()
+                t.cancel()
+            asyncio.gather(*self.tasks, return_exceptions=True)
             self.loop.stop()
+            self.loop.close()
+
+        def stop():
+            asyncio.ensure_future(astop())
 
         try:
             self.loop.add_signal_handler(signal.SIGINT, stop)
@@ -208,4 +212,3 @@ class Phillip:
             print("Exiting...")
         finally:
             stop()
-            self.loop.close()
