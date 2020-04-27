@@ -61,7 +61,7 @@ class EventBase(ABC):
     @property
     def time(self) -> datetime:
         """A `datetime` object representing the time where the event happened."""
-        dt = self.soup.find(class_="timeago").get("datetime")
+        dt = self.soup.find(class_="js-timeago").get("datetime")
         return datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S+00:00")
 
     @abstractmethod
