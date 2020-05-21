@@ -5,9 +5,8 @@ import traceback
 from datetime import datetime, timedelta
 from typing import List
 
-from pyee import AsyncIOEventEmitter
-
 import aiohttp
+from pyee import AsyncIOEventEmitter
 
 from phillip import helper
 from phillip.handlers import Handler, SimpleHandler

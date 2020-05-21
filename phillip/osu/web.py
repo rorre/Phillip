@@ -1,10 +1,12 @@
-from asyncio_throttle import Throttler
-from typing import List, Tuple, Generator
-from bs4 import BeautifulSoup
 import json
-from phillip.osu.classes import GroupUser
-from phillip import abc, classes
+from typing import Generator, List, Tuple
 from urllib.parse import urlencode
+
+from asyncio_throttle import Throttler
+from bs4 import BeautifulSoup
+
+from phillip import abc, classes
+from phillip.osu.classes import GroupUser
 
 
 class WebClient:
