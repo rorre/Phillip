@@ -1,7 +1,7 @@
 from typing import List
 from urllib.parse import urlencode
 
-from phillip.osu.classes import Beatmap
+from phillip.osu.classes.api import Beatmap
 
 
 class APIClient:

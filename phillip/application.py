@@ -125,8 +125,7 @@ class Phillip:
 
                         self.last_event = event
                         if event.event_type not in ["Ranked", "Loved"]:
-                            user = await event.source.user()
-                            if user["username"] == "BanchoBot":
+                            if event.user_id == 3:
                                 continue
 
                         self.emitter.emit("map_event", event)

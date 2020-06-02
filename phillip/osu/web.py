@@ -6,7 +6,7 @@ from asyncio_throttle import Throttler
 from bs4 import BeautifulSoup
 
 from phillip import abc, classes
-from phillip.osu.classes import GroupUser
+from phillip.osu.classes.web import GroupUser
 
 
 class WebClient:
@@ -142,27 +142,25 @@ class WebClient:
         url = self.BASE_EVENTS_URL + "&types%5B%5D=".join(additions) + "&" + extras
 
         res_soup = await self.get_html(url)
-        events_html = res_soup.findAll(class_="beatmapset-event")
-        events_html.reverse()
+        events_html = res_soup.find(id="json-events").text
+        events = json.loads(events_html)
+        events.reverse()
 
         event_cases = {
-            "Nominated": classes.Nominated,
-            "Disqualified": classes.Disqualified,
-            "New": classes.Popped,
-            "Ranked.": classes.Ranked,
-            "Loved": classes.Loved,
+            "nominate": classes.Nominated,
+            "disqualify": classes.Disqualified,
+            "nomination_reset": classes.Popped,
+            "rank": classes.Ranked,
+            "love": classes.Loved,
         }
 
-        for i, event in enumerate(events_html):
-            action = (
-                event.find(class_="beatmapset-event__content").text.strip().split()[0]
-            )
-
-            if action == "This":
+        for i, event in enumerate(events):
+            action = event["type"]
+            if action == "qualify":
                 continue  # Skip qualified event news
 
             next_map = None
-            if i + 1 != len(events_html):
-                next_map = events_html[i + 1]
+            if i + 1 != len(events):
+                next_map = events[i + 1]
 
             yield event_cases[action](event, next_map, app=self._app)

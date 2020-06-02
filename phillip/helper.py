@@ -34,30 +34,28 @@ async def gen_embed(event, app) -> dict:
     embed_base = {
         "title": f"{action_icons[event.event_type]} {event.event_type}",
         "description": f"[**{event.artist} - {event.title}**]({event.event_source_url})\r\n\
-Mapped by {event.beatmap.creator} **[{']['.join(event.gamemodes)}]**",
+Mapped by {event.beatmapset.creator} **[{']['.join(event.gamemodes)}]**",
         "color": 29625,
         "thumbnail": {"url": f"{event.map_cover}"},
     }
 
     if event.event_type not in ["Ranked", "Loved"]:
-        apiuser = await event.source.user()
+        apiuser = (await app.api.get_api("get_user", u=event.user_id))[0]
         user = apiuser["username"]
         user_id = apiuser["user_id"]
         embed_base["footer"] = {
-            "icon_url": f"https://a.ppy.sh/{user_id}?1561560622.jpeg",
+            "icon_url": f"https://a.ppy.sh/{user_id}",
             "text": f"{user}",
         }
 
     if event.event_type in ["Popped", "Disqualified"]:
-        source = await event.source.post()
-        embed_base["footer"]["text"] += " - {}".format(
-            format_message(source["message"])
-        )
+        message = event.discussion.starting_post.message
+        embed_base["footer"]["text"] += " - {}".format(format_message(message))
         embed_base["color"] = 15408128
 
     if event.event_type == "Ranked":
         users_str = str()
-        history = await app.web.nomination_history(event.beatmap.beatmapset_id)
+        history = await app.web.nomination_history(event.beatmapset.id)
         for history_event in history:
             user = await app.api.get_api("get_user", u=history_event[1])
             u_name = user[0]["username"]
