@@ -108,13 +108,13 @@ class Phillip:
                 ]
                 for i, event in enumerate(events):
                     if event.time >= self.last_date:
-                        beatmap = await event.get_beatmap()
+                        await event.get_beatmap()
 
                         if event.time == self.last_date:
                             if self.last_event:
                                 if (
-                                    beatmap.beatmapset_id
-                                    == self.last_event.beatmap.beatmapset_id
+                                    event.beatmapset.id
+                                    == self.last_event.beatmapset.id
                                 ):
                                     continue
 
