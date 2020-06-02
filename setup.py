@@ -12,7 +12,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/rorre/Phillip",
-    packages=setuptools.find_packages(),
+    packages=['phillip', 'phillip.osu', 'phillip.osu.classes'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "Development Status :: 4 - Beta",
