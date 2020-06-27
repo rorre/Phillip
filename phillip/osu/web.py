@@ -53,7 +53,7 @@ class WebClient:
         """
 
         soup = await self.get_html(uri)
-        set_json_str = soup.find(id="json-beatmapset-discussion").text
+        set_json_str = soup.find(id="json-beatmapset-discussion").string
         set_json = json.loads(set_json_str)
         return set_json["beatmapset"]["discussions"]
 
@@ -71,7 +71,7 @@ class WebClient:
         """
         uri = f"https://osu.ppy.sh/beatmapsets/{str(mapid)}/discussion"
         soup = await self.get_html(uri)
-        set_json_str = soup.find(id="json-beatmapset-discussion").text
+        set_json_str = soup.find(id="json-beatmapset-discussion").string
         set_json = json.loads(set_json_str)
         js = set_json["beatmapset"]["events"]
 
@@ -99,7 +99,7 @@ class WebClient:
         """
         uri = self.BASE_GROUPS_URL + str(group_id)
         bs = await self.get_html(uri)
-        users_tag = bs.find(id="json-users").text
+        users_tag = bs.find(id="json-users").string
         users_json = json.loads(users_tag)
 
         out = []
@@ -142,7 +142,7 @@ class WebClient:
         url = self.BASE_EVENTS_URL + "&types%5B%5D=".join(additions) + "&" + extras
 
         res_soup = await self.get_html(url)
-        events_html = res_soup.find(id="json-events").text
+        events_html = res_soup.find(id="json-events").string
         events = json.loads(events_html)
         events.reverse()
 
