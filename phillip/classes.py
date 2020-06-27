@@ -5,7 +5,7 @@ class Nominated(EventBase):
     @property
     def event_type(self) -> str:
         stat = "Bubbled"
-        if self.next_event["type"] == "qualify":
+        if self.next_event and self.next_event["type"] == "qualify":
             stat = "Qualified"
         return stat
 
