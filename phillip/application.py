@@ -102,34 +102,32 @@ class Phillip:
         """
         while not self._closed:
             try:
-                events = [
-                    event
-                    async for event in self.web.get_events(True, True, True, True, True)
-                ]
+                events = [e async for e in self.web.get_events()]
                 for i, event in enumerate(events):
-                    if event.time >= self.last_date:
-                        await event.get_beatmap()
+                    if event.time < self.last_date:
+                        continue
+                    await event.get_beatmap()
 
-                        if event.time == self.last_date:
-                            if self.last_event:
-                                if (
-                                    event.beatmapset.id
-                                    == self.last_event.beatmapset.id
-                                ):
-                                    continue
+                    if event.time == self.last_date:
+                        if (
+                            self.last_event
+                            and event.beatmapset.id == self.last_event.beatmapset.id
+                        ):
+                            continue
 
-                        if event.time == self.last_date and i + 1 == len(events):
-                            self.last_date = event.time + timedelta(seconds=1)
-                        else:
-                            self.last_date = event.time
+                    if event.time == self.last_date and i + 1 == len(events):
+                        self.last_date = event.time + timedelta(seconds=1)
+                    else:
+                        self.last_date = event.time
 
-                        self.last_event = event
-                        if event.event_type not in ["Ranked", "Loved"]:
-                            if event.user_id == 3:
-                                continue
+                    self.last_event = event
+                    if event.event_type not in ["Ranked", "Loved"]:
+                        # Skip BanchoBot bubble pops
+                        if event.user_id == 3:
+                            continue
 
-                        self.emitter.emit("map_event", event)
-                        self.emitter.emit(event.event_type.lower(), event)
+                    self.emitter.emit("map_event", event)
+                    self.emitter.emit(event.event_type.lower(), event)
             except Exception as e:
                 await self.on_error(e)
 
@@ -162,6 +160,7 @@ class Phillip:
         """Well, run the client, what else?!"""
         if self.disable_map and self.disable_user:
             raise Exception("Cannot disable both map and role check.")
+
         if not self.handlers:
             if not self.webhook_url:
                 raise Exception("Requires Handler or webhook_url")

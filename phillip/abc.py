@@ -17,7 +17,8 @@ class EventBase(ABC):
         self.next_event = next_event
         self._beatmap = None
 
-    async def get_beatmap(self):
+    async def get_beatmap(self) -> List[ApiBeatmap]:
+        """Fetch beatmapset info from osu! API."""
         if not self._beatmap:
             self._beatmap = await self.app.api.get_beatmaps(s=self.beatmapset.id)
         return self._beatmap
@@ -77,17 +78,18 @@ class EventBase(ABC):
         return modes
 
     @property
-    def api_beatmap(self) -> ApiBeatmap:
-        """First difficulty of the beatmap, usually the first entry from osu! API."""
+    def api_beatmap(self) -> List[ApiBeatmap]:
+        """Difficulties returned by osu! API."""
         return self._beatmap
 
     @property
     def beatmapset(self) -> WebBeatmap:
-        """Array of difficulties inside the beatmap."""
+        """Beatmapset info returned by the osu-web JSON."""
         return WebBeatmap(self.js["beatmapset"])
 
     @property
     def discussion(self) -> Discussion:
+        """Discussion info returned by the osu-web JSON."""
         js_obj = self.js.get("discussion")
         if not js_obj:
             return None
