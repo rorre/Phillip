@@ -35,7 +35,7 @@ PyPI release is planned.
 
 ```python
 from phillip.application import Phillip
-p = notAiess(
+p = Phillip(
     "0c38a********************", # osu! API token
     webhook_url="https://discordapp.com/api/webhooks/************" # Discord webhook URL
 )
@@ -46,7 +46,7 @@ p.run()
 This section will give you an example of using custom ``Handler`` to handle beatmap events
 
 ```python
-from phillip.application import notaiess
+from phillip.application import Phillip
 from phillip.handlers import Handler
 import aiohttp
 

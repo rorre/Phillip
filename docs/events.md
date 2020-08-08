@@ -9,15 +9,11 @@ The only diffrrence is that they're using different mechanism to gather info and
     :docstring:
     :members:
 
-!!! warning
-    All of those are **properties**. Except `EventBase.user_action()` and `EventBase.user_id_action` 
-    as they're **async** for `phillip.classes.Popped` event.
-
 ### GroupUser
 
 `GroupUser` rrepresents a user inside a group that is defined from scraping the site.
 
-::: phillip.osu.classes.GroupUser
+::: phillip.osu.classes.web.GroupUser
     :docstring:
 
 !!! warning

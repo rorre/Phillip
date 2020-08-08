@@ -10,17 +10,13 @@ In this section we will only bring functions to help you with osu! API. (v1, obv
 ::: phillip.osu.APIClient
     :members:
 
-!!! info
-    `phillip.helper.get_beatmap_api` is a shorthand of `phillip.helper.get_api('get_beatmaps', **kwargs)`.
-    Same goes with `get_user`.
-
 ## osu!web
 
 In this section, we will scrape the site in order to get data from osu!
 
 !!! warning
-    A throttler is auto initiated to rate limit your request to **2 requests/minute** 
-    in order to avoid getting banned. You may change this but in general this is **highly discouraged**.
+    A throttler is automatically initiated to rate limit your request to **2 requests/minute** 
+    in order to avoid getting IP banned. You may change this but in general this is **highly discouraged**.
 
 ---
 
