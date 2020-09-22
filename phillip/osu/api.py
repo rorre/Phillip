@@ -11,7 +11,7 @@ class APIClient:
         self._session = session
         self._key = key
 
-    async def get_api(self, endpoint: str, **kwargs: dict) -> List[dict]:
+    async def get_api(self, endpoint: str, **kwargs) -> List[dict]:
         """Request something based on endpoint. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
         **Parameters:**
@@ -35,7 +35,7 @@ class APIClient:
         async with self._session.get(api_url) as api_res:
             return await api_res.json()
 
-    async def get_beatmaps(self, **kwargs: dict) -> List[Beatmap]:
+    async def get_beatmaps(self, **kwargs) -> List[Beatmap]:
         """Get beatmapset from osu! API. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
         **Returns**

@@ -1,5 +1,5 @@
 import json
-from typing import Generator, List, Tuple
+from typing import AsyncGenerator, List, Tuple, Type
 from urllib.parse import urlencode
 
 from asyncio_throttle import Throttler
@@ -86,7 +86,7 @@ class WebClient:
                 history.append((event_name, event["user_id"]))
         return history
 
-    async def get_users(self, group_id: int) -> List[dict]:
+    async def get_users(self, group_id: int) -> List[GroupUser]:
         """Get users inside of a group. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
         **Parameters:**
@@ -115,7 +115,7 @@ class WebClient:
         nomination_reset: bool = True,
         disqualify: bool = True,
         **kwargs,
-    ) -> Generator[List[abc.EventBase], None, None]:
+    ) -> AsyncGenerator[Type[abc.EventBase], None]:
         """Get events of from osu!website. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
         **Parameters:**
@@ -163,4 +163,4 @@ class WebClient:
             if i + 1 != len(events):
                 next_map = events[i + 1]
 
-            yield event_cases[action](event, next_map, app=self._app)
+            yield event_cases[action](event, next_map, app=self._app)  # type: ignore

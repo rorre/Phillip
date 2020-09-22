@@ -3,7 +3,7 @@ import signal
 import sys
 import traceback
 from datetime import datetime, timedelta
-from typing import List
+from typing import Dict, List
 
 import aiohttp
 from pyee import AsyncIOEventEmitter
@@ -60,7 +60,7 @@ class Phillip:
         self.last_event = None
         self.disable_user = disable_groupfeed
         self.disable_map = disable_mapfeed
-        self.tasks = []
+        self.tasks: List[asyncio.Task] = []
 
         self.session = session or aiohttp.ClientSession()
         self.api = APIClient(self.session, self.apitoken)
@@ -74,7 +74,7 @@ class Phillip:
             28,  # Full BN
             32,  # Probation BN
         ]
-        self.last_users = dict()
+        self.last_users: Dict[int, List[dict]] = dict()
 
         for gid in self.group_ids:
             self.last_users[gid] = list()
@@ -184,7 +184,7 @@ class Phillip:
         """Run Phillip. This function does not take any parameter.
         """
 
-        async def astop():
+        async def _stop():
             self._closed = True
             await self.session.close()
             for t in self.tasks:
@@ -194,7 +194,7 @@ class Phillip:
             self.loop.close()
 
         def stop():
-            asyncio.ensure_future(astop())
+            asyncio.ensure_future(_stop())
 
         try:
             self.loop.add_signal_handler(signal.SIGINT, stop)

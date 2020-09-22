@@ -15,7 +15,7 @@ class EventBase(ABC):
         self.app = app
         self.js = js
         self.next_event = next_event
-        self._beatmap = None
+        self._beatmap: List[ApiBeatmap]
 
     async def get_beatmap(self) -> List[ApiBeatmap]:
         """Fetch beatmapset info from osu! API."""
@@ -55,7 +55,7 @@ class EventBase(ABC):
         return datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S+00:00")
 
     @abstractmethod
-    def event_type(self):
+    def event_type(self) -> str:
         """Event that happened on the beatmap (bubbled, qualified, etc.)"""
         pass
 

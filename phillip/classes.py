@@ -12,18 +12,18 @@ class Nominated(EventBase):
 
 class Disqualified(EventBase):
     @property
-    def event_type(self) -> str:
+    def event_type(self):
         return "Disqualified"
 
     @property
-    def event_source_url(self) -> str:
+    def event_source_url(self):
         discussion_id = self.js["comment"]["beatmap_discussion_id"]
         return f"https://osu.ppy.sh/beatmapsets/beatmap-discussions/{discussion_id}"
 
 
 class Popped(Disqualified):
     @property
-    def event_type(self) -> str:
+    def event_type(self):
         return "Popped"
 
 

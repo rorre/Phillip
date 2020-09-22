@@ -1,5 +1,5 @@
 """
-notAiess
+Phillip
 ========
 
 A basic wrapper for osu! beatmapset events

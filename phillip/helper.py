@@ -1,5 +1,8 @@
 from typing import List
 
+from phillip.application import Phillip
+from phillip.abc import EventBase
+
 
 def format_message(msg: str) -> str:
     message = msg.split("\n")[0]
@@ -10,7 +13,7 @@ def format_message(msg: str) -> str:
     return message
 
 
-async def gen_embed(event, app) -> dict:
+async def gen_embed(event: EventBase, app: Phillip) -> dict:
     """Generate Aiess-styled Discord embed of event. 
     *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
