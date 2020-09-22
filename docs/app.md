@@ -4,8 +4,6 @@ and the way of the app behaves.
 ---
 
 ::: phillip.application.Phillip
-    :docstring:
-    :members:
 
 ---
 

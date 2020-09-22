@@ -10,10 +10,6 @@ if TYPE_CHECKING:
 
 class Handler:
     """Handler base for ``Phillip``
-
-    **Parameters:**
-
-    * webhook_url - `str` -- Discord webhook url to send
     """
 
     def __init__(self):

@@ -27,11 +27,12 @@ class Phillip:
     * last_date - `datetime` | optional -- Custom checkpoint to check every event after last_date, defaults to None
     * handlers - `List[Handler]` | optional -- Event handlers assigned to be called, defaults to [Handler]
     * webhook_url - `str` | optional -- **Discord** webhook url if there is no handlers assigned, defaults to empty string
-    * loop -- Custom event loop to run on
-    * emitter - `AsyncIOEventEmitter` - Custom event emitter to fire events.
-    * disable_groupfeed - `bool` -- Whether to disable group feed or not.
-    * disable_mapfeed - `bool` -- Whether to disable map feed or not.
-    * session - `aiohttp.ClientSession` -- aiohttp client session to use for http requests.
+    * loop | optional -- Custom event loop to run on
+    * emitter - `AsyncIOEventEmitter` | optional - Custom event emitter to fire events.
+    * disable_groupfeed - `bool | optional` -- Whether to disable group feed or not.
+    * disable_mapfeed - `bool` | optional -- Whether to disable map feed or not.
+    * skip_bancho - `bool` | optional -- Whether to skip BanchoBot's events or not. Useful if you don't want to get spammed by bubble pops events.
+    * session - `aiohttp.ClientSession` | optional -- aiohttp client session to use for http requests.
 
     **Raises:**
 
@@ -48,6 +49,7 @@ class Phillip:
         emitter: AsyncIOEventEmitter = None,
         disable_groupfeed: bool = False,
         disable_mapfeed: bool = False,
+        skip_bancho: bool = True,
         session=None,
     ):
         self._closed = False

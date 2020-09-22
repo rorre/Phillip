@@ -8,7 +8,6 @@ In this section we will only bring functions to help you with osu! API. (v1, obv
 ---
 
 ::: phillip.osu.APIClient
-    :members:
 
 ## osu!web
 
@@ -21,13 +20,4 @@ In this section, we will scrape the site in order to get data from osu!
 ---
 
 ::: phillip.osu.WebClient
-    :members:
-
-
-## Discord Webhook
-
-To help you generate webhooks, I have made an Aiess-styled webhook generator for events.
-
-::: phillip.helper.gen_embed
-    :docstring:
 

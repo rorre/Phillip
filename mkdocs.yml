@@ -15,11 +15,19 @@ nav:
     - Event Object: 'events.md'
     - Helpers: 'helpers.md'
 
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          rendering:
+            show_root_heading: yes
+      watch:
+        - phillip
+
 markdown_extensions:
   - admonition
   - markdown.extensions.codehilite:
       guess_lang: false
-  - mkautodoc
   - pymdownx.superfences
   - toc:
       permalink: true

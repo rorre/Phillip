@@ -6,6 +6,13 @@ from phillip.handlers import Handler
 
 
 class DiscordHandler(Handler):
+    """Discord handler for `Phillip`.
+
+    **Parameters:**
+
+    * webhook_url - `str` -- Discord webhook url to send
+    """
+
     def __init__(self, hook_url: str):
         self.hook_url = hook_url
         self.app: Phillip

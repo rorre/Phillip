@@ -4,7 +4,6 @@ to inherit base Handler class and override the functions you want to.
 ---
 
 ::: phillip.handlers.Handler
-    :members:
 
 ---
 
