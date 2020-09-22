@@ -5,7 +5,7 @@ from phillip.application import Phillip
 from phillip.handlers import Handler
 
 
-class SimpleHandler(Handler):
+class DiscordHandler(Handler):
     def __init__(self, hook_url: str):
         self.hook_url = hook_url
         self.app: Phillip

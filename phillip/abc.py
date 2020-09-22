@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from phillip.osu.classes.api import Beatmap as ApiBeatmap
 from phillip.osu.classes.web import Beatmap as WebBeatmap
@@ -15,13 +15,13 @@ class EventBase(ABC):
         self.app = app
         self.js = js
         self.next_event = next_event
-        self._beatmap: List[ApiBeatmap]
+        self._beatmap: Optional[List[ApiBeatmap]] = None
 
     async def get_beatmap(self) -> List[ApiBeatmap]:
         """Fetch beatmapset info from osu! API."""
         if not self._beatmap:
             self._beatmap = await self.app.api.get_beatmaps(s=self.beatmapset.id)
-        return self._beatmap
+        return self._beatmap  # type: ignore
 
     @property
     def creator(self) -> str:
@@ -80,7 +80,7 @@ class EventBase(ABC):
     @property
     def api_beatmap(self) -> List[ApiBeatmap]:
         """Difficulties returned by osu! API."""
-        return self._beatmap
+        return self._beatmap  # type: ignore
 
     @property
     def beatmapset(self) -> WebBeatmap:

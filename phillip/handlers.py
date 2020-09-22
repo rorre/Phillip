@@ -1,8 +1,11 @@
 from pyee import AsyncIOEventEmitter
+from typing import TYPE_CHECKING
 
-from phillip.abc import EventBase
-from phillip.application import Phillip
 from phillip.osu.classes.web import GroupUser
+
+if TYPE_CHECKING:
+    from phillip.abc import EventBase
+    from phillip.application import Phillip
 
 
 class Handler:
@@ -41,37 +44,37 @@ class Handler:
             else:
                 self.emitter.on(func.split("_")[-1], getattr(self, func))
 
-    async def on_map_event(self, event: EventBase):
+    async def on_map_event(self, event: "EventBase"):
         """Function to be called when any beatmap event happens.
         """
         pass
 
-    async def on_map_bubbled(self, event: EventBase):
+    async def on_map_bubbled(self, event: "EventBase"):
         """Function to be called when a beatmap is bubbled.
         """
         pass
 
-    async def on_map_qualified(self, event: EventBase):
+    async def on_map_qualified(self, event: "EventBase"):
         """Function to be called when a beatmap is qualified.
         """
         pass
 
-    async def on_map_disqualified(self, event: EventBase):
+    async def on_map_disqualified(self, event: "EventBase"):
         """Function to be called when a beatmap is disqualified.
         """
         pass
 
-    async def on_map_popped(self, event: EventBase):
+    async def on_map_popped(self, event: "EventBase"):
         """Function to be called when a beatmap is popped.
         """
         pass
 
-    async def on_map_ranked(self, event: EventBase):
+    async def on_map_ranked(self, event: "EventBase"):
         """Function to be called when a beatmap is ranked.
         """
         pass
 
-    async def on_map_loved(self, event: EventBase):
+    async def on_map_loved(self, event: "EventBase"):
         """Function to be called when a beatmap is loved.
         """
         pass

@@ -3,14 +3,18 @@ import signal
 import sys
 import traceback
 from datetime import datetime, timedelta
-from typing import Dict, List
+from typing import Dict, List, TYPE_CHECKING
 
 import aiohttp
 from pyee import AsyncIOEventEmitter
 
 from phillip import helper
-from phillip.handlers import Handler, SimpleHandler
+from phillip.handlers import Handler
+
 from phillip.osu import APIClient, WebClient
+
+if TYPE_CHECKING:
+    from phillip.discord import DiscordHandler
 
 
 class Phillip:
@@ -164,7 +168,7 @@ class Phillip:
         if not self.handlers:
             if not self.webhook_url:
                 raise Exception("Requires Handler or webhook_url")
-            self.handlers.append(SimpleHandler(self.webhook_url))
+            self.handlers.append(DiscordHandler(self.webhook_url))
 
         if not self.disable_map:
             self.tasks.append(self.loop.create_task(self.check_map_events()))
