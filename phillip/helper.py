@@ -1,8 +1,5 @@
 from typing import List
 
-from phillip.abc import EventBase
-from phillip.application import Phillip
-
 
 def has_user(source: dict, target: List[dict]) -> bool:
     """Check if user is inside of another list
