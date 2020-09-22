@@ -1,7 +1,5 @@
-import aiohttp
 from pyee import AsyncIOEventEmitter
 
-from phillip import helper
 from phillip.abc import EventBase
 from phillip.application import Phillip
 from phillip.osu.classes.web import GroupUser
@@ -111,24 +109,3 @@ class Handler:
         """Function to be called when someone gets added/removed to/from Alumni.
         """
         pass
-
-
-class SimpleHandler(Handler):
-    def __init__(self, hook_url: str):
-        self.hook_url = hook_url
-        self.app: Phillip
-
-    async def on_map_event(self, event: EventBase):
-        """Parse beatmap event and send to discord webhook.
-
-        **Parameters:**
-
-        * event - `EventBase` -- The beatmapset event
-        """
-        embed = await helper.gen_embed(event, self.app)
-        with aiohttp.ClientSession() as session:
-            await session.post(
-                self.hook_url,
-                json={"content": event.event_source_url, "embeds": [embed]},
-            )
-        return
