@@ -1,6 +1,6 @@
 import aiohttp
 
-from phillip.abc import EventBase
+from phillip.abstract import EventBase
 from phillip.application import Phillip
 from phillip.handlers import Handler
 
@@ -48,7 +48,7 @@ async def gen_embed(event: EventBase, app: Phillip) -> dict:
 
     **Parameters:**
 
-    * event - `abc.EventBase` -- The beatmap's event.
+    * event - `abstract.EventBase` -- The beatmap's event.
 
     **Returns**
 

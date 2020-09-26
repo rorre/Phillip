@@ -11,7 +11,8 @@ from pyee import AsyncIOEventEmitter
 from phillip import helper
 from phillip.handlers import Handler
 
-from phillip.osu import APIClient, WebClient
+from phillip.osu.old.api import APIClient
+from phillip.osu.new.web import WebClient
 
 if TYPE_CHECKING:
     from phillip.discord import DiscordHandler

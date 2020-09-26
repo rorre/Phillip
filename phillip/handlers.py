@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from phillip.osu.classes.web import GroupUser
 
 if TYPE_CHECKING:
-    from phillip.abc import EventBase
+    from phillip.abstract import EventBase
     from phillip.application import Phillip
 
 

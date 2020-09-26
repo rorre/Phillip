@@ -1,4 +1,4 @@
-from phillip.abc import EventBase
+from phillip.abstract import EventBase
 
 
 class Nominated(EventBase):

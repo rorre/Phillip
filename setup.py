@@ -12,13 +12,19 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/rorre/Phillip",
-    packages=['phillip', 'phillip.osu', 'phillip.osu.classes'],
+    packages=[
+        "phillip",
+        "phillip.osu",
+        "phillip.osu.classes",
+        "phillip.osu.new",
+        "phillip.osu.old",
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
         "Framework :: AsyncIO",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)"
+        "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
     ],
 )

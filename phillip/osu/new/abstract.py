@@ -1,44 +1,41 @@
-import json
-from typing import AsyncGenerator, List, Tuple, Type
+from abc import ABC, abstractmethod
+from typing import AsyncGenerator, List, Tuple, Type, Union, Dict, Any
 from urllib.parse import urlencode
 
-from asyncio_throttle import Throttler
-from bs4 import BeautifulSoup
+import aiohttp
 
-from phillip import abc, classes
+from phillip import abstract, classes
+from phillip.application import Phillip
 from phillip.osu.classes.web import GroupUser
 
 
-class WebClient:
-    BASE_GROUPS_URL = "https://osu.ppy.sh/groups/"
+class ABCClient(ABC):
     EVENTS = {
         "nominate": "Bubbled",
         "disqualify": "Disqualified",
         "nomination_reset": "Popped",
     }
-    BASE_EVENTS_URL = "https://osu.ppy.sh/beatmapsets/events?user=&types%5B%5D="
     TYPES = ["nominate", "rank", "love", "nomination_reset", "disqualify"]
 
-    def __init__(self, session, throttler=None, app=None):
+    def __init__(self, session: aiohttp.ClientSession, app: Phillip = None):
         self._app = app
         self._session = session
-        self._throttler = throttler or Throttler(rate_limit=2, period=60)
 
-    async def get_html(self, uri: str) -> BeautifulSoup:
-        """Receive html from uri. 
-        *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
+    @property
+    @abstractmethod
+    def groups_url(self) -> str:
+        pass
 
-        **Parameters:**
+    @property
+    @abstractmethod
+    def events_url(self) -> str:
+        pass
 
-        * uri - `str` -- URL of discussion page.
-
-        **Returns**
-
-        * BeautifulSoup -- Soup'd html response.
-        """
-        async with self._throttler:
-            async with self._session.get(uri, cookies={"locale": "en"}) as site_html:
-                return BeautifulSoup(await site_html.text(), features="html.parser")
+    @abstractmethod
+    async def get_json(
+        self, uri: str, json_tag: str
+    ) -> Union[Dict[str, Any], List[dict]]:
+        pass
 
     async def get_discussion_json(self, uri: str) -> List[dict]:
         """Receive discussion posts in JSON. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
@@ -52,10 +49,8 @@ class WebClient:
         * `List[dict]` -- The discussion posts.
         """
 
-        soup = await self.get_html(uri)
-        set_json_str = soup.find(id="json-beatmapset-discussion").string
-        set_json = json.loads(set_json_str)
-        return set_json["beatmapset"]["discussions"]
+        set_json = await self.get_json(uri, "json-beatmapset-discussion")
+        return set_json["beatmapset"]["discussions"]  # type: ignore
 
     async def nomination_history(self, mapid: int) -> List[Tuple[str, int]]:
         """Get nomination history of a beatmap. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
@@ -70,10 +65,8 @@ class WebClient:
             * `child` - `Tuple[str, int]` -- A tuple with a string of event type and user id of user triggering the event.
         """
         uri = f"https://osu.ppy.sh/beatmapsets/{str(mapid)}/discussion"
-        soup = await self.get_html(uri)
-        set_json_str = soup.find(id="json-beatmapset-discussion").string
-        set_json = json.loads(set_json_str)
-        js = set_json["beatmapset"]["events"]
+        set_json = await self.get_json(uri, "json-beatmapset-discussion")
+        js = set_json["beatmapset"]["events"]  # type: ignore
 
         history = []
         for i, event in enumerate(js):
@@ -97,10 +90,8 @@ class WebClient:
 
         * `List[dict]` -- A dictionary containing users' data.
         """
-        uri = self.BASE_GROUPS_URL + str(group_id)
-        bs = await self.get_html(uri)
-        users_tag = bs.find(id="json-users").string
-        users_json = json.loads(users_tag)
+        uri = self.groups_url + str(group_id)
+        users_json = await self.get_json(uri, "json-users")
 
         out = []
         for user in users_json:
@@ -115,7 +106,7 @@ class WebClient:
         nomination_reset: bool = True,
         disqualify: bool = True,
         **kwargs,
-    ) -> AsyncGenerator[Type[abc.EventBase], None]:
+    ) -> AsyncGenerator[Type[abstract.EventBase], None]:
         """Get events of from osu!website. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
         **Parameters:**
@@ -128,7 +119,7 @@ class WebClient:
 
         **Yields:**
 
-        * list `abc.EventBase` -- List of events resulted from fetching osu!web, \
+        * list `abstract.EventBase` -- List of events resulted from fetching osu!web, \
              with next index as next event that will be processed.
         """
         additions = list()
@@ -139,12 +130,10 @@ class WebClient:
         if types_val[0]:
             additions.append("qualify")
         extras = urlencode(kwargs)
-        url = self.BASE_EVENTS_URL + "&types%5B%5D=".join(additions) + "&" + extras
+        url = self.events_url + "&types%5B%5D=".join(additions) + "&" + extras
 
-        res_soup = await self.get_html(url)
-        events_html = res_soup.find(id="json-events").string
-        events = json.loads(events_html)
-        events.reverse()
+        events = await self.get_json(url, "json-events")
+        events.reverse()  # type: ignore
 
         event_cases = {
             "nominate": classes.Nominated,
@@ -155,12 +144,12 @@ class WebClient:
         }
 
         for i, event in enumerate(events):
-            action = event["type"]
+            action = event["type"]  # type: ignore
             if action == "qualify":
                 continue  # Skip qualified event news
 
             next_map = None
             if i + 1 != len(events):
-                next_map = events[i + 1]
+                next_map = events[i + 1]  # type: ignore
 
             yield event_cases[action](event, next_map, app=self._app)  # type: ignore
