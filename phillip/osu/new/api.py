@@ -1,8 +1,11 @@
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, TYPE_CHECKING, Union
 
 import aiohttp
-from phillip.application import Phillip
+
 from phillip.osu.new.abstract import ABCClient
+
+if TYPE_CHECKING:
+    from phillip.application import Phillip
 
 
 class APIClient(ABCClient):
@@ -24,7 +27,7 @@ class APIClient(ABCClient):
         redirect_uri: str,
         access_token: str,
         refresh_token: str,
-        app: Phillip = None,
+        app: "Phillip" = None,
     ):
         self._app = app
         self._session = session

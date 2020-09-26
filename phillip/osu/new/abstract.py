@@ -1,12 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import AsyncGenerator, List, Tuple, Type, Union, Dict, Any
+from typing import AsyncGenerator, List, TYPE_CHECKING, Tuple, Type, Union, Dict, Any
 from urllib.parse import urlencode
 
 import aiohttp
 
 from phillip import abstract, classes
-from phillip.application import Phillip
 from phillip.osu.classes.web import GroupUser
+
+if TYPE_CHECKING:
+    from phillip.application import Phillip
 
 
 class ABCClient(ABC):
@@ -17,7 +19,7 @@ class ABCClient(ABC):
     }
     TYPES = ["nominate", "rank", "love", "nomination_reset", "disqualify"]
 
-    def __init__(self, session: aiohttp.ClientSession, app: Phillip = None):
+    def __init__(self, session: aiohttp.ClientSession, app: "Phillip" = None):
         self._app = app
         self._session = session
 
