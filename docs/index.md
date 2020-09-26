@@ -1,13 +1,13 @@
 # Phillip
 
-Phillip is an event driven osu! feed for Python. It is written on top of asyncio so it is running pretty fast.
+Phillip is an event driven osu! feed for Python. It is written on top of asyncio.
 
 ## Features
 
 * Asyncronous
-* Event-driven API (Easy management for each events)
+* Event-driven API
 * Easy to use
-* Rate limited to not get you banned from.peppy's server
+* Rate limited to not get you IP banned from peppy's server
 
 ## Requirements
 
@@ -47,6 +47,7 @@ This section will give you an example of using custom ``Handler`` to handle beat
 
 ```python
 from phillip.application import Phillip
+from phillip.discord import gen_embed
 from phillip.handlers import Handler
 import aiohttp
 
@@ -57,7 +58,7 @@ class HandleMap(Handler):
     # To see other event handler you can add, see https://notaiess.readthedocs.io/en/latest/api.html#event-listener
     async def on_map_event(self, event):
         # Generate webhook dict of the event. This will be converted to JSON later.
-        embed = await helper.gen_embed(event)
+        embed = await gen_embed(event, self.app)
 
         # Send webhook with aiohttp.
         # It is better to use aiohttp as it's already embedded when you install notAiess.

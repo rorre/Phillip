@@ -14,7 +14,7 @@ If both could not be found, it will raise an `Exception` as they're needed in or
 
 ```python
 from phillip.application import Phillip
-p = notAiess(
+p = Phillip(
     "0c38a********************", # osu! API token
     webhook_url="https://discordapp.com/api/webhooks/************" # Discord webhook URL
 )

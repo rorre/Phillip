@@ -13,3 +13,9 @@ all happens in the background--so don't sweat it.
 
 All map events will give you `EventBase` argument, while all user events 
 will give you `GroupUser` argument.
+
+---
+## Discord
+
+A discord handler is already provided as an example. You may use it by
+setting `webhook_url` to `Phillip`'s constructor.

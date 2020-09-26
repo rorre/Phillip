@@ -1,13 +1,13 @@
 There are lots of helper functions in Phillip as it tries to have as little dependencies as possible.
 This will help you access requests data from osu! and process them.
 
-## osu! API
+## osu!v v1 API
 
 In this section we will only bring functions to help you with osu! API. (v1, obviously.)
 
 ---
 
-::: phillip.osu.APIClient
+::: phillip.osu.old.APIClient
 
 ## osu!web
 
@@ -19,5 +19,7 @@ In this section, we will scrape the site in order to get data from osu!
 
 ---
 
-::: phillip.osu.WebClient
+::: phillip.osu.new.abstract.ABCClient
+
+::: phillip.osu.new.WebClient
 

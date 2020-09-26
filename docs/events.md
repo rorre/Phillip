@@ -5,7 +5,7 @@ The event object fired to the event handlers could be splitted into two, `EventB
 `EventBase` is used for map events, they have their own classes for each event which always inherits from this class.
 The only diffrrence is that they're using different mechanism to gather info and maybe additional info (such as source post for bubble pops).
 
-::: phillip.abc.EventBase
+::: phillip.abstract.EventBase
 
 ### GroupUser
 
