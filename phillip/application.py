@@ -65,6 +65,7 @@ class Phillip:
         self.last_date = last_date or datetime.utcfromtimestamp(0)
         self.loop = loop or asyncio.get_event_loop()
         self.last_event = None
+        self.skip_bancho = skip_bancho
         self.disable_user = disable_groupfeed
         self.disable_map = disable_mapfeed
         self.tasks: List[asyncio.Task] = []
@@ -130,7 +131,7 @@ class Phillip:
                     self.last_event = event
                     if event.event_type not in ["Ranked", "Loved"]:
                         # Skip BanchoBot bubble pops
-                        if event.user_id == 3:
+                        if event.user_id == 3 and self.skip_bancho:
                             continue
 
                     self.emitter.emit("map_event", event)
