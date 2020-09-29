@@ -172,6 +172,8 @@ class Phillip:
         if not self.handlers:
             if not self.webhook_url:
                 raise Exception("Requires Handler or webhook_url")
+            from phillip.discord import DiscordHandler
+
             self.handlers.append(DiscordHandler(self.webhook_url))
 
         if not self.disable_map:
