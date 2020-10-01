@@ -1,5 +1,5 @@
 [report]
-# Regexes for lines to exclude from consideration
+show_missing = true
 exclude_lines =
     # Have to re-enable the standard pragma
     pragma: no cover
@@ -19,7 +19,6 @@ exclude_lines =
 
     if TYPE_CHECKING
     pass
-
 omit =
     *handlers*
 
