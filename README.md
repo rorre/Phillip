@@ -1,4 +1,6 @@
-![Phillip. A character by shirokoi.](img/Phillip.png)
+<p align="center">
+<img src="https://raw.githubusercontent.com/rorre/Phillip/master/img/Phillip.png" alt="Phillip. A character by shirokoi.">
+</p>
 <h2 align="center">An event-driven osu! feeds</h2>
 
 <p align="center">
