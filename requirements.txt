@@ -1,8 +1,0 @@
-aiohttp>=3.6.2
-asyncio-throttle>=1.0.1
-beautifulsoup4>=4.9.1
-mkdocs>=1.1.2
-mkdocs-material>=5.5.3
-pyee>=7.0.2
-pymdown-extensions>=7.1
-git+git://github.com/rorre/mkautodoc.git@attr-value#egg=mkautodoc
