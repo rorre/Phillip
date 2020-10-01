@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Union
 
 import aiohttp
 
@@ -29,8 +29,7 @@ class APIClient(ABCClient):
         refresh_token: str,
         app: "Phillip" = None,
     ):
-        self._app = app
-        self._session = session
+        super().__init__(session, app)
         self._client_id = client_id
         self._client_secret = client_secret
         self._redirect_uri = redirect_uri
@@ -69,4 +68,3 @@ class APIClient(ABCClient):
         response = await self._fetch("GET", uri)
         json_tag = json_tag[json_tag.find("-") + 1 :]
         return response[json_tag]
-

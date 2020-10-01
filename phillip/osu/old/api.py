@@ -1,13 +1,15 @@
 from typing import List
 from urllib.parse import urlencode
 
+import aiohttp
+
 from phillip.osu.classes.api import Beatmap
 
 
 class APIClient:
     BASE_URL = "https://osu.ppy.sh/api/"
 
-    def __init__(self, session, key):
+    def __init__(self, session: aiohttp.ClientSession, key: str):
         self._session = session
         self._key = key
 

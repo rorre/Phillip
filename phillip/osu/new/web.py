@@ -1,5 +1,5 @@
 import json
-from typing import List, Union, Dict, Any
+from typing import Any, Dict, List, Union
 
 from asyncio_throttle import Throttler
 from bs4 import BeautifulSoup
@@ -17,8 +17,7 @@ class WebClient(ABCClient):
         return "https://osu.ppy.sh/groups/"
 
     def __init__(self, session, throttler=None, app=None):
-        self._app = app
-        self._session = session
+        super().__init__(session, app)
         self._throttler = throttler or Throttler(rate_limit=2, period=60)
 
     async def get_html(self, uri: str) -> BeautifulSoup:

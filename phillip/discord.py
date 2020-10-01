@@ -25,7 +25,7 @@ class DiscordHandler(Handler):
         * event - `EventBase` -- The beatmapset event
         """
         embed = await gen_embed(event, self.app)
-        with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession() as session:
             await session.post(
                 self.hook_url,
                 json={"content": event.event_source_url, "embeds": [embed]},
@@ -34,7 +34,7 @@ class DiscordHandler(Handler):
 
 
 def format_message(msg: str) -> str:
-    message = msg.split("\n")[0]
+    message = msg.splitlines()[0]
     if len(message) < 20:
         message = msg[:80]
     if len(message) > 80:

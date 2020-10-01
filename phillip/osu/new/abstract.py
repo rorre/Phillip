@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import AsyncGenerator, List, TYPE_CHECKING, Tuple, Type, Union, Dict, Any
+from typing import (TYPE_CHECKING, Any, AsyncGenerator, Dict, List, Tuple,
+                    Type, Union)
 from urllib.parse import urlencode
 
 import aiohttp
@@ -38,21 +39,6 @@ class ABCClient(ABC):
         self, uri: str, json_tag: str
     ) -> Union[Dict[str, Any], List[dict]]:
         pass
-
-    async def get_discussion_json(self, uri: str) -> List[dict]:
-        """Receive discussion posts in JSON. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
-
-        **Parameters:**
-
-        * uri - `str` -- URL of discussion page.
-
-        **Returns**
-
-        * `List[dict]` -- The discussion posts.
-        """
-
-        set_json = await self.get_json(uri, "json-beatmapset-discussion")
-        return set_json["beatmapset"]["discussions"]  # type: ignore
 
     async def nomination_history(self, mapid: int) -> List[Tuple[str, int]]:
         """Get nomination history of a beatmap. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*

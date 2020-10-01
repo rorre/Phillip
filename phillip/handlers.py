@@ -1,5 +1,6 @@
-from pyee import AsyncIOEventEmitter
 from typing import TYPE_CHECKING
+
+from pyee import AsyncIOEventEmitter
 
 from phillip.osu.classes.web import GroupUser
 

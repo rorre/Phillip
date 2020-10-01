@@ -1,0 +1,168 @@
+{
+    "3378391": [
+        {
+            "user_id": "3378391",
+            "username": "-Keitaro",
+            "join_date": "2013-10-04 04:15:47",
+            "count300": "4097834",
+            "count100": "579838",
+            "count50": "77352",
+            "playcount": "27397",
+            "ranked_score": "3617095463",
+            "total_score": "15979056732",
+            "pp_rank": "36433",
+            "level": "98.6686",
+            "pp_raw": "5192.61",
+            "accuracy": "92.87406158447266",
+            "count_rank_ss": "15",
+            "count_rank_ssh": "10",
+            "count_rank_s": "202",
+            "count_rank_sh": "99",
+            "count_rank_a": "432",
+            "country": "ID",
+            "total_seconds_played": "1341152",
+            "pp_country_rank": "623",
+            "events": []
+        }
+    ],
+    "2841009": [
+        {
+            "user_id": "2841009",
+            "username": "Mirash",
+            "join_date": "2013-06-21 16:48:55",
+            "count300": "12119303",
+            "count100": "1654175",
+            "count50": "251434",
+            "playcount": "54181",
+            "ranked_score": "21130509953",
+            "total_score": "79444519875",
+            "pp_rank": "38264",
+            "level": "100.525",
+            "pp_raw": "5122.43",
+            "accuracy": "97.05213928222656",
+            "count_rank_ss": "13",
+            "count_rank_ssh": "0",
+            "count_rank_s": "776",
+            "count_rank_sh": "54",
+            "count_rank_a": "1718",
+            "country": "RU",
+            "total_seconds_played": "3344556",
+            "pp_country_rank": "3150",
+            "events": []
+        }
+    ],
+    "2688103": [
+        {
+            "user_id": "2688103",
+            "username": "IOException",
+            "join_date": "2013-05-22 04:54:46",
+            "count300": "7546262",
+            "count100": "383577",
+            "count50": "38782",
+            "playcount": "23073",
+            "ranked_score": "29360554872",
+            "total_score": "88797391055",
+            "pp_rank": "6504",
+            "level": "100.619",
+            "pp_raw": "7544.67",
+            "accuracy": "99.1983871459961",
+            "count_rank_ss": "66",
+            "count_rank_ssh": "10",
+            "count_rank_s": "265",
+            "count_rank_sh": "69",
+            "count_rank_a": "1287",
+            "country": "US",
+            "total_seconds_played": "1801160",
+            "pp_country_rank": "1140",
+            "events": [
+                {
+                    "display_html": "<b><a href='\/u\/2688103'>IOException<\/a><\/b> has updated the beatmap \"<a href='\/s\/1266834'>TUYU - Namikare (short ver.)<\/a>\"",
+                    "beatmap_id": "0",
+                    "beatmapset_id": "1266834",
+                    "date": "2020-09-29 23:23:47",
+                    "epicfactor": "2"
+                },
+                {
+                    "display_html": "<img src='\/images\/A_small.png'\/> <b><a href='\/u\/2688103'>IOException<\/a><\/b> achieved <b>rank #1<\/b> on <a href='\/b\/2515480?m=0'>yuikonnu - Souzou Forest [Lolicode's Imaginative Expert ft. Moecho]<\/a> (osu!)",
+                    "beatmap_id": "2515480",
+                    "beatmapset_id": "1208022",
+                    "date": "2020-09-29 23:01:38",
+                    "epicfactor": "4"
+                },
+                {
+                    "display_html": "<img src='\/images\/X_small.png'\/> <b><a href='\/u\/2688103'>IOException<\/a><\/b> achieved <b>rank #1<\/b> on <a href='\/b\/2600667?m=0'>yuikonnu - Souzou Forest [deetz' Extra]<\/a> (osu!)",
+                    "beatmap_id": "2600667",
+                    "beatmapset_id": "1208022",
+                    "date": "2020-09-29 22:45:43",
+                    "epicfactor": "4"
+                },
+                {
+                    "display_html": "<a href='\/beatmapsets\/1208022'>yuikonnu - Souzou Forest<\/a> by <b><a href='\/users\/2688103'>IOException<\/a><\/b> has just been ranked!",
+                    "beatmap_id": "0",
+                    "beatmapset_id": "1208022",
+                    "date": "2020-09-29 21:02:40",
+                    "epicfactor": "8"
+                },
+                {
+                    "display_html": "<a href='\/beatmapsets\/1207286'>Wagakki Band - Kagerou Days<\/a> by <b><a href='\/users\/2688103'>IOException<\/a><\/b> has just been ranked!",
+                    "beatmap_id": "0",
+                    "beatmapset_id": "1207286",
+                    "date": "2020-09-29 13:22:08",
+                    "epicfactor": "8"
+                }
+            ]
+        }
+    ],
+    "3": [
+        {
+            "user_id": "3",
+            "username": "BanchoBot",
+            "join_date": "2007-08-28 03:09:14",
+            "count300": null,
+            "count100": null,
+            "count50": null,
+            "playcount": null,
+            "ranked_score": null,
+            "total_score": null,
+            "pp_rank": null,
+            "level": null,
+            "pp_raw": null,
+            "accuracy": null,
+            "count_rank_ss": null,
+            "count_rank_ssh": null,
+            "count_rank_s": null,
+            "count_rank_sh": null,
+            "count_rank_a": null,
+            "country": "SH",
+            "total_seconds_played": null,
+            "pp_country_rank": null,
+            "events": []
+        }
+    ],
+    "3193504": [
+        {
+            "user_id": "3193504",
+            "username": "Kibbleru",
+            "join_date": "2013-08-26 23:59:13",
+            "count300": "4564064",
+            "count100": "549581",
+            "count50": "64117",
+            "playcount": "15860",
+            "ranked_score": "12545438973",
+            "total_score": "28242958773",
+            "pp_rank": "71252",
+            "level": "100.013",
+            "pp_raw": "4185.48",
+            "accuracy": "97.39672088623047",
+            "count_rank_ss": "14",
+            "count_rank_ssh": "1",
+            "count_rank_s": "560",
+            "count_rank_sh": "32",
+            "count_rank_a": "1366",
+            "country": "CA",
+            "total_seconds_played": "1279067",
+            "pp_country_rank": "3048",
+            "events": []
+        }
+    ]
+}

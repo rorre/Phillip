@@ -3,19 +3,15 @@ import signal
 import sys
 import traceback
 from datetime import datetime, timedelta
-from typing import Dict, List, TYPE_CHECKING
+from typing import Dict, List
 
 import aiohttp
 from pyee import AsyncIOEventEmitter
 
 from phillip import helper
 from phillip.handlers import Handler
-
-from phillip.osu.old.api import APIClient
 from phillip.osu.new.web import WebClient
-
-if TYPE_CHECKING:
-    from phillip.discord import DiscordHandler
+from phillip.osu.old.api import APIClient
 
 
 class Phillip:
@@ -53,6 +49,7 @@ class Phillip:
         skip_bancho: bool = True,
         session=None,
     ):
+        self.TESTING = False
         self._closed = False
         if not handlers:
             self.handlers = []
@@ -88,10 +85,13 @@ class Phillip:
             self.last_users[gid] = list()
 
         self.emitter = emitter or AsyncIOEventEmitter()
-        if handlers:
-            for handler in handlers:
-                handler.register_emitter(self.emitter)
-                handler.app = self
+        if self.handlers:
+            for handler in self.handlers:
+                self._prepare_handler(handler)
+
+    def _prepare_handler(self, h: Handler):
+        h.register_emitter(self.emitter)
+        h.app = self
 
     async def on_error(self, error):
         """Function to be called if an exception occurs.
@@ -139,7 +139,9 @@ class Phillip:
             except Exception as e:
                 await self.on_error(e)
 
-            await asyncio.sleep(5 * 60)
+            if self.TESTING:
+                break
+            await asyncio.sleep(5 * 60)  # pragma: no cover
 
     async def check_role_change(self):
         """Check for role changes. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
@@ -151,7 +153,7 @@ class Phillip:
 
                     for user in users:
                         if not helper.has_user(user, self.last_users[gid]):
-                            self.emitter.emit("group_add", user)
+                            self.emitter.emit("group_added", user)
                             self.emitter.emit(user.default_group, user)
 
                     for user in self.last_users[gid]:
@@ -162,7 +164,10 @@ class Phillip:
                     self.last_users[gid] = users
                 except Exception as e:
                     await self.on_error(e)
-            await asyncio.sleep(15 * 60)
+
+            if self.TESTING:
+                break
+            await asyncio.sleep(15 * 60)  # pragma: no cover
 
     def start(self):
         """Well, run the client, what else?!"""
@@ -181,7 +186,7 @@ class Phillip:
         if not self.disable_user:
             self.tasks.append(self.loop.create_task(self.check_role_change()))
 
-    def add_handler(self, handler):
+    def add_handler(self, handler: Handler):
         """Adds custom handler to handlers.
 
         **Parameters:**
@@ -189,6 +194,7 @@ class Phillip:
         * handler - `handlers.Handler` -- The event handler, must inherits `handlers.Handler`.
         """
         self.handlers.append(handler)
+        self._prepare_handler(handler)
 
     def run(self):
         """Run Phillip. This function does not take any parameter.
@@ -200,13 +206,15 @@ class Phillip:
             for t in self.tasks:
                 t.cancel()
             asyncio.gather(*self.tasks, return_exceptions=True)
-            self.loop.stop()
-            self.loop.close()
+
+            if not self.TESTING:
+                self.loop.stop()
+                self.loop.close()
 
         def stop():
             asyncio.ensure_future(_stop())
 
-        try:
+        try:  # pragma: no cover
             self.loop.add_signal_handler(signal.SIGINT, stop)
             self.loop.add_signal_handler(signal.SIGTERM, stop)
         except NotImplementedError:
@@ -214,8 +222,9 @@ class Phillip:
 
         try:
             self.start()
-            self.loop.run_forever()
-        except KeyboardInterrupt:
+            if not self.TESTING:
+                self.loop.run_forever()
+        except KeyboardInterrupt:  # pragma: no cover
             print("Exiting...")
         finally:
             stop()
