@@ -16,7 +16,7 @@ No longer true, look over [Naxess' Aiess](https://github.com/Naxesss/Aiess) for 
 If you're not willing to have all the databases shinenigans and would want to have more freedom as to what you can do, feel free to use this one.
 
 ## How
-Head over to the [docs](https://phillip.rtfd.io/)!
+Head over to the [docs](https://rorre.github.io/Phillip/)!
 
 ## Contributing
 Contribution is always welcome (obviously)! You can create a fork, do your changes and create a pull request to improve my shitty code or add one or two features!
