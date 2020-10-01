@@ -1,0 +1,900 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An event-driven library for osu! mapping feeds.">
+      
+      
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.0.1">
+    
+    
+      
+        <title>Event Object - Phillip</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.38780c08.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.3f72e892.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../css/custom.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#eventbase" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href=".." title="Phillip" class="md-header-nav__button md-logo" aria-label="Phillip">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Phillip
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Event Object
+            
+          </span>
+        </div>
+      
+    </div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/rorre/phillip" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    rorre/phillip
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Phillip" class="md-nav__button md-logo" aria-label="Phillip">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Phillip
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/rorre/phillip" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    rorre/phillip
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Introduction" class="md-nav__link">
+      Introduction
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../app/" title="The Phillip Instance" class="md-nav__link">
+      The Phillip Instance
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../handler/" title="Handling Events" class="md-nav__link">
+      Handling Events
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Event Object
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" title="Event Object" class="md-nav__link md-nav__link--active">
+      Event Object
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#eventbase" class="md-nav__link">
+    EventBase
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase" class="md-nav__link">
+    EventBase
+  </a>
+  
+    <nav class="md-nav" aria-label="EventBase">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.api_beatmap" class="md-nav__link">
+    api_beatmap
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.artist" class="md-nav__link">
+    artist
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.beatmapset" class="md-nav__link">
+    beatmapset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.creator" class="md-nav__link">
+    creator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.discussion" class="md-nav__link">
+    discussion
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.event_source_url" class="md-nav__link">
+    event_source_url
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.gamemodes" class="md-nav__link">
+    gamemodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.map_cover" class="md-nav__link">
+    map_cover
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.time" class="md-nav__link">
+    time
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.title" class="md-nav__link">
+    title
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.user_id" class="md-nav__link">
+    user_id
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.event_type" class="md-nav__link">
+    event_type()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.get_beatmap" class="md-nav__link">
+    get_beatmap()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#groupuser" class="md-nav__link">
+    GroupUser
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phillip.osu.classes.web.GroupUser" class="md-nav__link">
+    GroupUser
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../helpers/" title="Helpers" class="md-nav__link">
+      Helpers
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#eventbase" class="md-nav__link">
+    EventBase
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase" class="md-nav__link">
+    EventBase
+  </a>
+  
+    <nav class="md-nav" aria-label="EventBase">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.api_beatmap" class="md-nav__link">
+    api_beatmap
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.artist" class="md-nav__link">
+    artist
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.beatmapset" class="md-nav__link">
+    beatmapset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.creator" class="md-nav__link">
+    creator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.discussion" class="md-nav__link">
+    discussion
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.event_source_url" class="md-nav__link">
+    event_source_url
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.gamemodes" class="md-nav__link">
+    gamemodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.map_cover" class="md-nav__link">
+    map_cover
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.time" class="md-nav__link">
+    time
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.title" class="md-nav__link">
+    title
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.user_id" class="md-nav__link">
+    user_id
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.event_type" class="md-nav__link">
+    event_type()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.abstract.EventBase.get_beatmap" class="md-nav__link">
+    get_beatmap()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#groupuser" class="md-nav__link">
+    GroupUser
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phillip.osu.classes.web.GroupUser" class="md-nav__link">
+    GroupUser
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  <h1>Event Object</h1>
+                
+                <p>The event object fired to the event handlers could be splitted into two, <code>EventBase</code> or <code>GroupUser</code>.</p>
+<h3 id="eventbase">EventBase<a class="headerlink" href="#eventbase" title="Permanent link">&para;</a></h3>
+<p><code>EventBase</code> is used for map events, they have their own classes for each event which always inherits from this class.
+The only diffrrence is that they're using different mechanism to gather info and maybe additional info (such as source post for bubble pops).</p>
+<div class="doc doc-object doc-class">
+<h2 class="doc doc-heading" id="phillip.abstract.EventBase">
+
+        <code>phillip.abstract.EventBase</code>
+
+
+      <a class="headerlink" href="#phillip.abstract.EventBase" title="Permanent link">&para;</a></h2>
+<div class="doc doc-contents first">
+<p>An Abstract Class (ABC) representing base osu! beatmapset event.</p>
+<div class="doc doc-children">
+<div class="doc doc-object doc-attribute">
+<h3 class="doc doc-heading" id="phillip.abstract.EventBase.api_beatmap">
+
+        <code class="highlight">
+api_beatmap: <span class="n">List</span><span class="p">[</span><span class="n">phillip</span><span class="o">.</span><span class="n">osu</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">Beatmap</span><span class="p">]</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.abstract.EventBase.api_beatmap" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Difficulties returned by osu! API.</p>
+</div>
+</div>
+<div class="doc doc-object doc-attribute">
+<h3 class="doc doc-heading" id="phillip.abstract.EventBase.artist">
+
+        <code class="highlight">
+artist: <span class="nb">str</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.abstract.EventBase.artist" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Beatmap's artist.</p>
+</div>
+</div>
+<div class="doc doc-object doc-attribute">
+<h3 class="doc doc-heading" id="phillip.abstract.EventBase.beatmapset">
+
+        <code class="highlight">
+beatmapset: <span class="n">Beatmap</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.abstract.EventBase.beatmapset" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Beatmapset info returned by the osu-web JSON.</p>
+</div>
+</div>
+<div class="doc doc-object doc-attribute">
+<h3 class="doc doc-heading" id="phillip.abstract.EventBase.creator">
+
+        <code class="highlight">
+creator: <span class="nb">str</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.abstract.EventBase.creator" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Mapper of beatmap.</p>
+</div>
+</div>
+<div class="doc doc-object doc-attribute">
+<h3 class="doc doc-heading" id="phillip.abstract.EventBase.discussion">
+
+        <code class="highlight">
+discussion: <span class="n">Discussion</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.abstract.EventBase.discussion" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Discussion info returned by the osu-web JSON.</p>
+</div>
+</div>
+<div class="doc doc-object doc-attribute">
+<h3 class="doc doc-heading" id="phillip.abstract.EventBase.event_source_url">
+
+        <code class="highlight">
+event_source_url: <span class="nb">str</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.abstract.EventBase.event_source_url" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>URL to event cause.</p>
+</div>
+</div>
+<div class="doc doc-object doc-attribute">
+<h3 class="doc doc-heading" id="phillip.abstract.EventBase.gamemodes">
+
+        <code class="highlight">
+gamemodes: <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.abstract.EventBase.gamemodes" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Game modes inside the beatmapset.</p>
+</div>
+</div>
+<div class="doc doc-object doc-attribute">
+<h3 class="doc doc-heading" id="phillip.abstract.EventBase.map_cover">
+
+        <code class="highlight">
+map_cover: <span class="nb">str</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.abstract.EventBase.map_cover" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>URL to map's cover image.</p>
+</div>
+</div>
+<div class="doc doc-object doc-attribute">
+<h3 class="doc doc-heading" id="phillip.abstract.EventBase.time">
+
+        <code class="highlight">
+time: <span class="n">datetime</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.abstract.EventBase.time" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>A <code>datetime</code> object representing the time where the event happened.</p>
+</div>
+</div>
+<div class="doc doc-object doc-attribute">
+<h3 class="doc doc-heading" id="phillip.abstract.EventBase.title">
+
+        <code class="highlight">
+title: <span class="nb">str</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.abstract.EventBase.title" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Beatmap's title.</p>
+</div>
+</div>
+<div class="doc doc-object doc-attribute">
+<h3 class="doc doc-heading" id="phillip.abstract.EventBase.user_id">
+
+        <code class="highlight">
+user_id: <span class="nb">int</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.abstract.EventBase.user_id" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>The user that causes this event to occur.</p>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.abstract.EventBase.event_type">
+
+        <code class="highlight language-python">
+event_type<span class="p">(</span><span class="bp">self</span><span class="p">)</span>        </code>
+
+
+      <a class="headerlink" href="#phillip.abstract.EventBase.event_type" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Event that happened on the beatmap (bubbled, qualified, etc.)</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\abstract.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">event_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">"""Event that happened on the beatmap (bubbled, qualified, etc.)"""</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.abstract.EventBase.get_beatmap">
+
+        <code class="highlight language-python">
+get_beatmap<span class="p">(</span><span class="bp">self</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.abstract.EventBase.get_beatmap" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Fetch beatmapset info from osu! API.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\abstract.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">get_beatmap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ApiBeatmap</span><span class="p">]:</span>
+    <span class="sd">"""Fetch beatmapset info from osu! API."""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_beatmap</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beatmap</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_beatmaps</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">beatmapset</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_beatmap</span>  <span class="c1"># type: ignore</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</div>
+<h3 id="groupuser">GroupUser<a class="headerlink" href="#groupuser" title="Permanent link">&para;</a></h3>
+<p><code>GroupUser</code> rrepresents a user inside a group that is defined from scraping the site.</p>
+<div class="doc doc-object doc-class">
+<h2 class="doc doc-heading" id="phillip.osu.classes.web.GroupUser">
+
+        <code>phillip.osu.classes.web.GroupUser</code>
+
+
+      <a class="headerlink" href="#phillip.osu.classes.web.GroupUser" title="Permanent link">&para;</a></h2>
+<div class="doc doc-contents first">
+<p>A class representing a user inside a grup.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li>obj - <code>dict</code> -- osu! json object, gathered from groups page.</li>
+</ul>
+<p><strong>Attributes:</strong></p>
+<ul>
+<li>id - <code>int</code> -- osu! user ID.</li>
+<li>username - <code>str</code> -- osu! username.</li>
+<li>profile_colour - <code>str</code> -- Hex of user's role color.</li>
+<li>avatar_url - <code>str</code> -- User's avatar URL.</li>
+<li>country_code - <code>str</code> -- Country code of user.</li>
+<li>default_group - <code>str</code> -- Highest group of the user.</li>
+<li>is_active - <code>bool</code> -- Representation if user is still active on osu! or not.</li>
+<li>is_bot - <code>bool</code> -- Is user a bot?</li>
+<li>is_online - <code>bool</code> -- Is the user is only at the moment or not.</li>
+<li>is_supporter - <code>bool</code> -- Does the user have supporter tag?</li>
+<li>last_visit - <code>str</code> -- User's last login to osu!</li>
+<li>pm_friends_only - <code>bool</code> -- Represents if user only enables forum pm to friends only or not.</li>
+<li>country - <code>dict</code> -- A dictionary with key of code and name, representing the country code and full country name respectively.</li>
+<li>cover - <code>dict</code> -- A dictionary with custom_url, id, and url as key, representing cover url, id, and cover url respectively.</li>
+<li>support_level - <code>int</code> -- Supporter tag level of user.</li>
+</ul>
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This class may change in the future as osu!web development goes.</p>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../handler/" title="Handling Events" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Handling Events
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../helpers/" title="Helpers" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Helpers
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.77e55a48.min.js"></script>
+      <script src="../assets/javascripts/bundle.aa3f9871.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: [],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>

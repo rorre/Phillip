@@ -1,0 +1,1013 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An event-driven library for osu! mapping feeds.">
+      
+      
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.0.1">
+    
+    
+      
+        <title>Handling Events - Phillip</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.38780c08.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.3f72e892.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../css/custom.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#phillip.handlers.Handler" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href=".." title="Phillip" class="md-header-nav__button md-logo" aria-label="Phillip">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Phillip
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Handling Events
+            
+          </span>
+        </div>
+      
+    </div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/rorre/phillip" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    rorre/phillip
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Phillip" class="md-nav__button md-logo" aria-label="Phillip">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Phillip
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/rorre/phillip" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    rorre/phillip
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Introduction" class="md-nav__link">
+      Introduction
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../app/" title="The Phillip Instance" class="md-nav__link">
+      The Phillip Instance
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Handling Events
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" title="Handling Events" class="md-nav__link md-nav__link--active">
+      Handling Events
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler" class="md-nav__link">
+    Handler
+  </a>
+  
+    <nav class="md-nav" aria-label="Handler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_group_added" class="md-nav__link">
+    on_group_added()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_group_alumni" class="md-nav__link">
+    on_group_alumni()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_group_bng" class="md-nav__link">
+    on_group_bng()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_group_gmt" class="md-nav__link">
+    on_group_gmt()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_group_nat" class="md-nav__link">
+    on_group_nat()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_group_probation" class="md-nav__link">
+    on_group_probation()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_group_removed" class="md-nav__link">
+    on_group_removed()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_map_bubbled" class="md-nav__link">
+    on_map_bubbled()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_map_disqualified" class="md-nav__link">
+    on_map_disqualified()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_map_event" class="md-nav__link">
+    on_map_event()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_map_loved" class="md-nav__link">
+    on_map_loved()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_map_popped" class="md-nav__link">
+    on_map_popped()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_map_qualified" class="md-nav__link">
+    on_map_qualified()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_map_ranked" class="md-nav__link">
+    on_map_ranked()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.register_emitter" class="md-nav__link">
+    register_emitter()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discord" class="md-nav__link">
+    Discord
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../events/" title="Event Object" class="md-nav__link">
+      Event Object
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../helpers/" title="Helpers" class="md-nav__link">
+      Helpers
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler" class="md-nav__link">
+    Handler
+  </a>
+  
+    <nav class="md-nav" aria-label="Handler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_group_added" class="md-nav__link">
+    on_group_added()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_group_alumni" class="md-nav__link">
+    on_group_alumni()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_group_bng" class="md-nav__link">
+    on_group_bng()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_group_gmt" class="md-nav__link">
+    on_group_gmt()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_group_nat" class="md-nav__link">
+    on_group_nat()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_group_probation" class="md-nav__link">
+    on_group_probation()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_group_removed" class="md-nav__link">
+    on_group_removed()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_map_bubbled" class="md-nav__link">
+    on_map_bubbled()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_map_disqualified" class="md-nav__link">
+    on_map_disqualified()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_map_event" class="md-nav__link">
+    on_map_event()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_map_loved" class="md-nav__link">
+    on_map_loved()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_map_popped" class="md-nav__link">
+    on_map_popped()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_map_qualified" class="md-nav__link">
+    on_map_qualified()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.on_map_ranked" class="md-nav__link">
+    on_map_ranked()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phillip.handlers.Handler.register_emitter" class="md-nav__link">
+    register_emitter()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discord" class="md-nav__link">
+    Discord
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  <h1>Handling Events</h1>
+                
+                <p>Handling events in Phillip is very, very easy. What is required is 
+to inherit base Handler class and override the functions you want to.</p>
+<hr />
+<div class="doc doc-object doc-class">
+<h2 class="doc doc-heading" id="phillip.handlers.Handler">
+
+        <code>phillip.handlers.Handler</code>
+
+
+      <a class="headerlink" href="#phillip.handlers.Handler" title="Permanent link">&para;</a></h2>
+<div class="doc doc-contents first">
+<p>Handler base for <code>Phillip</code></p>
+<div class="doc doc-children">
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.on_group_added">
+
+        <code class="highlight language-python">
+on_group_added<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.handlers.Handler.on_group_added" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function to be called when someone gets added to a group.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">on_group_added</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">GroupUser</span><span class="p">):</span>
+    <span class="sd">"""Function to be called when someone gets added to a group.</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.on_group_alumni">
+
+        <code class="highlight language-python">
+on_group_alumni<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.handlers.Handler.on_group_alumni" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function to be called when someone gets added/removed to/from Alumni.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">on_group_alumni</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">GroupUser</span><span class="p">):</span>
+    <span class="sd">"""Function to be called when someone gets added/removed to/from Alumni.</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.on_group_bng">
+
+        <code class="highlight language-python">
+on_group_bng<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.handlers.Handler.on_group_bng" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function to be called when someone gets added/removed to/from  BNG.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">on_group_bng</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">GroupUser</span><span class="p">):</span>
+    <span class="sd">"""Function to be called when someone gets added/removed to/from  BNG.</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.on_group_gmt">
+
+        <code class="highlight language-python">
+on_group_gmt<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.handlers.Handler.on_group_gmt" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function to be called when someone gets added/removed to/from GMT.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">on_group_gmt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">GroupUser</span><span class="p">):</span>
+    <span class="sd">"""Function to be called when someone gets added/removed to/from GMT.</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.on_group_nat">
+
+        <code class="highlight language-python">
+on_group_nat<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.handlers.Handler.on_group_nat" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function to be called when someone gets added/removed to/from NAT.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">on_group_nat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">GroupUser</span><span class="p">):</span>
+    <span class="sd">"""Function to be called when someone gets added/removed to/from NAT.</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.on_group_probation">
+
+        <code class="highlight language-python">
+on_group_probation<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.handlers.Handler.on_group_probation" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function to be called when someone gets added/removed to/from the probation.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">on_group_probation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">GroupUser</span><span class="p">):</span>
+    <span class="sd">"""Function to be called when someone gets added/removed to/from the probation.</span>
+<span class="sd">    """</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.on_group_removed">
+
+        <code class="highlight language-python">
+on_group_removed<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.handlers.Handler.on_group_removed" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function to be called when someone gets removed from a group.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">on_group_removed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">GroupUser</span><span class="p">):</span>
+    <span class="sd">"""Function to be called when someone gets removed from a group.</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.on_map_bubbled">
+
+        <code class="highlight language-python">
+on_map_bubbled<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.handlers.Handler.on_map_bubbled" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function to be called when a beatmap is bubbled.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">on_map_bubbled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="s2">"EventBase"</span><span class="p">):</span>
+    <span class="sd">"""Function to be called when a beatmap is bubbled.</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.on_map_disqualified">
+
+        <code class="highlight language-python">
+on_map_disqualified<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.handlers.Handler.on_map_disqualified" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function to be called when a beatmap is disqualified.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">on_map_disqualified</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="s2">"EventBase"</span><span class="p">):</span>
+    <span class="sd">"""Function to be called when a beatmap is disqualified.</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.on_map_event">
+
+        <code class="highlight language-python">
+on_map_event<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.handlers.Handler.on_map_event" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function to be called when any beatmap event happens.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">on_map_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="s2">"EventBase"</span><span class="p">):</span>
+    <span class="sd">"""Function to be called when any beatmap event happens.</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.on_map_loved">
+
+        <code class="highlight language-python">
+on_map_loved<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.handlers.Handler.on_map_loved" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function to be called when a beatmap is loved.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">on_map_loved</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="s2">"EventBase"</span><span class="p">):</span>
+    <span class="sd">"""Function to be called when a beatmap is loved.</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.on_map_popped">
+
+        <code class="highlight language-python">
+on_map_popped<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.handlers.Handler.on_map_popped" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function to be called when a beatmap is popped.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">on_map_popped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="s2">"EventBase"</span><span class="p">):</span>
+    <span class="sd">"""Function to be called when a beatmap is popped.</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.on_map_qualified">
+
+        <code class="highlight language-python">
+on_map_qualified<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.handlers.Handler.on_map_qualified" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function to be called when a beatmap is qualified.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">on_map_qualified</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="s2">"EventBase"</span><span class="p">):</span>
+    <span class="sd">"""Function to be called when a beatmap is qualified.</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.on_map_ranked">
+
+        <code class="highlight language-python">
+on_map_ranked<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+      <a class="headerlink" href="#phillip.handlers.Handler.on_map_ranked" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function to be called when a beatmap is ranked.</p>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">on_map_ranked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="s2">"EventBase"</span><span class="p">):</span>
+    <span class="sd">"""Function to be called when a beatmap is ranked.</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.handlers.Handler.register_emitter">
+
+        <code class="highlight language-python">
+register_emitter<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">emitter</span><span class="p">)</span>        </code>
+
+
+      <a class="headerlink" href="#phillip.handlers.Handler.register_emitter" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Registers an emitter to the handler</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li>emitter - <code>pyee.AsyncIOEventEmitter</code> -- Emitter to register.</li>
+</ul>
+<details class="quote">
+          <summary>Source code in <code>phillip\handlers.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">register_emitter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">emitter</span><span class="p">:</span> <span class="n">AsyncIOEventEmitter</span><span class="p">):</span>
+    <span class="sd">"""Registers an emitter to the handler</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    * emitter - `pyee.AsyncIOEventEmitter` -- Emitter to register.</span>
+<span class="sd">    """</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">emitter</span> <span class="o">=</span> <span class="n">emitter</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_register_events</span><span class="p">()</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr />
+<p>All of the functions started with <code>on_</code> are event handlers. You only
+need to override to work with them. All of the event registration are
+all happens in the background--so don't sweat it.</p>
+<p>All map events will give you <code>EventBase</code> argument, while all user events 
+will give you <code>GroupUser</code> argument.</p>
+<hr />
+<h2 id="discord">Discord<a class="headerlink" href="#discord" title="Permanent link">&para;</a></h2>
+<p>A discord handler is already provided as an example. You may use it by
+setting <code>webhook_url</code> to <code>Phillip</code>'s constructor.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../app/" title="The Phillip Instance" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                The Phillip Instance
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../events/" title="Event Object" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Event Object
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.77e55a48.min.js"></script>
+      <script src="../assets/javascripts/bundle.aa3f9871.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: [],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>

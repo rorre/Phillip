@@ -1,0 +1,674 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="An event-driven library for osu! mapping feeds." name="description"/>
+<link href="../assets/images/favicon.png" rel="shortcut icon"/>
+<meta content="mkdocs-1.1.2, mkdocs-material-6.0.1" name="generator"/>
+<title>Helpers - Phillip</title>
+<link href="../assets/stylesheets/main.38780c08.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.3f72e892.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
+<style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+<link href="../css/custom.css" rel="stylesheet"/>
+</head>
+<body data-md-color-accent="none" data-md-color-primary="none" data-md-color-scheme="" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#osuv-v1-api">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Header" class="md-header-nav md-grid">
+<a aria-label="Phillip" class="md-header-nav__button md-logo" href=".." title="Phillip">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"></path></svg>
+</a>
+<label class="md-header-nav__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
+</label>
+<div class="md-header-nav__title" data-md-component="header-title">
+<div class="md-header-nav__ellipsis">
+<span class="md-header-nav__topic md-ellipsis">
+            Phillip
+          </span>
+<span class="md-header-nav__topic md-ellipsis">
+            
+              Helpers
+            
+          </span>
+</div>
+</div>
+<div class="md-header-nav__source">
+<a class="md-source" href="https://github.com/rorre/phillip" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    rorre/phillip
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Phillip" class="md-nav__button md-logo" href=".." title="Phillip">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"></path></svg>
+</a>
+    Phillip
+  </label>
+<div class="md-nav__source">
+<a class="md-source" href="https://github.com/rorre/phillip" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    rorre/phillip
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href=".." title="Introduction">
+      Introduction
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../app/" title="The Phillip Instance">
+      The Phillip Instance
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../handler/" title="Handling Events">
+      Handling Events
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../events/" title="Event Object">
+      Event Object
+    </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+        Helpers
+        <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./" title="Helpers">
+      Helpers
+    </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#osuv-v1-api">
+    osu!v v1 API
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.old.api.APIClient">
+    APIClient
+  </a>
+<nav aria-label="APIClient" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.old.api.APIClient.get_api">
+    get_api()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.old.api.APIClient.get_beatmaps">
+    get_beatmaps()
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#osuweb">
+    osu!web
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.new.abstract.ABCClient">
+    ABCClient
+  </a>
+<nav aria-label="ABCClient" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.new.abstract.ABCClient.get_events">
+    get_events()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.new.abstract.ABCClient.get_users">
+    get_users()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.new.abstract.ABCClient.nomination_history">
+    nomination_history()
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.new.web.WebClient">
+    WebClient
+  </a>
+<nav aria-label="WebClient" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.new.web.WebClient.get_html">
+    get_html()
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#osuv-v1-api">
+    osu!v v1 API
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.old.api.APIClient">
+    APIClient
+  </a>
+<nav aria-label="APIClient" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.old.api.APIClient.get_api">
+    get_api()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.old.api.APIClient.get_beatmaps">
+    get_beatmaps()
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#osuweb">
+    osu!web
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.new.abstract.ABCClient">
+    ABCClient
+  </a>
+<nav aria-label="ABCClient" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.new.abstract.ABCClient.get_events">
+    get_events()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.new.abstract.ABCClient.get_users">
+    get_users()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.new.abstract.ABCClient.nomination_history">
+    nomination_history()
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.new.web.WebClient">
+    WebClient
+  </a>
+<nav aria-label="WebClient" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phillip.osu.new.web.WebClient.get_html">
+    get_html()
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content">
+<article class="md-content__inner md-typeset">
+<h1>Helpers</h1>
+<p>There are lots of helper functions in Phillip as it tries to have as little dependencies as possible.
+This will help you access requests data from osu! and process them.</p>
+<h2 id="osuv-v1-api">osu!v v1 API<a class="headerlink" href="#osuv-v1-api" title="Permanent link">¶</a></h2>
+<p>In this section we will only bring functions to help you with osu! API. (v1, obviously.)</p>
+<hr/>
+<div class="doc doc-object doc-class">
+<h2 class="doc doc-heading" id="phillip.osu.old.api.APIClient">
+<code>phillip.osu.old.api.APIClient</code>
+<a class="headerlink" href="#phillip.osu.old.api.APIClient" title="Permanent link">¶</a></h2>
+<div class="doc doc-contents first">
+<div class="doc doc-children">
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.osu.old.api.APIClient.get_api">
+<code class="highlight language-python">
+get_api<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<span class="doc doc-properties">
+<small class="doc doc-property doc-property-async"><code>async</code></small>
+</span>
+<a class="headerlink" href="#phillip.osu.old.api.APIClient.get_api" title="Permanent link">¶</a></h3>
+<div class="doc doc-contents">
+<p>Request something based on endpoint. <em>This function is a <a href="https://docs.python.org/3/library/asyncio-task.html#coroutine">coroutine</a>.</em></p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li>endpoint - <code>str</code> -- The API endpoint, reference could be found in <a href="https://github.com/ppy/osu-api/wiki">osu!wiki</a>.</li>
+<li>**kwargs - <code>dict</code> | optional -- Keyword arguments that will be passed as a query string.</li>
+</ul>
+<p><strong>Raises:</strong></p>
+<ul>
+<li><code>Exception</code> -- If API key is not assigned.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>List[dict]</code> -- API response.</li>
+</ul>
+<details class="quote">
+<summary>Source code in <code>phillip\osu\old\api.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">get_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="sd">"""Request something based on endpoint. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    * endpoint - `str` -- The API endpoint, reference could be found in [osu!wiki](https://github.com/ppy/osu-api/wiki).</span>
+<span class="sd">    * \*\*kwargs - `dict` | optional -- Keyword arguments that will be passed as a query string.</span>
+
+<span class="sd">    **Raises:**</span>
+
+<span class="sd">    * `Exception` -- If API key is not assigned.</span>
+
+<span class="sd">    **Returns**</span>
+
+<span class="sd">    * `List[dict]` -- API response.</span>
+<span class="sd">    """</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s2">"k"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key</span>
+
+    <span class="n">api_args</span> <span class="o">=</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">api_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">BASE_URL</span> <span class="o">+</span> <span class="n">endpoint</span> <span class="o">+</span> <span class="s2">"?"</span> <span class="o">+</span> <span class="n">api_args</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">api_url</span><span class="p">)</span> <span class="k">as</span> <span class="n">api_res</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">api_res</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.osu.old.api.APIClient.get_beatmaps">
+<code class="highlight language-python">
+get_beatmaps<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<span class="doc doc-properties">
+<small class="doc doc-property doc-property-async"><code>async</code></small>
+</span>
+<a class="headerlink" href="#phillip.osu.old.api.APIClient.get_beatmaps" title="Permanent link">¶</a></h3>
+<div class="doc doc-contents">
+<p>Get beatmapset from osu! API. <em>This function is a <a href="https://docs.python.org/3/library/asyncio-task.html#coroutine">coroutine</a>.</em></p>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>List[Beatmap]</code> -- Beatmapsets fetched from API.</li>
+</ul>
+<details class="quote">
+<summary>Source code in <code>phillip\osu\old\api.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">get_beatmaps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Beatmap</span><span class="p">]:</span>
+    <span class="sd">"""Get beatmapset from osu! API. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*</span>
+
+<span class="sd">    **Returns**</span>
+
+<span class="sd">    * `List[Beatmap]` -- Beatmapsets fetched from API.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">Beatmap</span><span class="p">(</span><span class="nb">map</span><span class="p">)</span> <span class="k">for</span> <span class="nb">map</span> <span class="ow">in</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_api</span><span class="p">(</span><span class="s2">"get_beatmaps"</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)]</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</div>
+<h2 id="osuweb">osu!web<a class="headerlink" href="#osuweb" title="Permanent link">¶</a></h2>
+<p>In this section, we will scrape the site in order to get data from osu!</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A throttler is automatically initiated to rate limit your request to <strong>2 requests/minute</strong> 
+in order to avoid getting IP banned. You may change this but in general this is <strong>highly discouraged</strong>.</p>
+</div>
+<hr/>
+<div class="doc doc-object doc-class">
+<h2 class="doc doc-heading" id="phillip.osu.new.abstract.ABCClient">
+<code>phillip.osu.new.abstract.ABCClient</code>
+<a class="headerlink" href="#phillip.osu.new.abstract.ABCClient" title="Permanent link">¶</a></h2>
+<div class="doc doc-contents first">
+<div class="doc doc-children">
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.osu.new.abstract.ABCClient.get_events">
+<code class="highlight language-python">
+get_events<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nominate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">love</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nomination_reset</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">disqualify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<a class="headerlink" href="#phillip.osu.new.abstract.ABCClient.get_events" title="Permanent link">¶</a></h3>
+<div class="doc doc-contents">
+<p>Get events of from osu!website. <em>This function is a <a href="https://docs.python.org/3/library/asyncio-task.html#coroutine">coroutine</a>.</em></p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li>nominate - <code>bool</code> -- Whether to get nomination events or not. <strong>This implies <code>qualify</code> event.</strong></li>
+<li>rank - <code>bool</code> -- Whether to get ranked events or not.</li>
+<li>love - <code>bool</code> -- Whetger to get loved events or not.</li>
+<li>nomination_reset - <code>bool</code> -- Whether to get nomination reset events or not.</li>
+<li>disqualify -- <code>bool</code> -- Whether to get disqualification events or not.</li>
+</ul>
+<p><strong>Yields:</strong></p>
+<ul>
+<li>list <code>abstract.EventBase</code> -- List of events resulted from fetching osu!web,              with next index as next event that will be processed.</li>
+</ul>
+<details class="quote">
+<summary>Source code in <code>phillip\osu\new\abstract.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">get_events</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">nominate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">rank</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">love</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">nomination_reset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">disqualify</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">abstract</span><span class="o">.</span><span class="n">EventBase</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
+    <span class="sd">"""Get events of from osu!website. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    * nominate - `bool` -- Whether to get nomination events or not. **This implies `qualify` event.**</span>
+<span class="sd">    * rank - `bool` -- Whether to get ranked events or not.</span>
+<span class="sd">    * love - `bool` -- Whetger to get loved events or not.</span>
+<span class="sd">    * nomination_reset - `bool` -- Whether to get nomination reset events or not.</span>
+<span class="sd">    * disqualify -- `bool` -- Whether to get disqualification events or not.</span>
+
+<span class="sd">    **Yields:**</span>
+
+<span class="sd">    * list `abstract.EventBase` -- List of events resulted from fetching osu!web, \</span>
+<span class="sd">         with next index as next event that will be processed.</span>
+<span class="sd">    """</span>
+    <span class="n">additions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">types_val</span> <span class="o">=</span> <span class="p">[</span><span class="n">nominate</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">love</span><span class="p">,</span> <span class="n">nomination_reset</span><span class="p">,</span> <span class="n">disqualify</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">additions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">types_val</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">TYPES</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">types_val</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">additions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"qualify"</span><span class="p">)</span>
+    <span class="n">extras</span> <span class="o">=</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">events_url</span> <span class="o">+</span> <span class="s2">"&amp;types%5B%5D="</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">additions</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"&amp;"</span> <span class="o">+</span> <span class="n">extras</span>
+
+    <span class="n">events</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_json</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">"json-events"</span><span class="p">)</span>
+    <span class="n">events</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+
+    <span class="n">event_cases</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"nominate"</span><span class="p">:</span> <span class="n">classes</span><span class="o">.</span><span class="n">Nominated</span><span class="p">,</span>
+        <span class="s2">"disqualify"</span><span class="p">:</span> <span class="n">classes</span><span class="o">.</span><span class="n">Disqualified</span><span class="p">,</span>
+        <span class="s2">"nomination_reset"</span><span class="p">:</span> <span class="n">classes</span><span class="o">.</span><span class="n">Popped</span><span class="p">,</span>
+        <span class="s2">"rank"</span><span class="p">:</span> <span class="n">classes</span><span class="o">.</span><span class="n">Ranked</span><span class="p">,</span>
+        <span class="s2">"love"</span><span class="p">:</span> <span class="n">classes</span><span class="o">.</span><span class="n">Loved</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">event</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">events</span><span class="p">):</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
+        <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s2">"qualify"</span><span class="p">:</span>
+            <span class="k">continue</span>  <span class="c1"># Skip qualified event news</span>
+
+        <span class="n">next_map</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">):</span>
+            <span class="n">next_map</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
+
+        <span class="k">yield</span> <span class="n">event_cases</span><span class="p">[</span><span class="n">action</span><span class="p">](</span><span class="n">event</span><span class="p">,</span> <span class="n">next_map</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.osu.new.abstract.ABCClient.get_users">
+<code class="highlight language-python">
+get_users<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">)</span> </code>
+<span class="doc doc-properties">
+<small class="doc doc-property doc-property-async"><code>async</code></small>
+</span>
+<a class="headerlink" href="#phillip.osu.new.abstract.ABCClient.get_users" title="Permanent link">¶</a></h3>
+<div class="doc doc-contents">
+<p>Get users inside of a group. <em>This function is a <a href="https://docs.python.org/3/library/asyncio-task.html#coroutine">coroutine</a>.</em></p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li>group_id - <code>int</code> -- The group id.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>List[dict]</code> -- A dictionary containing users' data.</li>
+</ul>
+<details class="quote">
+<summary>Source code in <code>phillip\osu\new\abstract.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">get_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GroupUser</span><span class="p">]:</span>
+    <span class="sd">"""Get users inside of a group. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    * group_id - `int` -- The group id.</span>
+
+<span class="sd">    **Returns**</span>
+
+<span class="sd">    * `List[dict]` -- A dictionary containing users' data.</span>
+<span class="sd">    """</span>
+    <span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">groups_url</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span>
+    <span class="n">users_json</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_json</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="s2">"json-users"</span><span class="p">)</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users_json</span><span class="p">:</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GroupUser</span><span class="p">(</span><span class="n">user</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">out</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.osu.new.abstract.ABCClient.nomination_history">
+<code class="highlight language-python">
+nomination_history<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapid</span><span class="p">)</span> </code>
+<span class="doc doc-properties">
+<small class="doc doc-property doc-property-async"><code>async</code></small>
+</span>
+<a class="headerlink" href="#phillip.osu.new.abstract.ABCClient.nomination_history" title="Permanent link">¶</a></h3>
+<div class="doc doc-contents">
+<p>Get nomination history of a beatmap. <em>This function is a <a href="https://docs.python.org/3/library/asyncio-task.html#coroutine">coroutine</a>.</em></p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li>mapid - <code>int</code> -- Beatmapset ID to gather.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>parent - <code>List[child]</code> -- A list containing child tuples.<ul>
+<li><code>child</code> - <code>Tuple[str, int]</code> -- A tuple with a string of event type and user id of user triggering the event.</li>
+</ul>
+</li>
+</ul>
+<details class="quote">
+<summary>Source code in <code>phillip\osu\new\abstract.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">nomination_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapid</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+    <span class="sd">"""Get nomination history of a beatmap. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    * mapid - `int` -- Beatmapset ID to gather.</span>
+
+<span class="sd">    **Returns**</span>
+
+<span class="sd">    * parent - `List[child]` -- A list containing child tuples.</span>
+<span class="sd">        * `child` - `Tuple[str, int]` -- A tuple with a string of event type and user id of user triggering the event.</span>
+<span class="sd">    """</span>
+    <span class="n">uri</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"https://osu.ppy.sh/beatmapsets/</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">mapid</span><span class="p">)</span><span class="si">}</span><span class="s2">/discussion"</span>
+    <span class="n">set_json</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_json</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="s2">"json-beatmapset-discussion"</span><span class="p">)</span>
+    <span class="n">js</span> <span class="o">=</span> <span class="n">set_json</span><span class="p">[</span><span class="s2">"beatmapset"</span><span class="p">][</span><span class="s2">"events"</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
+
+    <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">event</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">js</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">js</span><span class="p">):</span>
+            <span class="n">next_event</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">event</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EVENTS</span><span class="p">:</span>
+            <span class="n">event_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EVENTS</span><span class="p">[</span><span class="n">event</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]]</span>
+            <span class="k">if</span> <span class="n">next_event</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"qualify"</span><span class="p">:</span>
+                <span class="n">event_name</span> <span class="o">=</span> <span class="s2">"Qualified"</span>
+            <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">event_name</span><span class="p">,</span> <span class="n">event</span><span class="p">[</span><span class="s2">"user_id"</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">history</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="doc doc-object doc-class">
+<h2 class="doc doc-heading" id="phillip.osu.new.web.WebClient">
+<code>phillip.osu.new.web.WebClient</code>
+<a class="headerlink" href="#phillip.osu.new.web.WebClient" title="Permanent link">¶</a></h2>
+<div class="doc doc-contents first">
+<div class="doc doc-children">
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="phillip.osu.new.web.WebClient.get_html">
+<code class="highlight language-python">
+get_html<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">)</span> </code>
+<span class="doc doc-properties">
+<small class="doc doc-property doc-property-async"><code>async</code></small>
+</span>
+<a class="headerlink" href="#phillip.osu.new.web.WebClient.get_html" title="Permanent link">¶</a></h3>
+<div class="doc doc-contents">
+<p>Receive html from uri with rate limit. 
+<em>This function is a <a href="https://docs.python.org/3/library/asyncio-task.html#coroutine">coroutine</a>.</em></p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li>uri - <code>str</code> -- URL of discussion page.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>BeautifulSoup -- Soup'd html response.</li>
+</ul>
+<details class="quote">
+<summary>Source code in <code>phillip\osu\new\web.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">get_html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BeautifulSoup</span><span class="p">:</span>
+    <span class="sd">"""Receive html from uri with rate limit. </span>
+<span class="sd">    *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    * uri - `str` -- URL of discussion page.</span>
+
+<span class="sd">    **Returns**</span>
+
+<span class="sd">    * BeautifulSoup -- Soup'd html response.</span>
+<span class="sd">    """</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_throttler</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">cookies</span><span class="o">=</span><span class="p">{</span><span class="s2">"locale"</span><span class="p">:</span> <span class="s2">"en"</span><span class="p">})</span> <span class="k">as</span> <span class="n">site_html</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="k">await</span> <span class="n">site_html</span><span class="o">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">features</span><span class="o">=</span><span class="s2">"html.parser"</span><span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-nav">
+<nav aria-label="Footer" class="md-footer-nav__inner md-grid">
+<a class="md-footer-nav__link md-footer-nav__link--prev" href="../events/" rel="prev" title="Event Object">
+<div class="md-footer-nav__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+</div>
+<div class="md-footer-nav__title">
+<div class="md-ellipsis">
+<span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Event Object
+              </div>
+</div>
+</a>
+</nav>
+</div>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+          Material for MkDocs
+        </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<script src="../assets/javascripts/vendor.77e55a48.min.js"></script>
+<script src="../assets/javascripts/bundle.aa3f9871.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+<script>
+        app = initialize({
+          base: "..",
+          features: [],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+</body>
+</html>
