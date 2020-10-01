@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "phillip"
-version = "0.3.0"
+version = "1.0"
 description = "A basic wrapper for osu! beatmapset events."
 authors = ["Rendy Arya Kemal <rendyarya22@gmail.com>"]
 license = "LGPL-3.0-only"

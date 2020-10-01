@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="Phillip",
-    version="0.2.0",
+    version="1.0",
     author="Rendy Arya Kemal",
     author_email="rendyarya22@gmail.com",
     description="An event-driven for osu! feeds.",
