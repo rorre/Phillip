@@ -106,8 +106,7 @@ class Phillip:
         )
 
     async def check_map_events(self):
-        """Check for map events. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
-        """
+        """Check for map events. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*"""
         while not self._closed:
             try:
                 events = [e async for e in self.web.get_events()]
@@ -144,8 +143,7 @@ class Phillip:
             await asyncio.sleep(5 * 60)  # pragma: no cover
 
     async def check_role_change(self):
-        """Check for role changes. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
-        """
+        """Check for role changes. *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*"""
         while not self._closed:
             for gid in self.group_ids:
                 try:
@@ -170,7 +168,7 @@ class Phillip:
             await asyncio.sleep(15 * 60)  # pragma: no cover
 
     def start(self):
-        """Well, run the client, what else?!"""
+        """Start all tasks loop tasks."""
         if self.disable_map and self.disable_user:
             raise Exception("Cannot disable both map and role check.")
 
@@ -196,17 +194,24 @@ class Phillip:
         self.handlers.append(handler)
         self._prepare_handler(handler)
 
+    async def close(self):
+        """Cancel all task. This will technically shut down the instance.
+
+        However, the session and loop is not closed, so you need to do cleanup on your own."""
+        self._closed = True
+        for t in self.tasks:
+            t.cancel()
+        asyncio.gather(*self.tasks, return_exceptions=True)
+
     def run(self):
-        """Run Phillip. This function does not take any parameter.
+        """Setup and run the instance. This function does not take any parameter.
+
+        The difference with `start()` is that this also starts the loop and do cleanup upon `KeyboardInterrupt`, `SIGINT` or `SIGTERM`.
         """
 
         async def _stop():
-            self._closed = True
+            await self.close()
             await self.session.close()
-            for t in self.tasks:
-                t.cancel()
-            asyncio.gather(*self.tasks, return_exceptions=True)
-
             if not self.TESTING:
                 self.loop.stop()
                 self.loop.close()
