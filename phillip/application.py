@@ -10,6 +10,7 @@ from pyee import AsyncIOEventEmitter
 
 from phillip import helper
 from phillip.handlers import Handler
+from phillip.osu.classes.web import GroupUser
 from phillip.osu.new.web import WebClient
 from phillip.osu.old.api import APIClient
 
@@ -79,7 +80,7 @@ class Phillip:
             28,  # Full BN
             32,  # Probation BN
         ]
-        self.last_users: Dict[int, List[dict]] = dict()
+        self.last_users: Dict[int, List[GroupUser]] = dict()
 
         for gid in self.group_ids:
             self.last_users[gid] = list()
