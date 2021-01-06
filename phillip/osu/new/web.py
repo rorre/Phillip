@@ -21,7 +21,7 @@ class WebClient(ABCClient):
         self._throttler = throttler or Throttler(rate_limit=2, period=60)
 
     async def get_html(self, uri: str) -> BeautifulSoup:
-        """Receive html from uri with rate limit. 
+        """Receive html from uri with rate limit.
         *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
         **Parameters:**

@@ -10,8 +10,7 @@ if TYPE_CHECKING:
 
 
 class Handler:
-    """Handler base for ``Phillip``
-    """
+    """Handler base for ``Phillip``"""
 
     def __init__(self):
         self.app: Phillip
@@ -42,70 +41,56 @@ class Handler:
                 self.emitter.on(func.split("_")[-1], getattr(self, func))
 
     async def on_map_event(self, event: "EventBase"):
-        """Function to be called when any beatmap event happens.
-        """
+        """Function to be called when any beatmap event happens."""
         pass
 
     async def on_map_bubbled(self, event: "EventBase"):
-        """Function to be called when a beatmap is bubbled.
-        """
+        """Function to be called when a beatmap is bubbled."""
         pass
 
     async def on_map_qualified(self, event: "EventBase"):
-        """Function to be called when a beatmap is qualified.
-        """
+        """Function to be called when a beatmap is qualified."""
         pass
 
     async def on_map_disqualified(self, event: "EventBase"):
-        """Function to be called when a beatmap is disqualified.
-        """
+        """Function to be called when a beatmap is disqualified."""
         pass
 
     async def on_map_popped(self, event: "EventBase"):
-        """Function to be called when a beatmap is popped.
-        """
+        """Function to be called when a beatmap is popped."""
         pass
 
     async def on_map_ranked(self, event: "EventBase"):
-        """Function to be called when a beatmap is ranked.
-        """
+        """Function to be called when a beatmap is ranked."""
         pass
 
     async def on_map_loved(self, event: "EventBase"):
-        """Function to be called when a beatmap is loved.
-        """
+        """Function to be called when a beatmap is loved."""
         pass
 
     async def on_group_added(self, user: GroupUser):
-        """Function to be called when someone gets added to a group.
-        """
+        """Function to be called when someone gets added to a group."""
         pass
 
     async def on_group_removed(self, user: GroupUser):
-        """Function to be called when someone gets removed from a group.
-        """
+        """Function to be called when someone gets removed from a group."""
         pass
 
     async def on_group_probation(self, user: GroupUser):
-        """Function to be called when someone gets added/removed to/from the probation.
-        """
+        """Function to be called when someone gets added/removed to/from the probation."""
 
     async def on_group_gmt(self, user: GroupUser):
-        """Function to be called when someone gets added/removed to/from GMT.
-        """
+        """Function to be called when someone gets added/removed to/from GMT."""
         pass
 
     async def on_group_bng(self, user: GroupUser):
-        """Function to be called when someone gets added/removed to/from  BNG.
-        """
+        """Function to be called when someone gets added/removed to/from  BNG."""
         pass
 
     async def on_group_nat(self, user: GroupUser):
-        """Function to be called when someone gets added/removed to/from NAT.
-        """
+        """Function to be called when someone gets added/removed to/from NAT."""
         pass
 
     async def on_group_alumni(self, user: GroupUser):
-        """Function to be called when someone gets added/removed to/from Alumni.
-        """
+        """Function to be called when someone gets added/removed to/from Alumni."""
         pass

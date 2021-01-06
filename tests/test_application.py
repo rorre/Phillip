@@ -8,8 +8,7 @@ from phillip.abstract import EventBase
 from phillip.application import Phillip
 from phillip.handlers import Handler
 from phillip.osu.classes.web import GroupUser
-from tests.mocks.application import (api_mock, bancho_event_mock, events_mock,
-                                     users_mock)
+from tests.mocks.application import api_mock, bancho_event_mock, events_mock, users_mock
 
 
 @pytest.fixture

@@ -33,7 +33,7 @@ jobs:
     - name: Linting with isort and flake8
       run: |
         flake8 phillip tests --select F
-        isort --check-only --diff phillip tests
+        isort --check-only --diff phillip tests --profile black
     - name: Test and enerate coverage report
       run: |
         pytest --cov=phillip --cov-report=xml

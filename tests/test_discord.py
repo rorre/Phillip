@@ -7,8 +7,13 @@ from phillip.abstract import EventBase
 from phillip.application import Phillip
 from phillip.discord import DiscordHandler, format_message, gen_embed
 from phillip.osu.classes.api import Beatmap
-from tests.mocks.discord.mocks import (get_api, html_mock, map_json, pop_mock,
-                                       popped_map_json)
+from tests.mocks.discord.mocks import (
+    get_api,
+    html_mock,
+    map_json,
+    pop_mock,
+    popped_map_json,
+)
 
 
 @pytest.fixture
