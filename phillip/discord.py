@@ -43,7 +43,7 @@ def format_message(msg: str) -> str:
 
 
 async def gen_embed(event: EventBase, app: Phillip) -> dict:
-    """Generate Aiess-styled Discord embed of event. 
+    """Generate Aiess-styled Discord embed of event.
     *This function is a [coroutine](https://docs.python.org/3/library/asyncio-task.html#coroutine).*
 
     **Parameters:**
@@ -63,8 +63,9 @@ async def gen_embed(event: EventBase, app: Phillip) -> dict:
         "Loved": ":gift_heart:",
     }
 
+    event_type = event.event_type
     embed_base = {
-        "title": f"{action_icons[event.event_type]} {event.event_type}",
+        "title": f"{action_icons[event_type]} {event_type}",
         "description": f"[**{event.artist} - {event.title}**]({event.event_source_url})\r\n\
 Mapped by {event.beatmapset.creator} **[{']['.join(event.gamemodes)}]**",
         "color": 29625,
@@ -82,7 +83,7 @@ Mapped by {event.beatmapset.creator} **[{']['.join(event.gamemodes)}]**",
 
     if event.event_type in ["Popped", "Disqualified"]:
         message = event.discussion.starting_post.message
-        embed_base["footer"]["text"] += " - {}".format(format_message(message))
+        embed_base["footer"]["text"] += " - {}".format(format_message(message))  # type: ignore
         embed_base["color"] = 15408128
 
     if event.event_type == "Ranked":
@@ -97,6 +98,6 @@ Mapped by {event.beatmapset.creator} **[{']['.join(event.gamemodes)}]**",
 
             users_str += f"{action_icons[history_event[0]]} [{u_name}](https://osu.ppy.sh/u/{history_event[1]}) "
 
-        embed_base["description"] += "\r\n " + users_str
+        embed_base["description"] += "\r\n " + users_str  # type: ignore
 
     return embed_base

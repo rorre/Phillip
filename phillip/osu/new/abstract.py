@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import (TYPE_CHECKING, Any, AsyncGenerator, Dict, List, Tuple,
-                    Type, Union)
+from typing import TYPE_CHECKING, Any, AsyncGenerator, Dict, List, Tuple, Type, Union
 from urllib.parse import urlencode
 
 import aiohttp

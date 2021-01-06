@@ -8,8 +8,7 @@ from phillip.osu.classes.web import Discussion
 
 
 class EventBase(ABC):
-    """An Abstract Class (ABC) representing base osu! beatmapset event.
-    """
+    """An Abstract Class (ABC) representing base osu! beatmapset event."""
 
     def __init__(self, js: dict, next_event: dict = None, app=None):
         self.app = app
@@ -54,6 +53,7 @@ class EventBase(ABC):
         dt = self.js["created_at"]
         return datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S+00:00")
 
+    @property
     @abstractmethod
     def event_type(self) -> str:
         """Event that happened on the beatmap (bubbled, qualified, etc.)"""
