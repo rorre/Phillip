@@ -288,20 +288,19 @@ mkdocs-material = ">=5.0.0"
 
 [[package]]
 name = "mkdocstrings"
-version = "0.13.6"
+version = "0.14.0"
 description = "Automatic documentation from sources, for MkDocs."
 category = "main"
 optional = false
 python-versions = ">=3.6,<4.0"
 
 [package.dependencies]
-beautifulsoup4 = ">=4.8.2,<5.0.0"
+Jinja2 = ">=2.11,<3.0"
+Markdown = ">=3.3,<4.0"
+MarkupSafe = ">=1.1,<2.0"
 mkdocs = ">=1.1,<2.0"
 pymdown-extensions = ">=6.3,<9.0"
-pytkdocs = ">=0.2.0,<0.10.0"
-
-[package.extras]
-tests = ["coverage (>=5.2.1,<6.0.0)", "invoke (>=1.4.1,<2.0.0)", "mkdocs-material (>=5.5.12,<6.0.0)", "mypy (>=0.782,<0.783)", "pytest (>=6.0.1,<7.0.0)", "pytest-cov (>=2.10.1,<3.0.0)", "pytest-randomly (>=3.4.1,<4.0.0)", "pytest-sugar (>=0.9.4,<0.10.0)", "pytest-xdist (>=2.1.0,<3.0.0)"]
+pytkdocs = ">=0.2.0,<0.11.0"
 
 [[package]]
 name = "multidict"
@@ -558,7 +557,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "e4d647c2e11189b8e2377c5014dc38c4c8d848ac78bbba2b89c2022de182b3d3"
+content-hash = "2d040fe22e345120f32d3169131f745d18a585c3c1cee681bf88ed81b028591b"
 
 [metadata.files]
 aiohttp = [
@@ -635,6 +634,7 @@ click = [
 ]
 colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},
+    {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
 ]
 coverage = [
     {file = "coverage-5.3.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:fabeeb121735d47d8eab8671b6b031ce08514c86b7ad8f7d5490a7b6dcd6267d"},
@@ -777,8 +777,8 @@ mkdocs-material-extensions = [
     {file = "mkdocs_material_extensions-1.0.1-py3-none-any.whl", hash = "sha256:d90c807a88348aa6d1805657ec5c0b2d8d609c110e62b9dce4daf7fa981fa338"},
 ]
 mkdocstrings = [
-    {file = "mkdocstrings-0.13.6-py3-none-any.whl", hash = "sha256:79d2a16b8c86a467bdc84846dfb90552551d2d9fd35578df9f92de13fb3b4537"},
-    {file = "mkdocstrings-0.13.6.tar.gz", hash = "sha256:79e5086c79f60d1ae1d4b222f658d348ebdd6302c970cc06ee8394f2839d7c4d"},
+    {file = "mkdocstrings-0.14.0-py3-none-any.whl", hash = "sha256:ac821a339c53e843045d3915de208e389d48493f2612a4317cde841677bcbe48"},
+    {file = "mkdocstrings-0.14.0.tar.gz", hash = "sha256:f1b832943c4fe980fcfc17d07abfe9a8091044dbf553cb7be0ca263953130b2c"},
 ]
 multidict = [
     {file = "multidict-5.1.0-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:b7993704f1a4b204e71debe6095150d43b2ee6150fa4f44d6d966ec356a8d61f"},
@@ -885,6 +885,8 @@ pyyaml = [
     {file = "PyYAML-5.3.1-cp37-cp37m-win_amd64.whl", hash = "sha256:73f099454b799e05e5ab51423c7bcf361c58d3206fa7b0d555426b1f4d9a3eaf"},
     {file = "PyYAML-5.3.1-cp38-cp38-win32.whl", hash = "sha256:06a0d7ba600ce0b2d2fe2e78453a470b5a6e000a985dd4a4e54e436cc36b0e97"},
     {file = "PyYAML-5.3.1-cp38-cp38-win_amd64.whl", hash = "sha256:95f71d2af0ff4227885f7a6605c37fd53d3a106fcab511b8860ecca9fcf400ee"},
+    {file = "PyYAML-5.3.1-cp39-cp39-win32.whl", hash = "sha256:ad9c67312c84def58f3c04504727ca879cb0013b2517c85a9a253f0cb6380c0a"},
+    {file = "PyYAML-5.3.1-cp39-cp39-win_amd64.whl", hash = "sha256:6034f55dab5fea9e53f436aa68fa3ace2634918e8b5994d82f3621c04ff5ed2e"},
     {file = "PyYAML-5.3.1.tar.gz", hash = "sha256:b8eac752c5e14d3eca0e6dd9199cd627518cb5ec06add0de9d32baeee6fe645d"},
 ]
 regex = [
