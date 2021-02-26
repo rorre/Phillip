@@ -13,12 +13,12 @@ beautifulsoup4 = "^4.9.3"
 pyee = "^8.1.0"
 mkdocs = {version = "^1.1.2", extras = ["docs"]}
 pymdown-extensions = {version = "^8.1", extras = ["docs"]}
-mkdocs-material = {version = "^6.2.3", extras = ["docs"]}
+mkdocs-material = {version = "^7.0.3", extras = ["docs"]}
 mkdocstrings = {version = "^0.13.6", extras = ["docs"]}
 
 [tool.poetry.dev-dependencies]
 mkdocs = "^1.1.2"
-mkdocs-material = "^6.2.3"
+mkdocs-material = "^7.0.3"
 pymdown-extensions = "^8.0"
 mkdocstrings = "^0.13.2"
 pytest = "^6.2.1"
